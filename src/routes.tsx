@@ -4,7 +4,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import Loading from './components/Loading';
 
 import Home from './views/home';
-import HomeEx2 from './views/home/HomeEx2';
+import Settings from './views/settings';
 
 const Canvas = lazy(() => import('./views/canvas'));
 
@@ -16,7 +16,7 @@ interface Router {
 
 export const paths = {
   home: '/',
-  home2: '/home2',
+  settings: '/settings',
   canvas: '/canvas',
 };
 
@@ -26,8 +26,8 @@ const routes: Router[] = [
     element: <Home />,
   },
   {
-    path: paths.home2,
-    element: <HomeEx2 />,
+    path: paths.settings,
+    element: <Settings />,
   },
   {
     path: paths.canvas,
@@ -52,3 +52,12 @@ const RootRouter: FC = () => (
 );
 
 export default RootRouter;
+
+export function isFrontendRoute(path?: string) {
+  if (path) {
+    const basePath = path.split(/[?#]/)[0]; // strip out query params and link bookmarks
+    return routes.some(r => r.path === basePath);
+  }
+
+  return false;
+}
