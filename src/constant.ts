@@ -2,7 +2,7 @@ import { paths } from './routes';
 
 export const menu = [
   {
-    path: '/alarm',
+    path: '/canvas',
     logo: 'BellIcon',
     tooltip: 'setting alarm',
   },

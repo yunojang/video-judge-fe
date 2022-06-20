@@ -6,6 +6,7 @@ import Menu from 'src/components/Menu';
 import ErrorMsg from 'src/components/ErrorMsg';
 import UserList from './components/UserList';
 import PostList from './components/PostList';
+import ChannelList from './components/ChannelList';
 
 const Settings = () => {
   const [menu, setMenu] = useState<string>(default_menu);
@@ -16,7 +17,7 @@ const Settings = () => {
     } else if (menu === MenuType.Post) {
       return <PostList />;
     } else if (menu === MenuType.Channel) {
-      return <PostList />;
+      return <ChannelList />;
     } else {
       return <ErrorMsg msg="Incorrect menu" />;
     }

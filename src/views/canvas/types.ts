@@ -26,12 +26,12 @@ export class Canvas {
   }
 }
 
-interface Coordinate {
+export interface Coordinate {
   x: number;
   y: number;
 }
 
-interface Position {
+export interface Position {
   start: Coordinate;
   end: Coordinate;
 }
