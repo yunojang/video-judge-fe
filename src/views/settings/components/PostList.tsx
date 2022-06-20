@@ -1,32 +1,16 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { css } from '@emotion/css';
-import { useSelector } from 'react-redux';
 
 import ListView from 'src/components/ListView';
 import ErrorMsg from 'src/components/ErrorMsg';
-import PostForm from './PostForm';
 import { MenuType } from 'src/types';
-import { useList } from '../../hooks';
-import { RootState } from 'src/store';
 import { Post } from 'src/model/post';
 
 const PostList: FC = () => {
   const resource = MenuType.Post;
 
   const { t } = useTranslation();
-  const user = useSelector((state: RootState) => state.user.user);
-  const { postList } = useList(resource);
-
-  const addPosting = (title: string) => {
-    const body = {
-      title,
-      author: user.name,
-    };
-
-    postList(body);
-  };
-
   const style = makeStyle();
 
   const renderList = (collection: Post[] | null) => {
@@ -48,12 +32,7 @@ const PostList: FC = () => {
     );
   };
 
-  return (
-    <>
-      <PostForm onSubmit={addPosting} />
-      <ListView<Post> resource={resource} renderList={renderList} />
-    </>
-  );
+  return <ListView<Post> resource={resource} renderList={renderList} />;
 };
 
 export default PostList;

@@ -4,6 +4,7 @@ import { User } from 'src/model/user';
 export enum MenuType {
   User = 'users',
   Post = 'posts',
+  Channel = 'channels',
 }
 
 export const default_menu = MenuType.User;
@@ -16,6 +17,10 @@ export const temp_menu = [
   {
     id: MenuType.Post,
     label: 'Post',
+  },
+  {
+    id: MenuType.Channel,
+    label: 'Channel',
   },
 ];
 

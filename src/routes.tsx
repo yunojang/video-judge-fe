@@ -1,10 +1,14 @@
-import { FC, Suspense } from 'react';
+import { FC, lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary';
 import Loading from './components/Loading';
 
 import Home from './views/home';
-import HomeEx2 from './views/home/HomeEx2';
+
+const Canvas = lazy(() => import('./views/canvas/CanvasRenderer'));
+
+const Settings = lazy(() => import('./views/settings'));
+const Channel = lazy(() => import('./views/settings/channel'));
 
 interface Router {
   path: string;
@@ -14,7 +18,9 @@ interface Router {
 
 export const paths = {
   home: '/',
-  home2: '/home2',
+  settings: '/settings',
+  channels: '/channel',
+  canvas: '/canvas',
 };
 
 const routes: Router[] = [
@@ -23,8 +29,16 @@ const routes: Router[] = [
     element: <Home />,
   },
   {
-    path: paths.home2,
-    element: <HomeEx2 />,
+    path: paths.settings,
+    element: <Settings />,
+  },
+  {
+    path: paths.canvas,
+    element: <Canvas />,
+  },
+  {
+    path: paths.channels + '/:id',
+    element: <Channel />,
   },
 ];
 
@@ -45,3 +59,12 @@ const RootRouter: FC = () => (
 );
 
 export default RootRouter;
+
+export function isFrontendRoute(path?: string) {
+  if (path) {
+    const basePath = path.split(/[?#]/)[0]; // strip out query params and link bookmarks
+    return routes.some(r => r.path === basePath);
+  }
+
+  return false;
+}
