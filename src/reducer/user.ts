@@ -14,6 +14,14 @@ const UserActions = {
   load: makeAction('Load'),
 };
 
+// Action Creators
+export function loadUser(token: number) {
+  return {
+    type: UserActions.load,
+    payload: Client.get({ endPoint: `users/${token}` }),
+  };
+}
+
 interface UserState {
   userIdx: number | null;
   user: UserData;
@@ -28,14 +36,6 @@ const initialState: UserState = {
   flag: false,
   loading: false,
 };
-
-// Action Creators
-export function loadUser(token: number) {
-  return {
-    type: UserActions.load,
-    payload: Client.get({ endPoint: `users/${token}` }),
-  };
-}
 
 export function createUser(user: User) {
   const body = JSON.stringify(user);
