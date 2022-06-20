@@ -4,9 +4,11 @@ import ErrorBoundary from './components/ErrorBoundary';
 import Loading from './components/Loading';
 
 import Home from './views/home';
-import Settings from './views/settings';
 
-const Canvas = lazy(() => import('./views/canvas'));
+const Canvas = lazy(() => import('./views/canvas/CanvasRenderer'));
+
+const Settings = lazy(() => import('./views/settings'));
+const Channel = lazy(() => import('./views/settings/channel'));
 
 interface Router {
   path: string;
@@ -17,6 +19,7 @@ interface Router {
 export const paths = {
   home: '/',
   settings: '/settings',
+  channels: '/channel',
   canvas: '/canvas',
 };
 
@@ -32,6 +35,10 @@ const routes: Router[] = [
   {
     path: paths.canvas,
     element: <Canvas />,
+  },
+  {
+    path: paths.channels + '/:id',
+    element: <Channel />,
   },
 ];
 
