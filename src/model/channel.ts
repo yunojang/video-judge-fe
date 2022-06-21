@@ -1,7 +1,6 @@
-import { Position } from 'src/views/canvas/types';
-
-interface AreaObject extends Position {
+interface AreaObject {
   color: string;
+  position: Position;
 }
 
 export interface ChannelData {

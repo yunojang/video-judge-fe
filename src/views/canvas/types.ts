@@ -3,6 +3,7 @@ import { getResolution, WidthProps, HeightProps } from './utils/screen';
 interface CanvasProps {
   width?: number;
   height?: number;
+  boxes?: Box[];
 }
 
 export class Canvas {
@@ -10,8 +11,8 @@ export class Canvas {
   width: number;
   height: number;
 
-  constructor({ width, height }: CanvasProps) {
-    this.boxes = [];
+  constructor({ width, height, boxes = [] }: CanvasProps) {
+    this.boxes = boxes;
 
     if (!(width || height)) {
       width = 640;
@@ -36,30 +37,30 @@ export interface Position {
   end: Coordinate;
 }
 
-type FillPosition = 'inner' | 'outer' | false;
+type FillType = 'inner' | 'outer' | false;
 
 interface BoxProps {
-  position?: Position;
-  fillAlpha?: number;
-  fillPosition?: FillPosition;
+  position: Position;
   color?: string;
+  fillAlpha?: number;
+  fillType?: FillType;
 }
 
 export class Box {
-  position?: Position;
+  position: Position;
   fillAlpha: number;
-  fillPosition: FillPosition;
+  fillType: FillType;
   color: string;
 
   constructor({
     color = '#4c4c4c',
     fillAlpha = 0.25,
     position,
-    fillPosition = 'inner',
+    fillType = 'inner',
   }: BoxProps) {
     this.color = color;
     this.fillAlpha = fillAlpha;
     this.position = position;
-    this.fillPosition = fillPosition;
+    this.fillType = fillType;
   }
 }

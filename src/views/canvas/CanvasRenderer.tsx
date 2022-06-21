@@ -1,5 +1,7 @@
 import { css } from '@emotion/css';
 import { MouseEventHandler, useEffect, useRef, useState } from 'react';
+import { Box, Canvas } from './types';
+import { getAlphaColor } from './utils/color';
 
 interface Cor {
   x: number;
@@ -7,35 +9,59 @@ interface Cor {
 }
 
 interface CanvasProps {
-  width?: number;
-  height?: number;
-  strokeColor?: string;
+  canvas: Canvas;
+  editMode: boolean;
+  toggleMode: () => void;
+  defaultStrokeColor?: string;
 }
 
-const Canvas = ({
-  width = 480,
-  height = 360,
-  strokeColor = '#4c4c4c',
+const CanvasRenderer = ({
+  canvas: { boxes, width, height },
+  editMode,
+  toggleMode,
+  defaultStrokeColor = '#4c4c4c',
 }: CanvasProps) => {
-  const canvas = useRef<HTMLCanvasElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const context = useRef<CanvasRenderingContext2D | null>();
 
-  const [isEditMode, setEditMode] = useState<boolean>(false);
   const [isPainting, setPainting] = useState<boolean>(false);
   const [startPoint, setStartPoint] = useState<Cor | null>(null);
 
+  const drawBox = (ctx: CanvasRenderingContext2D, box: Box) => {
+    const {
+      position: { start, end },
+      color,
+      fillAlpha,
+    } = box;
+
+    const width = end.x - start.x;
+    const height = end.y - start.y;
+
+    ctx.strokeStyle = color;
+    ctx.fillStyle = getAlphaColor(color, fillAlpha);
+
+    ctx.strokeRect(start.x, start.y, width, height);
+    ctx.fillRect(start.x, start.y, width, height);
+
+    ctx.strokeStyle = defaultStrokeColor;
+  };
+
   useEffect(() => {
-    context.current = canvas.current?.getContext(
+    const ctx = context.current as CanvasRenderingContext2D;
+
+    boxes.forEach(box => drawBox(ctx, box));
+  }, [boxes]);
+
+  useEffect(() => {
+    context.current = canvasRef.current?.getContext(
       '2d',
     ) as CanvasRenderingContext2D;
 
-    context.current.strokeStyle = strokeColor;
+    context.current.strokeStyle = defaultStrokeColor;
   }, []);
 
-  const toggleEditMode = () => setEditMode(b => !b);
-
   const onClick: MouseEventHandler<HTMLCanvasElement> = e => {
-    if (!isEditMode) {
+    if (!editMode) {
       return;
     }
 
@@ -47,17 +73,17 @@ const Canvas = ({
       setStartPoint({ x, y });
     } else {
       setPainting(false);
-      setEditMode(false);
+      toggleMode();
 
       const { x: sx, y: sy } = startPoint;
       ctx.strokeRect(sx, sy, x - sx, y - sy);
-      ctx.fillStyle = '#4a4a4a3c';
+      ctx.fillStyle = '#4a4a4a2a';
       ctx.fillRect(sx, sy, x - sx, y - sy);
     }
   };
 
   const onMouseMove: MouseEventHandler<HTMLCanvasElement> = e => {
-    if (!isEditMode || !isPainting || !startPoint) {
+    if (!editMode || !isPainting || !startPoint) {
       return;
     }
 
@@ -69,30 +95,27 @@ const Canvas = ({
     ctx.strokeRect(sx, sy, x - sx, y - sy);
   };
 
-  const style = makeStyle({ isEditMode });
+  const style = makeStyle({ editMode });
   return (
     <div>
-      <button onClick={toggleEditMode} className={style.button}>
-        square
-      </button>
       <canvas
+        ref={canvasRef}
         onClick={onClick}
         onMouseMove={onMouseMove}
-        ref={canvas}
         width={width}
         height={height}
         className={style.canvas}
-      ></canvas>
+      />
     </div>
   );
 };
-export default Canvas;
+export default CanvasRenderer;
 
-const makeStyle = ({ isEditMode }: { isEditMode: boolean }) => {
+const makeStyle = ({ editMode }: { editMode: boolean }) => {
   const canvas = css`
     background: #fff;
     border: 1px solid #aaa;
-    ${isEditMode &&
+    ${editMode &&
     css`
       cursor: crosshair;
     `}
@@ -101,7 +124,7 @@ const makeStyle = ({ isEditMode }: { isEditMode: boolean }) => {
   const button = css`
     border: 0;
     padding: 1em;
-    ${isEditMode &&
+    ${editMode &&
     css`
       box-shadow: inset 0 1px 10px #555;
       background: #ccc;

@@ -30,6 +30,11 @@ export const useFetchList = <T extends ListType>(
 
   useEffect(() => {
     request();
+
+    return () => {
+      setLoading(false);
+      setError(null);
+    };
   }, [resource]);
 
   return { loading, collection, reload: request, error };
