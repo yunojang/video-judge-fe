@@ -7,7 +7,8 @@ import Home from './views/home';
 
 const Settings = lazy(() => import('./views/settings'));
 const Channel = lazy(() => import('./views/settings/channel'));
-const CanvasEdit = lazy(() => import('./views/canvas/AreaEditor'));
+
+const ChannelDev = lazy(() => import('./views/settings/channel/devPage'));
 
 interface Router {
   path: string;
@@ -19,7 +20,7 @@ export const paths = {
   home: '/',
   settings: '/settings',
   channels: '/channel',
-  canvas: '/sandbox_canvas',
+  channel_test: '/channel_test',
 };
 
 const routes: Router[] = [
@@ -32,12 +33,13 @@ const routes: Router[] = [
     element: <Settings />,
   },
   {
-    path: paths.canvas,
-    element: <CanvasEdit />,
-  },
-  {
     path: paths.channels + '/:id',
     element: <Channel />,
+  },
+  // test Routing
+  {
+    path: paths.channel_test,
+    element: <ChannelDev />,
   },
 ];
 

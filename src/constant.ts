@@ -2,7 +2,7 @@ import { paths } from './routes';
 
 export const menu = [
   {
-    path: paths.canvas,
+    path: paths.channel_test,
     logo: 'MailIcon',
     tooltip: 'setting alarm',
   },

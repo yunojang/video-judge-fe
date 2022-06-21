@@ -4,7 +4,7 @@ import Client from 'src/utils/connection';
 
 export const useChannel = (id: number) => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [channel, setChannel] = useState<Channel>();
+  const [channel, setChannel] = useState<Channel | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -25,11 +25,13 @@ export const useChannel = (id: number) => {
     };
   }, [id]);
 
-  // const updateBox = () => {};
-
   return {
     channel,
     error,
     loading,
   };
+};
+
+export const useArea = () => {
+  return 1;
 };

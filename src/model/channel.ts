@@ -1,4 +1,6 @@
-interface AreaObject {
+import { Position } from 'src/views/canvas/types';
+
+export interface AreaObject {
   color: string;
   position: Position;
 }

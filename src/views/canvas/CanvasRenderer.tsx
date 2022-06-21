@@ -22,10 +22,18 @@ const CanvasRenderer = ({
   defaultStrokeColor = '#4c4c4c',
 }: CanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const context = useRef<CanvasRenderingContext2D | null>();
 
+  const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
   const [isPainting, setPainting] = useState<boolean>(false);
   const [startPoint, setStartPoint] = useState<Cor | null>(null);
+
+  useEffect(() => {
+    if (!context) {
+      return;
+    }
+
+    boxes.forEach(box => drawBox(context, box));
+  }, [boxes, context]);
 
   const drawBox = (ctx: CanvasRenderingContext2D, box: Box) => {
     const {
@@ -47,17 +55,7 @@ const CanvasRenderer = ({
   };
 
   useEffect(() => {
-    const ctx = context.current as CanvasRenderingContext2D;
-
-    boxes.forEach(box => drawBox(ctx, box));
-  }, [boxes]);
-
-  useEffect(() => {
-    context.current = canvasRef.current?.getContext(
-      '2d',
-    ) as CanvasRenderingContext2D;
-
-    context.current.strokeStyle = defaultStrokeColor;
+    setContext(canvasRef.current?.getContext('2d') as CanvasRenderingContext2D);
   }, []);
 
   const onClick: MouseEventHandler<HTMLCanvasElement> = e => {
@@ -66,7 +64,7 @@ const CanvasRenderer = ({
     }
 
     const { offsetX: x, offsetY: y } = e.nativeEvent;
-    const ctx = context.current as CanvasRenderingContext2D;
+    const ctx = context as CanvasRenderingContext2D;
 
     if (!isPainting || !startPoint) {
       setPainting(true);
@@ -76,6 +74,7 @@ const CanvasRenderer = ({
       toggleMode();
 
       const { x: sx, y: sy } = startPoint;
+      ctx.strokeStyle = defaultStrokeColor;
       ctx.strokeRect(sx, sy, x - sx, y - sy);
       ctx.fillStyle = '#4a4a4a2a';
       ctx.fillRect(sx, sy, x - sx, y - sy);
@@ -88,7 +87,7 @@ const CanvasRenderer = ({
     }
 
     const { offsetX: x, offsetY: y } = e.nativeEvent;
-    const ctx = context.current as CanvasRenderingContext2D;
+    const ctx = context as CanvasRenderingContext2D;
 
     const { x: sx, y: sy } = startPoint;
     ctx.clearRect(0, 0, width, height);
