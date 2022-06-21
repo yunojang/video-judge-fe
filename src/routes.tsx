@@ -8,8 +8,6 @@ import Home from './views/home';
 const Settings = lazy(() => import('./views/settings'));
 const Channel = lazy(() => import('./views/settings/channel'));
 
-const ChannelDev = lazy(() => import('./views/settings/channel/devPage'));
-
 interface Router {
   path: string;
   element: React.ReactNode;
@@ -20,7 +18,6 @@ export const paths = {
   home: '/',
   settings: '/settings',
   channels: '/channel',
-  channel_test: '/channel_test',
 };
 
 const routes: Router[] = [
@@ -35,11 +32,6 @@ const routes: Router[] = [
   {
     path: paths.channels + '/:id',
     element: <Channel />,
-  },
-  // test Routing
-  {
-    path: paths.channel_test,
-    element: <ChannelDev />,
   },
 ];
 

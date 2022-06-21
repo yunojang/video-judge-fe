@@ -8,8 +8,8 @@ const Channel = () => {
   const { id } = useParams();
   const { channel, error, loading } = useChannel(Number(id));
 
-  return error || !channel ? (
-    <span>404</span>
+  return error ? (
+    <span>404 Error Page</span>
   ) : loading ? (
     <Loading />
   ) : (

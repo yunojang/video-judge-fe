@@ -1,8 +1,10 @@
 import { css, Global } from '@emotion/react';
 import { Body1, H5, H6, Header, Switch, Title1 } from '@wizrnd/nx-ui';
+import { useState } from 'react';
 
 import { Channel } from 'src/model/channel';
 import AreaEditor from './AreaEditor';
+import AreaSettingTab from './AreaSettingTab';
 
 interface ChannelProps {
   channel: Channel;
@@ -10,6 +12,11 @@ interface ChannelProps {
 
 const ChannelPage = ({ channel }: ChannelProps) => {
   const { id, name, description, url, area, alarm, judgement } = channel;
+  const [selectedArea, setArea] = useState<number>(area.length);
+
+  const handleChange = (selected: number) => {
+    setArea(selected);
+  };
 
   return (
     <main>
@@ -20,7 +27,7 @@ const ChannelPage = ({ channel }: ChannelProps) => {
       <Style />
       <div className="container">
         <div className="channel-viewer">
-          <AreaEditor area={area} /> {/* get area only*/}
+          <AreaEditor area={area} selected={selectedArea} />
           <div className="channel-description">
             <Title1>
               [{id}] {name}
@@ -37,6 +44,13 @@ const ChannelPage = ({ channel }: ChannelProps) => {
           </div>
           <div className="switch-setting">
             Alarm Call: <Switch checked={alarm} />
+          </div>
+          <div>
+            <AreaSettingTab
+              area={area}
+              selected={selectedArea}
+              handleChange={handleChange}
+            />
           </div>
         </div>
       </div>

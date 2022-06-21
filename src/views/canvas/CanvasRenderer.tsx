@@ -1,7 +1,7 @@
-import { css } from '@emotion/css';
 import { MouseEventHandler, useEffect, useRef, useState } from 'react';
-import { Box, Canvas } from './types';
-import { getAlphaColor } from './utils/color';
+import { css } from '@emotion/css';
+
+import { Canvas } from './CanvasClass';
 
 interface Cor {
   x: number;
@@ -10,20 +10,22 @@ interface Cor {
 
 interface CanvasProps {
   canvas: Canvas;
+  selected: number;
   editMode: boolean;
   toggleMode: () => void;
   defaultStrokeColor?: string;
 }
 
 const CanvasRenderer = ({
-  canvas: { boxes, width, height },
+  canvas,
+  selected,
   editMode,
   toggleMode,
   defaultStrokeColor = '#4c4c4c',
 }: CanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
+
   const [isPainting, setPainting] = useState<boolean>(false);
   const [startPoint, setStartPoint] = useState<Cor | null>(null);
 
@@ -32,27 +34,15 @@ const CanvasRenderer = ({
       return;
     }
 
-    boxes.forEach(box => drawBox(context, box));
-  }, [boxes, context]);
+    canvas.clear(context);
 
-  const drawBox = (ctx: CanvasRenderingContext2D, box: Box) => {
-    const {
-      position: { start, end },
-      color,
-      fillAlpha,
-    } = box;
+    // select All tab...
+    if (selected >= canvas.boxes.length) {
+      return;
+    }
 
-    const width = end.x - start.x;
-    const height = end.y - start.y;
-
-    ctx.strokeStyle = color;
-    ctx.fillStyle = getAlphaColor(color, fillAlpha);
-
-    ctx.strokeRect(start.x, start.y, width, height);
-    ctx.fillRect(start.x, start.y, width, height);
-
-    ctx.strokeStyle = defaultStrokeColor;
-  };
+    canvas.drawBox(context, selected);
+  }, [canvas, context, selected]);
 
   useEffect(() => {
     setContext(canvasRef.current?.getContext('2d') as CanvasRenderingContext2D);
@@ -90,7 +80,7 @@ const CanvasRenderer = ({
     const ctx = context as CanvasRenderingContext2D;
 
     const { x: sx, y: sy } = startPoint;
-    ctx.clearRect(0, 0, width, height);
+    canvas.clear(ctx);
     ctx.strokeRect(sx, sy, x - sx, y - sy);
   };
 
@@ -101,8 +91,8 @@ const CanvasRenderer = ({
         ref={canvasRef}
         onClick={onClick}
         onMouseMove={onMouseMove}
-        width={width}
-        height={height}
+        width={canvas.width}
+        height={canvas.height}
         className={style.canvas}
       />
     </div>

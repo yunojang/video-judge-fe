@@ -1,32 +1,3 @@
-import { getResolution, WidthProps, HeightProps } from './utils/screen';
-
-interface CanvasProps {
-  width?: number;
-  height?: number;
-  boxes?: Box[];
-}
-
-export class Canvas {
-  boxes: Box[];
-  width: number;
-  height: number;
-
-  constructor({ width, height, boxes = [] }: CanvasProps) {
-    this.boxes = boxes;
-
-    if (!(width || height)) {
-      width = 640;
-    }
-
-    const { width: w, height: h } = getResolution({ width, height } as
-      | WidthProps
-      | HeightProps);
-
-    this.width = w;
-    this.height = h;
-  }
-}
-
 export interface Coordinate {
   x: number;
   y: number;
@@ -39,7 +10,7 @@ export interface Position {
 
 type FillType = 'inner' | 'outer' | false;
 
-interface BoxProps {
+export interface BoxProps {
   position: Position;
   color?: string;
   fillAlpha?: number;
