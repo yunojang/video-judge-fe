@@ -1,5 +1,5 @@
 import { getResolution, WidthProps, HeightProps } from './utils/screen';
-import { Box } from './types';
+import { Box, Position } from './types';
 import { getAlphaColor } from './utils/color';
 
 interface CanvasProps {
@@ -28,11 +28,7 @@ export class Canvas {
     this.height = h;
   }
 
-  getBoxSize(index: number) {
-    const {
-      position: { start, end },
-    } = this.boxes[index];
-
+  static getBoxSize({ start, end }: Position) {
     return { width: end.x - start.x, height: end.y - start.y };
   }
 
@@ -41,16 +37,13 @@ export class Canvas {
   }
 
   drawBox(ctx: CanvasRenderingContext2D, boxIndex: number) {
-    const {
-      color,
-      fillAlpha,
-      position: { start },
-    } = this.boxes[boxIndex];
-    const { width, height } = this.getBoxSize(boxIndex);
+    const { color, fillAlpha, position } = this.boxes[boxIndex];
+    const { width, height } = Canvas.getBoxSize(position);
 
     ctx.strokeStyle = color;
     ctx.fillStyle = getAlphaColor(color, fillAlpha);
 
+    const { start } = position;
     ctx.strokeRect(start.x, start.y, width, height);
     ctx.fillRect(start.x, start.y, width, height);
   }

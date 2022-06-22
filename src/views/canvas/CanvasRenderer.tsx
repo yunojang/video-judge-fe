@@ -2,6 +2,7 @@ import { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { css } from '@emotion/css';
 
 import { Canvas } from './CanvasClass';
+import { AreaData } from 'src/model/channel';
 
 interface Cor {
   x: number;
@@ -12,16 +13,18 @@ interface CanvasProps {
   canvas: Canvas;
   selected: number;
   editMode: boolean;
-  toggleMode: () => void;
   defaultStrokeColor?: string;
+  toggleMode: () => void;
+  handleDrawArea: (area: AreaData) => void;
 }
 
 const CanvasRenderer = ({
   canvas,
   selected,
   editMode,
-  toggleMode,
   defaultStrokeColor = '#4c4c4c',
+  toggleMode,
+  handleDrawArea,
 }: CanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
@@ -36,7 +39,7 @@ const CanvasRenderer = ({
 
     canvas.clear(context);
 
-    // select All tab...
+    // select All tab...?
     if (selected >= canvas.boxes.length) {
       return;
     }
@@ -54,20 +57,19 @@ const CanvasRenderer = ({
     }
 
     const { offsetX: x, offsetY: y } = e.nativeEvent;
-    const ctx = context as CanvasRenderingContext2D;
+    // const ctx = context as CanvasRenderingContext2D;
 
     if (!isPainting || !startPoint) {
       setPainting(true);
       setStartPoint({ x, y });
     } else {
       setPainting(false);
+      setStartPoint(null);
       toggleMode();
-
-      const { x: sx, y: sy } = startPoint;
-      ctx.strokeStyle = defaultStrokeColor;
-      ctx.strokeRect(sx, sy, x - sx, y - sy);
-      ctx.fillStyle = '#4a4a4a2a';
-      ctx.fillRect(sx, sy, x - sx, y - sy);
+      handleDrawArea({
+        position: { start: startPoint, end: { x, y } },
+        color: defaultStrokeColor,
+      });
     }
   };
 
@@ -110,18 +112,7 @@ const makeStyle = ({ editMode }: { editMode: boolean }) => {
     `}
   `;
 
-  const button = css`
-    border: 0;
-    padding: 1em;
-    ${editMode &&
-    css`
-      box-shadow: inset 0 1px 10px #555;
-      background: #ccc;
-    `}
-  `;
-
   return {
     canvas,
-    button,
   };
 };

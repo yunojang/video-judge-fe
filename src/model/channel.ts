@@ -1,14 +1,21 @@
 import { Position } from 'src/views/canvas/types';
 
-export interface AreaObject {
+export interface AreaData {
   color: string;
   position: Position;
+}
+
+export interface AreaObject extends AreaData {
+  parentId: number;
+}
+
+export interface Area extends AreaObject {
+  id: number;
 }
 
 export interface ChannelData {
   name: string;
   description: string;
-  area: AreaObject[];
   alarm: boolean;
   judgement: boolean;
   url: string;

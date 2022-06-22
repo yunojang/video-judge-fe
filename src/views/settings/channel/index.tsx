@@ -6,11 +6,11 @@ import ChannelPage from './ChannelPage';
 
 const Channel = () => {
   const { id } = useParams();
-  const { channel, error, loading } = useChannel(Number(id));
+  const { error, loading, channel } = useChannel(Number(id));
 
   return error ? (
     <span>404 Error Page</span>
-  ) : loading ? (
+  ) : loading || !channel ? (
     <Loading />
   ) : (
     <ChannelPage channel={channel} />

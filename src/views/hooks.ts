@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ListType } from 'src/types';
 import Client from 'src/utils/connection';
 
@@ -15,18 +15,21 @@ export const useFetchList = <T extends ListType>(
   const [collection, setCollection] = useState<T[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const request = () =>
-    Client.get({ endPoint: `${resource}` })
-      .then(({ json }) => {
-        setCollection(json as T[]);
-      })
-      .catch(err => {
-        handleErrorMsg(err);
-        setError('Failed to Fetch List');
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+  const request = useCallback(
+    () =>
+      Client.get({ endPoint: `${resource}` })
+        .then(({ json }) => {
+          setCollection(json as T[]);
+        })
+        .catch(err => {
+          handleErrorMsg(err);
+          setError('Failed to Fetch List');
+        })
+        .finally(() => {
+          setLoading(false);
+        }),
+    [handleErrorMsg, resource],
+  );
 
   useEffect(() => {
     request();
@@ -35,7 +38,7 @@ export const useFetchList = <T extends ListType>(
       setLoading(false);
       setError(null);
     };
-  }, [resource]);
+  }, [request]);
 
   return { loading, collection, reload: request, error };
 };

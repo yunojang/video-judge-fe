@@ -1,6 +1,6 @@
 import promiseWithTimeout from '../promiseWithTimeout';
 import parseResponse from './parseResponse';
-import { ClientConfig, ParseMethod, RequestConfig } from './types';
+import { ClientConfig, ParseMethod, RequestBase, RequestConfig } from './types';
 
 const DEAFULT_ORIGIN = 'http://localhost:3000';
 
@@ -39,13 +39,12 @@ export class ClientClass {
     timeout,
     parseMethod,
     endPoint,
-    ...restConfig
+    ...baseConfig
   }: RequestConfig & { parseMethod?: T }) {
     const url = this.getUrl(inputUrl, endPoint);
 
     // Control any options
-
-    const options = { ...restConfig };
+    const options: RequestBase = defaultConfig(baseConfig);
 
     const response = await promiseWithTimeout<Response>(
       fetch(url, options),
@@ -67,3 +66,13 @@ export class ClientClass {
     return this.url;
   }
 }
+
+const defaultConfig = ({
+  headers = { 'Content-Type': 'application/json' },
+  ...rest
+}: RequestBase) => {
+  return {
+    headers,
+    ...rest,
+  };
+};

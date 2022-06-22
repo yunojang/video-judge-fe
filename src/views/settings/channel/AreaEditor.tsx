@@ -1,19 +1,26 @@
 import { useMemo, useState } from 'react';
 import { css, Global } from '@emotion/react';
 
-import { AreaObject } from 'src/model/channel';
+import { Area, AreaData } from 'src/model/channel';
 import { Canvas } from 'src/views/canvas/CanvasClass';
 import { Box } from 'src/views/canvas/types';
 
 import CanvasRenderer from 'src/views/canvas/CanvasRenderer';
-import AreaEditBar from './AreaEditBar';
+import EditBar from './components/EditBar';
 
 interface AreaEditorProps {
-  area: AreaObject[];
+  parentId: number;
+  area: Area[];
   selected: number;
+  handleDrawArea: (area: AreaData) => void;
 }
 
-const AreaEditor = ({ area, selected }: AreaEditorProps) => {
+const AreaEditor = ({
+  // parentId,
+  area,
+  selected,
+  handleDrawArea,
+}: AreaEditorProps) => {
   const [editMode, setEditMode] = useState(false);
 
   const canvas = useMemo(() => {
@@ -27,12 +34,13 @@ const AreaEditor = ({ area, selected }: AreaEditorProps) => {
   return (
     <div className="editor-container">
       <Style />
-      <AreaEditBar editMode={editMode} toggleMode={toggleMode} />
+      <EditBar editMode={editMode} toggleMode={toggleMode} />
       <CanvasRenderer
         canvas={canvas}
         editMode={editMode}
         selected={selected}
         toggleMode={toggleMode}
+        handleDrawArea={handleDrawArea}
       />
     </div>
   );

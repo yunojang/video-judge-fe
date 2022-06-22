@@ -1,2 +1,1 @@
-export type Index = number;
-export type SelectedType = Index | 'all';
+export const all_index = 99999;
