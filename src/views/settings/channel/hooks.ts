@@ -12,7 +12,8 @@ export const useChannel = (id: number) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [channel, setChannel] = useState<Channel | null>(null);
   const [error, setError] = useState<string | null>(null);
-  // const [LoadingArae, setLoadingArae] = useState<boolean>(false);
+  const [areaLoading, setAreaLoading] = useState<boolean>(false);
+  const [shapeLoading, setShapeLoading] = useState<boolean>(false);
 
   const handelRequest = (promise: Promise<JsonResponse>) => {
     return promise
@@ -28,14 +29,13 @@ export const useChannel = (id: number) => {
       })
       .catch(err => {
         setError(err);
-      })
-      .finally(() => {
-        setLoading(false);
       });
   };
 
   useEffect(() => {
-    handelRequest(Client.get({ endPoint }));
+    handelRequest(Client.get({ endPoint })).finally(() => {
+      setLoading(false);
+    });
 
     return () => {
       setError(null);
@@ -44,10 +44,13 @@ export const useChannel = (id: number) => {
   }, [endPoint]);
 
   const pushArea = (newArea?: Area) => {
-    // setLoading(true);
+    setAreaLoading(true);
+
     if (!channel) {
-      setError('Can not push Area');
-      return;
+      const err = 'Can not push Area';
+
+      setError(err);
+      return Promise.reject(-1);
     }
 
     if (!newArea) {
@@ -63,7 +66,7 @@ export const useChannel = (id: number) => {
 
     return handelRequest(Client.put({ endPoint, body }))
       .then(() => channel.area.length)
-      .catch(() => null);
+      .finally(() => setAreaLoading(false));
   };
 
   const pushShape = (newShape: Shape, areaIndex: number) => {
@@ -72,13 +75,17 @@ export const useChannel = (id: number) => {
       return;
     }
 
+    setShapeLoading(true);
+
     const newShapes = [...channel.area[areaIndex].shapes, newShape];
     const area = [...channel.area];
     area[areaIndex] = { ...area[areaIndex], shapes: newShapes };
     const newChannel = { ...channel, area: area };
     const body = JSON.stringify(newChannel);
 
-    handelRequest(Client.put({ endPoint, body }));
+    handelRequest(Client.put({ endPoint, body })).finally(() =>
+      setShapeLoading(false),
+    );
   };
 
   return {
@@ -87,5 +94,7 @@ export const useChannel = (id: number) => {
     loading,
     pushArea,
     pushShape,
+    areaLoading,
+    shapeLoading,
   };
 };

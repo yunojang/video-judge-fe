@@ -1,6 +1,6 @@
 import { css, Global } from '@emotion/react';
 import { Body1, Button, H5, H6, Header, Switch, Title1 } from '@wizrnd/nx-ui';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { all_index } from './type';
 import { Channel } from 'src/model/channel';
@@ -10,27 +10,40 @@ import { Area, Shape } from 'src/canvas/CanvasClass';
 
 interface ChannelProps {
   channel: Channel;
-  pushArea: (area?: Area) => void;
+  areaLoading: boolean;
+  shapeLoading: boolean;
+  pushArea: (area?: Area) => Promise<number>;
   pushShape: (shape: Shape, index: number) => void;
 }
 
-const ChannelPage = ({ channel, pushArea, pushShape }: ChannelProps) => {
+const ChannelPage = ({
+  channel,
+  pushArea,
+  pushShape,
+  areaLoading,
+  shapeLoading,
+}: ChannelProps) => {
   const { id, name, description, url, alarm, inference, area } = channel;
 
-  const [selectedArea, setArea] = useState<number>(all_index); // All tab
-  const [areaLoading, setAreaLoading] = useState<boolean>(false);
+  const [selectedArea, setArea] = useState<number>(all_index); // no arae setting
 
   const handleChange = (selected: number) => {
     setArea(selected);
   };
 
-  const handlePushArea = () => {
-    pushArea();
+  const handlePushArea = async () => {
+    const index = await pushArea();
+
+    if (index > -1) {
+      handleChange(index);
+    }
   };
 
   const handlePushShape = (shape: Shape) => {
     pushShape(shape, selectedArea);
   };
+
+  const currentArea = useMemo(() => area[selectedArea], [area, selectedArea]);
 
   return (
     <main>
@@ -46,6 +59,7 @@ const ChannelPage = ({ channel, pushArea, pushShape }: ChannelProps) => {
             areas={area}
             selected={selectedArea}
             pushShape={handlePushShape}
+            shapeLoading={shapeLoading}
           />
 
           <div className="channel-description">
@@ -77,6 +91,10 @@ const ChannelPage = ({ channel, pushArea, pushShape }: ChannelProps) => {
             {!areaLoading && (
               <Button onClick={handlePushArea} iconName="PlusIcon" size="md" />
             )}
+          </div>
+
+          <div className="area-description">
+            {/* <div>{currentArea.color}</div> */}
           </div>
         </div>
       </div>

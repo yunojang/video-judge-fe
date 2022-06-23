@@ -11,8 +11,6 @@ interface AreaTabProps {
 }
 
 const AreaTab = ({ area, selected, handleChange }: AreaTabProps) => {
-  // const currentArea = area[selected];
-
   return (
     <Tabs value={selected} handleChange={(e, v) => handleChange(v)}>
       <Tab id={all_index} label="All" />

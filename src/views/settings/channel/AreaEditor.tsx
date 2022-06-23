@@ -9,13 +9,19 @@ import EditBar from './components/EditBar';
 interface AreaEditorProps {
   areas: Area[];
   selected: number;
+  shapeLoading: boolean;
   pushShape: (shape: Shape) => void;
 }
 
 const width = 900;
-const editBarHeight = 50;
+const editBarHeight = 40;
 
-const AreaEditor = ({ areas, selected, pushShape }: AreaEditorProps) => {
+const AreaEditor = ({
+  areas,
+  selected,
+  pushShape,
+  shapeLoading,
+}: AreaEditorProps) => {
   const canvas = useMemo(() => {
     return new Canvas({ areas, width });
   }, [areas]);
@@ -28,7 +34,11 @@ const AreaEditor = ({ areas, selected, pushShape }: AreaEditorProps) => {
   return (
     <div className="editor-container">
       <Style width={canvas.width} height={canvas.height + editBarHeight} />
-      <EditBar show={isCorrectCanvasArea} height={editBarHeight} />
+      <EditBar
+        show={isCorrectCanvasArea}
+        height={editBarHeight}
+        loading={shapeLoading}
+      />
 
       {isCorrectCanvasArea && (
         <CanvasRenderer
