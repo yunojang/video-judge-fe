@@ -4,6 +4,7 @@ import { css, Global } from '@emotion/react';
 import { Area, Canvas, Shape } from 'src/canvas/CanvasClass';
 
 import CanvasRenderer from 'src/canvas/CanvasRenderer';
+import VideoPlayer from './components/VideoPlayer';
 import EditBar from './components/EditBar';
 
 interface AreaEditorProps {
@@ -40,13 +41,17 @@ const AreaEditor = ({
         loading={shapeLoading}
       />
 
-      {isCorrectCanvasArea && (
-        <CanvasRenderer
-          canvas={canvas}
-          selected={selected}
-          pushShape={pushShape}
-        />
-      )}
+      <div className="viewer">
+        <VideoPlayer width={canvas.width} height={canvas.height} />
+
+        {isCorrectCanvasArea && (
+          <CanvasRenderer
+            canvas={canvas}
+            selected={selected}
+            pushShape={pushShape}
+          />
+        )}
+      </div>
     </div>
   );
 };
@@ -57,11 +62,14 @@ const Style = ({ width, height }: { width: number; height: number }) => (
   <Global
     styles={css`
       .editor-container {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
         width: ${width}px;
         height: ${height}px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .viewer {
+        position: relative;
       }
     `}
   />

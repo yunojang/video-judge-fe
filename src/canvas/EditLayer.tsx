@@ -105,7 +105,7 @@ const makeStyle = (editMode: EditMode, isEditing: boolean) => {
       cursor: crosshair;
     `}
 
-    z-index: ${isEditing ? '1' : '-1'};
+    z-index: ${isEditing ? '10' : '-1'};
   `;
 
   return {

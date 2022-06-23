@@ -101,7 +101,6 @@ const CanvasRenderer = ({ canvas, selected, pushShape }: CanvasProps) => {
   };
 
   const { width, height } = canvas;
-  console.log(width, height);
   const style = makeStyle({ editMode, width, height });
   return (
     <div className={style.container}>
@@ -147,6 +146,7 @@ const makeStyle = ({
     /* border: 1px solid #aaa; */
     position: absolute;
     inset: 0;
+    z-index: 1;
 
     ${editMode &&
     css`
