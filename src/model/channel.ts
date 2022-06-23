@@ -1,4 +1,4 @@
-import { Area } from 'src/views/canvas/CanvasClass';
+import { Area } from 'src/canvas/CanvasClass';
 
 // model
 // export interface Area{

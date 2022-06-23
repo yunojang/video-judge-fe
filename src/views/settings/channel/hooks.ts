@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Client from 'src/utils/connection';
 
 import { Channel, isChannel } from 'src/model/channel';
-import { Area, Shape } from 'src/views/canvas/CanvasClass';
+import { Area, Shape } from 'src/canvas/CanvasClass';
 import { JsonResponse } from 'src/utils/connection/types';
 
 const resource = 'channels';

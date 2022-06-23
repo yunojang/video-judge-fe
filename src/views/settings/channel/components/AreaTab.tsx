@@ -1,5 +1,5 @@
 import { all_index } from '../type';
-import { Area } from 'src/views/canvas/CanvasClass';
+import { Area } from 'src/canvas/CanvasClass';
 
 import { Tab, Tabs } from '@wizrnd/nx-ui';
 

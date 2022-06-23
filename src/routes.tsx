@@ -7,7 +7,7 @@ import Home from './views/home';
 
 const Settings = lazy(() => import('./views/settings'));
 const Channel = lazy(() => import('./views/settings/channel'));
-const CanvasTest = lazy(() => import('./views/canvas/TestRenderer'));
+const CanvasTest = lazy(() => import('./canvas/TestRenderer'));
 
 interface Router {
   path: string;

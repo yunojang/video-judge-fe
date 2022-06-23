@@ -6,7 +6,7 @@ import { all_index } from './type';
 import { Channel } from 'src/model/channel';
 import AreaEditor from './AreaEditor';
 import AreaTab from './components/AreaTab';
-import { Area, Shape } from 'src/views/canvas/CanvasClass';
+import { Area, Shape } from 'src/canvas/CanvasClass';
 
 interface ChannelProps {
   channel: Channel;

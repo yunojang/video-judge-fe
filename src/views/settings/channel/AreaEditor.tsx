@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { css, Global } from '@emotion/react';
 
-import { Area, Canvas, Shape } from 'src/views/canvas/CanvasClass';
+import { Area, Canvas, Shape } from 'src/canvas/CanvasClass';
 
-import CanvasRenderer from 'src/views/canvas/CanvasRenderer';
+import CanvasRenderer from 'src/canvas/CanvasRenderer';
 import EditBar from './components/EditBar';
 
 interface AreaEditorProps {
