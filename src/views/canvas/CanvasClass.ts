@@ -1,22 +1,57 @@
+import { Coordinate } from './types';
+
 import { getResolution, WidthProps, HeightProps } from './utils/screen';
-import { Box, Position } from './types';
 import { getAlphaColor } from './utils/color';
+
+export interface Rect {
+  start: Coordinate;
+  end: Coordinate;
+}
+
+export type Shape = Rect | Coordinate[];
+
+interface AreaProps {
+  name: string;
+  color?: string;
+  fillAlpha?: number;
+  shapes?: Shape[];
+}
+
+export class Area {
+  name: string;
+  color: string;
+  fillAlpha: number;
+  shapes: Shape[];
+
+  constructor({
+    name,
+    color = '#666666',
+    fillAlpha = 0.2,
+    shapes = [],
+  }: AreaProps) {
+    this.name = name;
+    this.color = color;
+    this.fillAlpha = fillAlpha;
+    this.shapes = shapes;
+  }
+}
 
 interface CanvasProps {
   width?: number;
   height?: number;
-  boxes?: Box[];
+  // model Area type으로 바꿀수있음
+  areas?: Area[];
 }
 
 export class Canvas {
-  boxes: Box[];
   width: number;
   height: number;
+  areas: Area[];
 
-  constructor({ width, height, boxes = [] }: CanvasProps) {
-    this.boxes = boxes;
+  constructor({ width, height, areas = [] }: CanvasProps) {
+    this.areas = areas;
 
-    if (!(width || height)) {
+    if (!width && !height) {
       width = 640;
     }
 
@@ -28,23 +63,45 @@ export class Canvas {
     this.height = h;
   }
 
-  static getBoxSize({ start, end }: Position) {
-    return { width: end.x - start.x, height: end.y - start.y };
-  }
+  static getRectSize = (start: Coordinate, end: Coordinate) => {
+    const { x: sx, y: sy } = start;
+    const { x: ex, y: ey } = end;
+
+    return {
+      width: ex - sx,
+      height: ey - sy,
+    };
+  };
 
   clear(ctx: CanvasRenderingContext2D) {
     ctx.clearRect(0, 0, this.width, this.height);
   }
 
-  drawBox(ctx: CanvasRenderingContext2D, boxIndex: number) {
-    const { color, fillAlpha, position } = this.boxes[boxIndex];
-    const { width, height } = Canvas.getBoxSize(position);
+  drawArea(ctx: CanvasRenderingContext2D, areaIdx: number) {
+    const { color, fillAlpha, shapes } = this.areas[areaIdx];
 
     ctx.strokeStyle = color;
     ctx.fillStyle = getAlphaColor(color, fillAlpha);
 
-    const { start } = position;
-    ctx.strokeRect(start.x, start.y, width, height);
-    ctx.fillRect(start.x, start.y, width, height);
+    shapes.map(shape => {
+      if (isRect(shape)) {
+        const { x, y } = shape.start;
+        const { width, height } = Canvas.getRectSize(shape.start, shape.end);
+
+        ctx.strokeRect(x, y, width, height);
+        ctx.fillRect(x, y, width, height);
+      } else {
+        // draw poly
+        ctx.beginPath();
+        shape.forEach(({ x, y }) => ctx.lineTo(x, y));
+        ctx.closePath();
+        ctx.stroke();
+        ctx.fill();
+      }
+    });
   }
 }
+
+const isRect = (shape: Shape): shape is Rect => {
+  return 'start' in shape && 'end' in shape;
+};

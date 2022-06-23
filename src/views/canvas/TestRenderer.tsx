@@ -7,25 +7,20 @@ import {
   useState,
 } from 'react';
 import { css } from '@emotion/css';
-import { Area, Canvas, Shape } from './testClass';
+import { Area, Canvas, Shape } from './CanvasClass';
 import { Button } from '@wizrnd/nx-ui';
 import { Coordinate } from './types';
 import EditLayer from './EditLayer';
+import { EditMode } from 'src/reducer/canvas';
 
 interface Cor {
   x: number;
   y: number;
 }
 
-interface CanvasProps {
-  defaultStrokeColor?: string;
-}
-
-export type EditMode = 'rect' | 'poly' | false;
-
 const selected_temp = 0;
 
-const CanvasTest = ({ defaultStrokeColor = '#4c4c4c' }: CanvasProps) => {
+const CanvasTest = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
 

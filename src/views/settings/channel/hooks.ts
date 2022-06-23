@@ -1,16 +1,30 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Area, AreaData, AreaObject, Channel } from 'src/model/channel';
+import { useEffect, useMemo, useState } from 'react';
 import Client from 'src/utils/connection';
 
+import { Channel, isChannel } from 'src/model/channel';
+import { Area, Shape } from 'src/views/canvas/CanvasClass';
+import { JsonResponse } from 'src/utils/connection/types';
+
+const resource = 'channels';
+
 export const useChannel = (id: number) => {
+  const endPoint = useMemo(() => `${resource}/${id}`, [id]);
   const [loading, setLoading] = useState<boolean>(true);
   const [channel, setChannel] = useState<Channel | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // const [LoadingArae, setLoadingArae] = useState<boolean>(false);
 
-  useEffect(() => {
-    Client.get({ endPoint: `channels/${id}` })
+  const handelRequest = (promise: Promise<JsonResponse>) => {
+    return promise
       .then(({ json }) => {
-        setChannel(json as Channel);
+        if (!isChannel(json)) {
+          return Promise.reject({
+            error: 'Response type is not valid',
+            statusText: 'Type Exception',
+          });
+        }
+
+        setChannel(json);
       })
       .catch(err => {
         setError(err);
@@ -18,70 +32,60 @@ export const useChannel = (id: number) => {
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    handelRequest(Client.get({ endPoint }));
 
     return () => {
       setError(null);
       setLoading(false);
     };
-  }, [id]);
+  }, [endPoint]);
+
+  const pushArea = (newArea?: Area) => {
+    // setLoading(true);
+    if (!channel) {
+      setError('Can not push Area');
+      return;
+    }
+
+    if (!newArea) {
+      const index = channel.area.length;
+      newArea = new Area({ name: `Area${index}` });
+    }
+
+    const newChannel: Channel = {
+      ...channel,
+      area: [...channel.area, newArea],
+    };
+    const body = JSON.stringify(newChannel);
+
+    return handelRequest(Client.put({ endPoint, body }))
+      .then(() => channel.area.length)
+      .catch(() => null);
+  };
+
+  const pushShape = (newShape: Shape, areaIndex: number) => {
+    if (!channel) {
+      setError('Can not push Shape');
+      return;
+    }
+
+    const newShapes = [...channel.area[areaIndex].shapes, newShape];
+    const area = [...channel.area];
+    area[areaIndex] = { ...area[areaIndex], shapes: newShapes };
+    const newChannel = { ...channel, area: area };
+    const body = JSON.stringify(newChannel);
+
+    handelRequest(Client.put({ endPoint, body }));
+  };
 
   return {
     channel,
     error,
     loading,
-  };
-};
-
-export const useArea = (parentId: number) => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [area, setArea] = useState<Area[]>([]);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    Client.get({ endPoint: 'areas' })
-      .then(({ json }) => {
-        setArea(json.filter((item: Area) => item.parentId === parentId));
-      })
-      .catch(err => {
-        setError(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [parentId]);
-
-  const pushArea = useCallback(
-    (newArea: AreaData) => {
-      setLoading(true);
-
-      const areaObject: AreaObject = { ...newArea, parentId };
-      const body = JSON.stringify(areaObject);
-
-      return Client.post({ endPoint: 'areas', body })
-        .then(({ json }) => {
-          const newAreas = [...area, json as Area];
-          setArea(newAreas);
-
-          return newAreas.length - 1;
-        })
-        .catch(err => {
-          setError(err);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    },
-    [area, parentId],
-  );
-
-  // const moveArea = (area: AreaObject) => {};
-
-  // const deleteArea = (id: number) => {};
-
-  return {
-    area,
-    loading,
-    error,
     pushArea,
+    pushShape,
   };
 };

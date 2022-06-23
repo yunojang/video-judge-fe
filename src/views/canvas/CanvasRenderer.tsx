@@ -5,11 +5,15 @@ import {
   useRef,
   useState,
 } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { css } from '@emotion/css';
-import { Area, Canvas, Shape } from './testClass';
-import { Button } from '@wizrnd/nx-ui';
+
+import { Canvas, Shape } from './CanvasClass';
 import { Coordinate } from './types';
+import { RootState } from 'src/store';
+
 import EditLayer from './EditLayer';
+import { EditMode, setEditMode } from 'src/reducer/canvas';
 
 interface Cor {
   x: number;
@@ -17,40 +21,18 @@ interface Cor {
 }
 
 interface CanvasProps {
-  defaultStrokeColor?: string;
   canvas: Canvas;
   selected: number;
+  pushShape: (shape: Shape) => void;
 }
 
-export type EditMode = 'rect' | 'poly' | false;
-
-const CanvasRenderer = ({
-  defaultStrokeColor = '#4c4c4c',
-  canvas,
-  selected,
-}: CanvasProps) => {
+const CanvasRenderer = ({ canvas, selected, pushShape }: CanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
 
-  // seperate state - 데이터 불러와서, 렌더러에 넣어주는 영역
-  const [editMode, setEditMode] = useState<EditMode>(false);
-  // area model type으로  // edit -> setArea area를 렌더링
-  const [area, setArea] = useState<Area>({
-    color: '#ffaa55',
-    fillAlpha: 0.2,
-    name: 'Area-1',
-    shapes: [],
-  });
+  const { editMode } = useSelector((state: RootState) => state.canvas);
+  const dispatch = useDispatch();
 
-  // add shape method (실제론 변경 요청으로)
-  const pushShape = useCallback(
-    (shape: Shape) => {
-      setArea({ ...area, shapes: [...area.shapes, shape] });
-    },
-    [area],
-  );
-
-  // renderer state
   const [isDraw, setIsDraw] = useState<boolean>(false);
   const [point, setPoint] = useState<Cor[]>([]);
 
@@ -74,8 +56,8 @@ const CanvasRenderer = ({
   const drawEnd = useCallback(() => {
     setPoint([]);
     setIsDraw(false);
-    setEditMode(false);
-  }, []);
+    dispatch(setEditMode(false));
+  }, [dispatch]);
 
   const addRect = ({ x, y }: Coordinate) => {
     const start = point[0];
@@ -91,9 +73,7 @@ const CanvasRenderer = ({
 
   // hot key 분리
   useEffect(() => {
-    // editmode, 기능 -> redux로
-    // const endEdit = () => setEditMode(false);
-
+    // editmode, 기능 -> redux
     const handleKeydown = ({ key }: KeyboardEvent) => {
       if (key === 'Escape') {
         drawEnd();
@@ -120,7 +100,9 @@ const CanvasRenderer = ({
     setPoint([{ x, y }]);
   };
 
-  const style = makeStyle({ editMode });
+  const { width, height } = canvas;
+  console.log(width, height);
+  const style = makeStyle({ editMode, width, height });
   return (
     <div className={style.container}>
       <canvas
@@ -140,26 +122,29 @@ const CanvasRenderer = ({
         addRect={addRect}
         onClickPoly={pushPoint}
       />
-
-      <Button onClick={() => setEditMode('rect')} iconName="SquareIcon">
-        Square
-      </Button>
-      <Button onClick={() => setEditMode('poly')} iconName="ToolsIcon">
-        Poly
-      </Button>
     </div>
   );
 };
 export default CanvasRenderer;
 
-const makeStyle = ({ editMode }: { editMode: EditMode }) => {
+const makeStyle = ({
+  editMode,
+  width,
+  height,
+}: {
+  editMode: EditMode;
+  width: number;
+  height: number;
+}) => {
   const container = css`
     position: relative;
+    width: ${width}px;
+    height: ${height}px;
   `;
 
   const canvas = css`
-    background: #fff;
-    border: 1px solid #aaa;
+    /* background: #fff; */
+    /* border: 1px solid #aaa; */
     position: absolute;
     inset: 0;
 

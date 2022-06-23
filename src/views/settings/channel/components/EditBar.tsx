@@ -1,16 +1,30 @@
 import { Button } from '@wizrnd/nx-ui';
+import { useDispatch } from 'react-redux';
+import { setEditMode } from 'src/reducer/canvas';
 
 interface EditBarProps {
-  editMode: boolean;
-  toggleMode: () => void;
+  show?: boolean;
+  height?: number;
 }
 
-const AreaEditBar = ({ toggleMode }: EditBarProps) => {
+const AreaEditBar = ({ show = false, height = 50 }: EditBarProps) => {
+  const dispatch = useDispatch();
+
+  const setModeRect = () => dispatch(setEditMode('rect'));
+  const setModePoly = () => dispatch(setEditMode('poly'));
+
   return (
-    <div>
-      <Button onClick={toggleMode} iconName="SquareIcon">
-        Square
-      </Button>
+    <div style={{ height }}>
+      {show && (
+        <div>
+          <Button iconName="SquareIcon" onClick={setModeRect}>
+            Square
+          </Button>
+          <Button iconName="RubyIcon" onClick={setModePoly}>
+            Polygon
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

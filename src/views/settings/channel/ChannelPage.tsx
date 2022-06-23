@@ -1,33 +1,35 @@
 import { css, Global } from '@emotion/react';
-import { Body1, H5, H6, Header, Switch, Title1 } from '@wizrnd/nx-ui';
+import { Body1, Button, H5, H6, Header, Switch, Title1 } from '@wizrnd/nx-ui';
 import { useState } from 'react';
 
 import { all_index } from './type';
-import { AreaData, Channel } from 'src/model/channel';
+import { Channel } from 'src/model/channel';
 import AreaEditor from './AreaEditor';
 import AreaTab from './components/AreaTab';
-import { useArea } from './hooks';
+import { Area, Shape } from 'src/views/canvas/CanvasClass';
 
 interface ChannelProps {
   channel: Channel;
+  pushArea: (area?: Area) => void;
+  pushShape: (shape: Shape, index: number) => void;
 }
 
-const ChannelPage = ({ channel }: ChannelProps) => {
-  const { id, name, description, url, alarm, judgement } = channel;
+const ChannelPage = ({ channel, pushArea, pushShape }: ChannelProps) => {
+  const { id, name, description, url, alarm, inference, area } = channel;
 
-  const { area, pushArea } = useArea(id);
   const [selectedArea, setArea] = useState<number>(all_index); // All tab
+  const [areaLoading, setAreaLoading] = useState<boolean>(false);
 
   const handleChange = (selected: number) => {
     setArea(selected);
   };
 
-  const handleDrawArea = (area: AreaData) => {
-    pushArea(area).then(index => {
-      if (index) {
-        handleChange(index);
-      }
-    });
+  const handlePushArea = () => {
+    pushArea();
+  };
+
+  const handlePushShape = (shape: Shape) => {
+    pushShape(shape, selectedArea);
   };
 
   return (
@@ -39,11 +41,11 @@ const ChannelPage = ({ channel }: ChannelProps) => {
       <Style />
       <div className="container">
         <div className="channel-viewer">
+          {/* area editor */}
           <AreaEditor
-            parentId={id}
-            area={area}
+            areas={area}
             selected={selectedArea}
-            handleDrawArea={handleDrawArea}
+            pushShape={handlePushShape}
           />
 
           <div className="channel-description">
@@ -59,18 +61,23 @@ const ChannelPage = ({ channel }: ChannelProps) => {
           <H5>Settings</H5>
 
           <div className="switch-setting">
-            Inference Check: <Switch checked={judgement} />
+            Inference Check: <Switch checked={inference} />
           </div>
           <div className="switch-setting">
             Alarm Call: <Switch checked={alarm} />
           </div>
 
-          <AreaTab
-            parentId={id}
-            area={area}
-            selected={selectedArea}
-            handleChange={handleChange}
-          />
+          <div className="area-tab-wapper">
+            <AreaTab
+              parentId={id}
+              area={area}
+              selected={selectedArea}
+              handleChange={handleChange}
+            />
+            {!areaLoading && (
+              <Button onClick={handlePushArea} iconName="PlusIcon" size="md" />
+            )}
+          </div>
         </div>
       </div>
     </main>
@@ -108,6 +115,11 @@ const Style = () => (
       .switch-setting {
         display: flex;
         justify-content: space-between;
+      }
+
+      .area-tab-wapper {
+        display: flex;
+        align-items: center;
       }
     `}
   />

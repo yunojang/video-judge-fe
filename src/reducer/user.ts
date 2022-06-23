@@ -5,7 +5,8 @@ import { request, success, reject, makeActionFunction } from './utils';
 import Client from '../utils/connection';
 
 // Actions && Action Types
-const makeAction = makeActionFunction('user');
+const resource = 'user';
+const makeAction = makeActionFunction(resource);
 
 const UserActions = {
   create: makeAction('Create'),
@@ -18,7 +19,7 @@ const UserActions = {
 export function loadUser(token: number) {
   return {
     type: UserActions.load,
-    payload: Client.get({ endPoint: `users/${token}` }),
+    payload: Client.get({ endPoint: `${resource}/${token}` }),
   };
 }
 
@@ -72,7 +73,6 @@ export default (
     }
 
     case reject(UserActions.load): {
-      console.log('user load reject');
       return {
         ...state,
         flag: false,

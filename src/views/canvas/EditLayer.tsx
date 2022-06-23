@@ -1,7 +1,7 @@
 import { css } from '@emotion/css';
 import { MouseEventHandler, useEffect, useRef, useState } from 'react';
-import { EditMode } from './CanvasTest';
-import { Canvas, Rect } from './testClass';
+import { EditMode } from 'src/reducer/canvas';
+import { Canvas, Rect } from './CanvasClass';
 import { Coordinate } from './types';
 
 interface EditLayerProps {

@@ -1,60 +1,57 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { css, Global } from '@emotion/react';
 
-import { Area, AreaData } from 'src/model/channel';
-import { Canvas } from 'src/views/canvas/CanvasClass';
-import { Box } from 'src/views/canvas/types';
+import { Area, Canvas, Shape } from 'src/views/canvas/CanvasClass';
 
 import CanvasRenderer from 'src/views/canvas/CanvasRenderer';
 import EditBar from './components/EditBar';
 
 interface AreaEditorProps {
-  parentId: number;
-  area: Area[];
+  areas: Area[];
   selected: number;
-  handleDrawArea: (area: AreaData) => void;
+  pushShape: (shape: Shape) => void;
 }
 
-const AreaEditor = ({
-  // parentId,
-  area,
-  selected,
-  handleDrawArea,
-}: AreaEditorProps) => {
-  const [editMode, setEditMode] = useState(false);
+const width = 900;
+const editBarHeight = 50;
 
+const AreaEditor = ({ areas, selected, pushShape }: AreaEditorProps) => {
   const canvas = useMemo(() => {
-    const boxes = area.map(item => new Box(item));
+    return new Canvas({ areas, width });
+  }, [areas]);
 
-    return new Canvas({ boxes, width: 960 });
-  }, [area]);
-
-  const toggleMode = () => setEditMode(b => !b);
+  const isCorrectCanvasArea = useMemo(
+    () => Boolean(areas[selected]),
+    [areas, selected],
+  );
 
   return (
     <div className="editor-container">
-      <Style />
-      <EditBar editMode={editMode} toggleMode={toggleMode} />
-      <CanvasRenderer
-        canvas={canvas}
-        editMode={editMode}
-        selected={selected}
-        toggleMode={toggleMode}
-        handleDrawArea={handleDrawArea}
-      />
+      <Style width={canvas.width} height={canvas.height + editBarHeight} />
+      <EditBar show={isCorrectCanvasArea} height={editBarHeight} />
+
+      {isCorrectCanvasArea && (
+        <CanvasRenderer
+          canvas={canvas}
+          selected={selected}
+          pushShape={pushShape}
+        />
+      )}
     </div>
   );
 };
 
 export default AreaEditor;
 
-const Style = () => (
+const Style = ({ width, height }: { width: number; height: number }) => (
   <Global
     styles={css`
       .editor-container {
         display: flex;
         flex-direction: column;
         gap: 4px;
+        width: ${width}px;
+        height: ${height}px;
       }
     `}
   />
