@@ -1,23 +1,16 @@
-import { Position } from 'src/views/canvas/types';
+import { Area } from 'src/views/canvas/testClass';
 
-export interface AreaData {
-  color: string;
-  position: Position;
-}
+// model
+// export interface Area{
 
-export interface AreaObject extends AreaData {
-  parentId: number;
-}
-
-export interface Area extends AreaObject {
-  id: number;
-}
+// }
 
 export interface ChannelData {
   name: string;
   description: string;
   alarm: boolean;
-  judgement: boolean;
+  inference: boolean;
+  area: Area[]; // 나중에 실제 모델로 변경
   url: string;
 }
 

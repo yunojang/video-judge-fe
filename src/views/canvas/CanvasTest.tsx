@@ -2,6 +2,7 @@ import {
   MouseEventHandler,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -18,17 +19,13 @@ interface Cor {
 
 interface CanvasProps {
   defaultStrokeColor?: string;
-  canvas: Canvas;
-  selected: number;
 }
 
 export type EditMode = 'rect' | 'poly' | false;
 
-const CanvasRenderer = ({
-  defaultStrokeColor = '#4c4c4c',
-  canvas,
-  selected,
-}: CanvasProps) => {
+const selected_temp = 0;
+
+const CanvasTest = ({ defaultStrokeColor = '#4c4c4c' }: CanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
 
@@ -51,6 +48,7 @@ const CanvasRenderer = ({
   );
 
   // renderer state
+  const canvas = useMemo(() => new Canvas({ areas: [area] }), [area]);
   const [isDraw, setIsDraw] = useState<boolean>(false);
   const [point, setPoint] = useState<Cor[]>([]);
 
@@ -64,8 +62,8 @@ const CanvasRenderer = ({
     }
 
     canvas.clear(context);
-    canvas.drawArea(context, selected);
-  }, [canvas, context, selected]);
+    canvas.drawArea(context, selected_temp);
+  }, [canvas, context]);
 
   const pushPoint = (cor: Coordinate) => {
     setPoint(p => [...p, cor]);
@@ -134,7 +132,7 @@ const CanvasRenderer = ({
       <EditLayer
         editMode={editMode}
         isEditing={isDraw}
-        selected={selected}
+        selected={selected_temp}
         canvas={canvas}
         point={point}
         addRect={addRect}
@@ -150,7 +148,7 @@ const CanvasRenderer = ({
     </div>
   );
 };
-export default CanvasRenderer;
+export default CanvasTest;
 
 const makeStyle = ({ editMode }: { editMode: EditMode }) => {
   const container = css`
