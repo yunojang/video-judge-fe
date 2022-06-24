@@ -17,8 +17,6 @@ const Channel = () => {
     shapeLoading,
   } = useChannel(Number(id));
 
-  console.log(error);
-
   return error ? (
     <ErrorMsg msg={error} />
   ) : loading || !channel ? (

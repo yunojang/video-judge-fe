@@ -18,6 +18,7 @@ export interface Channel extends ChannelData {
   id: number;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const isChannel = (data: any): data is Channel => {
   const hasId = typeof data.id === 'number';
   const hasName = typeof data.name === 'string';

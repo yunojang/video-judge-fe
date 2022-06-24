@@ -44,6 +44,7 @@ const ChannelPage = ({
   };
 
   const currentArea = useMemo(() => area[selectedArea], [area, selectedArea]);
+  console.log(currentArea);
 
   return (
     <main>
