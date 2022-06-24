@@ -22,8 +22,8 @@ export const useFetchList = <T extends ListType>(
           setCollection(json as T[]);
         })
         .catch(err => {
-          handleErrorMsg(err);
           setError('Failed to Fetch List');
+          handleErrorMsg(err);
         })
         .finally(() => {
           setLoading(false);

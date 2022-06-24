@@ -1,5 +1,6 @@
 import { Post } from 'src/model/post';
 import { User } from 'src/model/user';
+import { AlertPublic } from './model/alert';
 
 export enum MenuType {
   User = 'users',
@@ -24,4 +25,4 @@ export const temp_menu = [
   },
 ];
 
-export type ListType = User | Post;
+export type ListType = User | Post | AlertPublic;
