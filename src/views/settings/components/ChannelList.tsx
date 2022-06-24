@@ -19,16 +19,14 @@ const ChannelList: FC = () => {
     name,
     description,
     index,
-    url,
-    alarm,
+    useAlarm,
   }: Channel & { index: number }) => (
     <Link to={`/channel/${id}`} key={index}>
       <div className={style.container}>
         <span className="title">{name}</span>
         <div className="description">
           <span>{description}</span>
-          <span>{url}</span>
-          <span>{alarm ? 'on' : 'off'}</span>
+          <span>{useAlarm ? 'on' : 'off'}</span>
         </div>
       </div>
     </Link>

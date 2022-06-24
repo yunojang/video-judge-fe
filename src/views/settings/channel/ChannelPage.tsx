@@ -23,7 +23,16 @@ const ChannelPage = ({
   areaLoading,
   shapeLoading,
 }: ChannelProps) => {
-  const { id, name, description, url, alarm, inference, area } = channel;
+  const {
+    id,
+    name,
+    description,
+    cameraSrc,
+    useInference,
+    useAlarm,
+    useSend,
+    area,
+  } = channel;
 
   const [selectedArea, setArea] = useState<number>(all_index); // no arae setting
 
@@ -68,18 +77,20 @@ const ChannelPage = ({
               [{id}] {name}
             </Title1>
             <Body1>{description}</Body1>
-            <Body1>{url}</Body1>
+            <Body1>{cameraSrc}</Body1>
           </div>
         </div>
 
         <div className="channel-settings">
           <H5>Settings</H5>
-
           <div className="switch-setting">
-            Inference Check: <Switch checked={inference} />
+            Use Inference: <Switch checked={useInference} />
           </div>
           <div className="switch-setting">
-            Alarm Call: <Switch checked={alarm} />
+            Use Alarm: <Switch checked={useAlarm} />
+          </div>
+          <div className="switch-setting">
+            Use Send: <Switch checked={useSend} />
           </div>
 
           <div className="area-tab-wapper">

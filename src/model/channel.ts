@@ -1,19 +1,27 @@
 import { Area } from 'src/canvas/CanvasClass';
 
-// model
-// export interface Area{
-
-// }
+interface Threshold {
+  seq: number;
+  modelId: number;
+  outputClassId: number;
+  use: boolean;
+  threshold: boolean;
+  createDate: Date;
+}
 
 export interface ChannelData {
   name: string;
+  cameraSrc: string;
   description: string;
-  alarm: boolean;
-  inference: boolean;
+  useInference: boolean;
+  useAlarm: boolean;
+  useSend: boolean;
+  createDate: Date;
   area: Area[]; // 나중에 실제 모델로 변경
-  url: string;
+  threshold: Threshold[];
 }
 
+// get response model
 export interface Channel extends ChannelData {
   id: number;
 }
