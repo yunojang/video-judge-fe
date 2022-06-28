@@ -35,3 +35,8 @@ export const isChannel = (data: any): data is Channel => {
 
   return hasId && hasName && hasDescription && hasArea;
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const isChannels = (data: Array<any>): data is Channel[] => {
+  return data.some(elem => !isChannel(elem));
+};

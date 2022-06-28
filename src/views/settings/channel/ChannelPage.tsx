@@ -13,15 +13,17 @@ interface ChannelProps {
   areaLoading: boolean;
   shapeLoading: boolean;
   pushArea: (area?: Area) => Promise<number>;
+  deleteArea: (index: number) => void;
   pushShape: (shape: Shape, index: number) => void;
 }
 
 const ChannelPage = ({
   channel,
-  pushArea,
-  pushShape,
   areaLoading,
   shapeLoading,
+  pushArea,
+  deleteArea,
+  pushShape,
 }: ChannelProps) => {
   const {
     id,
@@ -50,6 +52,15 @@ const ChannelPage = ({
 
   const handlePushShape = (shape: Shape) => {
     pushShape(shape, selectedArea);
+  };
+
+  const handleDeleteArea = () => {
+    if (selectedArea === all_index) {
+      return;
+    }
+
+    deleteArea(selectedArea);
+    setArea(selectedArea ? selectedArea - 1 : all_index);
   };
 
   const currentArea = useMemo(() => area[selectedArea], [area, selectedArea]);
@@ -107,6 +118,13 @@ const ChannelPage = ({
 
           <div className="area-description">
             {/* <div>{currentArea.color}</div> */}
+            {selectedArea !== all_index && (
+              <Button
+                onClick={handleDeleteArea}
+                iconName="XCircleFillIcon"
+                color="red"
+              />
+            )}
           </div>
         </div>
       </div>

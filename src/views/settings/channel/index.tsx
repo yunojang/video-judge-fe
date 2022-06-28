@@ -12,6 +12,7 @@ const Channel = () => {
     loading,
     channel,
     pushArea,
+    deleteArea,
     pushShape,
     areaLoading,
     shapeLoading,
@@ -25,6 +26,7 @@ const Channel = () => {
     <ChannelPage
       channel={channel}
       pushArea={pushArea}
+      deleteArea={deleteArea}
       pushShape={pushShape}
       areaLoading={areaLoading}
       shapeLoading={shapeLoading}

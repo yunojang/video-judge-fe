@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Client from 'src/utils/connection';
 
-import { Channel, isChannel } from 'src/model/channel';
+import { Channel, ChannelData, isChannel } from 'src/model/channel';
 import { Area, Shape } from 'src/canvas/CanvasClass';
-import { JsonResponse } from 'src/utils/connection/types';
+import { RequestConfig } from 'src/utils/connection/types';
 
 const resource = 'channels';
 
@@ -15,64 +15,88 @@ export const useChannel = (id: number) => {
   const [areaLoading, setAreaLoading] = useState<boolean>(false);
   const [shapeLoading, setShapeLoading] = useState<boolean>(false);
 
-  const handelRequest = (promise: Promise<JsonResponse>) => {
-    return promise
-      .then(({ json }) => {
-        if (!isChannel(json)) {
-          return Promise.reject({
-            error: 'Response type is not valid',
-            statusText: 'Type Exception',
-          });
-        }
+  const requestChannel = useCallback(
+    (options?: Partial<RequestConfig>) => {
+      return Client.request({ endPoint, ...options })
+        .then(({ json }) => {
+          if (!isChannel(json)) {
+            return Promise.reject({
+              error: 'Response type is not valid',
+              statusText: 'Type Exception',
+            });
+          }
 
-        setChannel(json);
-      })
-      .catch(err => {
-        setError(err);
-      });
-  };
+          setChannel(json);
+        })
+        .catch(err => {
+          setError(err);
+        })
+        .finally(() => setLoading(false));
+    },
+    [endPoint],
+  );
+
+  const putChannel = useCallback(
+    (newChannel?: ChannelData) => {
+      const body = JSON.stringify(newChannel);
+
+      return requestChannel({ method: 'PUT', body });
+    },
+    [requestChannel],
+  );
 
   useEffect(() => {
-    handelRequest(Client.get({ endPoint })).finally(() => {
-      setLoading(false);
-    });
+    requestChannel({ method: 'GET' });
 
     return () => {
       setError(null);
       setLoading(false);
     };
-  }, [endPoint]);
+  }, [requestChannel]);
 
+  // argument is connection model OR data interface convert to model from here
   const pushArea = (newArea?: Area) => {
     setAreaLoading(true);
 
     if (!channel) {
-      const err = 'Can not push Area';
-
+      const err = 'Cannot put Request without channel data';
       setError(err);
       return Promise.reject(-1);
     }
 
     if (!newArea) {
       const index = channel.area.length;
-      newArea = new Area({ name: `Area${index}` });
+      newArea = new Area({ name: `new Area` });
     }
 
     const newChannel: Channel = {
       ...channel,
       area: [...channel.area, newArea],
     };
-    const body = JSON.stringify(newChannel);
 
-    return handelRequest(Client.put({ endPoint, body }))
+    return putChannel(newChannel)
       .then(() => channel.area.length)
       .finally(() => setAreaLoading(false));
   };
 
+  const deleteArea = (index: number) => {
+    if (!channel) {
+      const err = 'Cannot put Request without channel data';
+      setError(err);
+      return;
+    }
+
+    const newArea = channel.area.filter((a, i) => i !== index);
+    const newChannel = { ...channel, area: newArea };
+
+    putChannel(newChannel);
+  };
+
   const pushShape = (newShape: Shape, areaIndex: number) => {
     if (!channel) {
-      setError('Can not push Shape');
-      return;
+      const err = 'Cannot put Request without channel data';
+      setError(err);
+      return Promise.reject(-1);
     }
 
     setShapeLoading(true);
@@ -81,11 +105,8 @@ export const useChannel = (id: number) => {
     const area = [...channel.area];
     area[areaIndex] = { ...area[areaIndex], shapes: newShapes };
     const newChannel = { ...channel, area: area };
-    const body = JSON.stringify(newChannel);
 
-    handelRequest(Client.put({ endPoint, body })).finally(() =>
-      setShapeLoading(false),
-    );
+    putChannel(newChannel).finally(() => setShapeLoading(false));
   };
 
   return {
@@ -93,6 +114,7 @@ export const useChannel = (id: number) => {
     error,
     loading,
     pushArea,
+    deleteArea,
     pushShape,
     areaLoading,
     shapeLoading,
