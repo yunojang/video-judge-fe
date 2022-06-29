@@ -14,24 +14,28 @@ interface AreaProps {
   name: string;
   color?: string;
   fillAlpha?: number;
+  useArea?: boolean;
   shapes?: Shape[];
 }
 
 export class Area {
-  name: string;
+  name?: string;
   color: string;
   fillAlpha: number;
+  useArea: boolean;
   shapes: Shape[];
 
   constructor({
-    name,
-    color = '#666666',
+    name = 'Area',
+    color = '#55aaee',
     fillAlpha = 0.2,
+    useArea = true,
     shapes = [],
   }: AreaProps) {
     this.name = name;
     this.color = color;
     this.fillAlpha = fillAlpha;
+    this.useArea = useArea;
     this.shapes = shapes;
   }
 }

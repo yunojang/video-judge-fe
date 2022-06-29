@@ -4,9 +4,11 @@ import { useMemo, useState } from 'react';
 
 import { all_index } from './type';
 import { Channel } from 'src/model/channel';
+import { Area, Shape } from 'src/canvas/CanvasClass';
+
 import AreaEditor from './AreaEditor';
 import AreaTab from './components/AreaTab';
-import { Area, Shape } from 'src/canvas/CanvasClass';
+import AreaDetail from './components/AreaDetail';
 
 interface ChannelProps {
   channel: Channel;
@@ -14,6 +16,7 @@ interface ChannelProps {
   shapeLoading: boolean;
   pushArea: (area?: Area) => Promise<number>;
   deleteArea: (index: number) => void;
+  changeAreaColor: (color: string, index: number) => void;
   pushShape: (shape: Shape, index: number) => void;
 }
 
@@ -23,6 +26,7 @@ const ChannelPage = ({
   shapeLoading,
   pushArea,
   deleteArea,
+  changeAreaColor,
   pushShape,
 }: ChannelProps) => {
   const {
@@ -63,8 +67,11 @@ const ChannelPage = ({
     setArea(selectedArea ? selectedArea - 1 : all_index);
   };
 
+  const handleChangeColor = (color: string) => {
+    changeAreaColor(color, selectedArea);
+  };
+
   const currentArea = useMemo(() => area[selectedArea], [area, selectedArea]);
-  console.log(currentArea);
 
   return (
     <main>
@@ -117,12 +124,11 @@ const ChannelPage = ({
           </div>
 
           <div className="area-description">
-            {/* <div>{currentArea.color}</div> */}
             {selectedArea !== all_index && (
-              <Button
-                onClick={handleDeleteArea}
-                iconName="XCircleFillIcon"
-                color="red"
+              <AreaDetail
+                handleChangeColor={handleChangeColor}
+                area={currentArea}
+                handleDelete={handleDeleteArea}
               />
             )}
           </div>
@@ -168,6 +174,10 @@ const Style = () => (
       .area-tab-wapper {
         display: flex;
         align-items: center;
+      }
+
+      .area-description {
+        height: 360px;
       }
     `}
   />

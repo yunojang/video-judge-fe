@@ -10,12 +10,13 @@ const Channel = () => {
   const {
     error,
     loading,
+    areaLoading,
+    shapeLoading,
     channel,
     pushArea,
     deleteArea,
+    changeAreaColor,
     pushShape,
-    areaLoading,
-    shapeLoading,
   } = useChannel(Number(id));
 
   return error ? (
@@ -25,11 +26,12 @@ const Channel = () => {
   ) : (
     <ChannelPage
       channel={channel}
-      pushArea={pushArea}
-      deleteArea={deleteArea}
-      pushShape={pushShape}
       areaLoading={areaLoading}
       shapeLoading={shapeLoading}
+      pushArea={pushArea}
+      deleteArea={deleteArea}
+      changeAreaColor={changeAreaColor}
+      pushShape={pushShape}
     />
   );
 };

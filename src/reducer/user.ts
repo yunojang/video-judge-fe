@@ -1,5 +1,5 @@
 import { AnyAction } from 'redux';
-import { User, UserData } from '../model/user';
+import { User, UserPublic } from '../model/user';
 import { request, success, reject, makeActionFunction } from './utils';
 
 import Client from '../utils/connection';
@@ -25,7 +25,7 @@ export function loadUser(token: number) {
 
 interface UserState {
   userIdx: number | null;
-  user: UserData;
+  user: UserPublic;
   flag: boolean;
   loading: boolean;
 }

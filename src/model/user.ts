@@ -1,7 +1,7 @@
-export interface UserData {
+export interface UserPublic {
   name: string;
 }
 
-export interface User extends UserData {
+export interface User extends UserPublic {
   id: number;
 }

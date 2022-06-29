@@ -1,35 +1,29 @@
 import { useMemo, useState } from 'react';
-import { temp_menu, default_menu, MenuType } from '../../types';
+import { menu, default_menu, MenuType } from './types';
 
 import { Layout } from '@wizrnd/nx-ui';
 import Menu from 'src/components/Menu';
 import ErrorMsg from 'src/components/ErrorMsg';
-import UserList from './components/UserList';
-import PostList from './components/PostList';
 import ChannelList from './components/ChannelList';
 
 const Settings = () => {
-  const [menu, setMenu] = useState<string>(default_menu);
+  const [selected, setSelected] = useState<string>(default_menu);
 
   const Component = useMemo(() => {
-    if (menu === MenuType.User) {
-      return <UserList />;
-    } else if (menu === MenuType.Post) {
-      return <PostList />;
-    } else if (menu === MenuType.Channel) {
+    if (selected === MenuType.Channel) {
       return <ChannelList />;
     } else {
       return <ErrorMsg msg="Incorrect menu" />;
     }
-  }, [menu]);
+  }, [selected]);
 
   return (
     <main>
       <Layout.Container style={{ flexDirection: 'row' }}>
         <Layout.Sider width="200px">
           <Menu
-            data={{ menu: temp_menu, current: menu }}
-            handleChange={k => setMenu(k)}
+            data={{ menu, current: selected }}
+            handleChange={k => setSelected(k)}
           />
         </Layout.Sider>
         <Layout.Content style={{ padding: '0.5em' }}>

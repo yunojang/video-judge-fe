@@ -1,6 +1,6 @@
 import { Area } from 'src/canvas/CanvasClass';
 
-interface Threshold {
+interface ThresholdBase {
   seq: number;
   modelId: number;
   outputClassId: number;
@@ -9,20 +9,30 @@ interface Threshold {
   createDate: Date;
 }
 
-export interface ChannelData {
+export interface ChannelAreaBase {
+  seq: number;
+  videoId: number;
   name: string;
-  cameraSrc: string;
+  useArea: boolean;
+  descripton: string;
+  createDate: Date;
+}
+
+export interface ChannelPublic {
+  name: string;
   description: string;
   useInference: boolean;
   useAlarm: boolean;
   useSend: boolean;
-  createDate: Date;
   area: Area[]; // 나중에 실제 모델로 변경
-  threshold: Threshold[];
+  threshold: ThresholdBase[];
+  position: string;
+  cameraSrc: string;
+  createDate: Date;
 }
 
 // get response model
-export interface Channel extends ChannelData {
+export interface Channel extends ChannelPublic {
   id: number;
 }
 

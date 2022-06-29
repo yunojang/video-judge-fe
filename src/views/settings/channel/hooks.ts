@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Client from 'src/utils/connection';
 
-import { Channel, ChannelData, isChannel } from 'src/model/channel';
+import { Channel, ChannelPublic, isChannel } from 'src/model/channel';
 import { Area, Shape } from 'src/canvas/CanvasClass';
 import { RequestConfig } from 'src/utils/connection/types';
 
@@ -37,7 +37,7 @@ export const useChannel = (id: number) => {
   );
 
   const putChannel = useCallback(
-    (newChannel?: ChannelData) => {
+    (newChannel?: ChannelPublic) => {
       const body = JSON.stringify(newChannel);
 
       return requestChannel({ method: 'PUT', body });
@@ -65,7 +65,6 @@ export const useChannel = (id: number) => {
     }
 
     if (!newArea) {
-      const index = channel.area.length;
       newArea = new Area({ name: `new Area` });
     }
 
@@ -92,6 +91,32 @@ export const useChannel = (id: number) => {
     putChannel(newChannel);
   };
 
+  const changeAreaColor = (color: string, areaIndex: number) => {
+    if (!channel) {
+      const err = 'Cannot put Request without channel data';
+      setError(err);
+      return;
+    }
+
+    const area = channel.area[areaIndex];
+
+    if (!area) {
+      const err = 'Cannot change color in Invaild area index';
+      setError(err);
+      return;
+    }
+
+    const newArea = [...channel.area];
+    newArea[areaIndex] = { ...area, color };
+
+    const newChannel: Channel = {
+      ...channel,
+      area: newArea,
+    };
+
+    return putChannel(newChannel);
+  };
+
   const pushShape = (newShape: Shape, areaIndex: number) => {
     if (!channel) {
       const err = 'Cannot put Request without channel data';
@@ -113,10 +138,11 @@ export const useChannel = (id: number) => {
     channel,
     error,
     loading,
-    pushArea,
-    deleteArea,
-    pushShape,
     areaLoading,
     shapeLoading,
+    pushArea,
+    deleteArea,
+    changeAreaColor,
+    pushShape,
   };
 };

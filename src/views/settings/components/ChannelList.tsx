@@ -4,12 +4,11 @@ import { css } from '@emotion/css';
 import { Link } from 'react-router-dom';
 
 import { Channel } from 'src/model/channel';
-import { MenuType } from 'src/types';
 
 import ListView from 'src/components/ListView';
 import ErrorMsg from 'src/components/ErrorMsg';
 
-const resource = MenuType.Channel;
+const resource = 'channels';
 const ChannelList: FC = () => {
   const { t } = useTranslation();
   const style = makeStyle();
