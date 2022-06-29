@@ -33,6 +33,7 @@ module.exports = {
     "eqeqeq": 1,
     "curly": 1,
     "react/prop-types": 0,
+    "@typescript-eslint/no-empty-function": 0,
   },
   ignorePatterns: [
     "node_modules",
