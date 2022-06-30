@@ -80,3 +80,7 @@ export interface RecordVideoPublic {
 
   id: number;
 }
+
+export interface Alert extends AlertPublic {
+  id: number;
+}
