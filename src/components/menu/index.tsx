@@ -1,7 +1,8 @@
 import { Menu as NxMenu, MenuItem } from '@wizrnd/nx-ui';
 
 interface MenuProps {
-  data: { menu: MenuObject[]; current: string | null };
+  menu: MenuObject[];
+  current: string | null;
   handleChange: (key: string) => void;
 }
 
@@ -10,10 +11,7 @@ interface MenuObject {
   label: string;
 }
 
-const Menu: React.FC<MenuProps> = ({
-  data: { menu, current },
-  handleChange,
-}) => {
+const Menu: React.FC<MenuProps> = ({ menu, current, handleChange }) => {
   const renderMenu = ({ id, label }: MenuObject, index: number) => {
     const color = current === id ? '#e5efff' : 'white';
 

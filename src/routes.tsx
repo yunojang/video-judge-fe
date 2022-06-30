@@ -9,6 +9,7 @@ const Settings = lazy(() => import('./views/settings'));
 const Channel = lazy(() => import('./views/settings/channel'));
 const CanvasTest = lazy(() => import('./canvas/TestRenderer'));
 const RequestTest = lazy(() => import('./views/request'));
+const Alert = lazy(() => import('./views/alert'));
 
 interface Router {
   path: string;
@@ -18,6 +19,7 @@ interface Router {
 
 export const paths = {
   home: '/',
+  alert: '/alert',
   settings: '/settings',
   channels: '/channel',
   canvasSandbox: '/sandbox_canvas',
@@ -35,6 +37,10 @@ const routes: Router[] = [
   {
     path: paths.channels + '/:id',
     element: <Channel />,
+  },
+  {
+    path: paths.alert,
+    element: <Alert />,
   },
   {
     path: paths.canvasSandbox,

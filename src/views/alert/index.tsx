@@ -1,7 +1,7 @@
 import MenuWrapper from 'src/components/Menu/MenuPage';
 import { default_menu, menu } from './menu';
 
-const Settings = () => {
+const Alert = () => {
   return (
     <main>
       <MenuWrapper menu={menu} defaultId={default_menu} />
@@ -9,4 +9,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default Alert;

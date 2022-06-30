@@ -1,8 +1,13 @@
-import { paths } from './routes';
+import { paths } from '../routes';
 
 export const menu = [
   {
     path: paths.canvasSandbox,
+    logo: 'HubotIcon',
+    tooltip: 'canvas sandbox lab',
+  },
+  {
+    path: paths.alert,
     logo: 'MailIcon',
     tooltip: 'setting alarm',
   },

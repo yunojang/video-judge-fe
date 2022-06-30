@@ -38,6 +38,7 @@ const CanvasRenderer = ({ canvas, selected, pushShape }: CanvasProps) => {
 
   useEffect(() => {
     setContext(canvasRef.current?.getContext('2d') as CanvasRenderingContext2D);
+    // set context in redux canvas store
   }, []);
 
   useEffect(() => {

@@ -8,22 +8,33 @@ interface EditBarProps {
   loading: boolean;
   show?: boolean;
   height?: number;
+  clear?: () => void;
 }
 
-const AreaEditBar = ({ show = false, height = 40, loading }: EditBarProps) => {
+const AreaEditBar = ({
+  show = false,
+  height = 40,
+  loading,
+  clear = () => {},
+}: EditBarProps) => {
   const dispatch = useDispatch();
 
   const setModeRect = () => dispatch(setEditMode('rect'));
   const setModePoly = () => dispatch(setEditMode('poly'));
 
   const element: ReactElement = (
-    <div>
-      <Button iconName="SquareIcon" onClick={setModeRect}>
-        Square
-      </Button>
-      <Button iconName="RubyIcon" onClick={setModePoly}>
-        Polygon
-      </Button>
+    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div>
+        <Button iconName="SquareIcon" onClick={setModeRect}>
+          Square
+        </Button>
+        <Button iconName="RubyIcon" onClick={setModePoly}>
+          Polygon
+        </Button>
+      </div>
+      <div>
+        <Button onClick={clear}>Clear</Button>
+      </div>
     </div>
   );
 

@@ -4,7 +4,7 @@ import RootProvider from './RootProvider';
 import RootRouter, { isFrontendRoute } from './routes';
 
 import Header from './views/home/components/Header';
-import { menu, title } from './constant';
+import { menu, title } from './constant/header';
 
 const App = () => (
   <Router>
