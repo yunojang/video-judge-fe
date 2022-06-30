@@ -1,8 +1,8 @@
-import { ListType } from 'src/types';
 import { useFetchList } from 'src/views/hooks';
 import Loading from '../Loading';
 import React from 'react';
 import ErrorMsg from '../ErrorMsg';
+import { ListType } from 'src/model/types';
 
 interface ListViewProps {
   resource: string;

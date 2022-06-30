@@ -7,26 +7,27 @@ import {
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { css } from '@emotion/css';
-
-import { Canvas, Shape } from './CanvasClass';
-import { Coordinate } from './types';
 import { RootState } from 'src/store';
-
-import EditLayer from './EditLayer';
 import { EditMode, setEditMode } from 'src/reducer/canvas';
 
-interface Cor {
-  x: number;
-  y: number;
-}
+import { Canvas } from './CanvasClass';
+import { DrawCoordinate } from './types';
+
+import EditLayer from './EditLayer';
 
 interface CanvasProps {
   canvas: Canvas;
   selected: number;
-  pushShape: (shape: Shape) => void;
+  pushRect: (c: number[]) => void;
+  pushPoly: (c: number[]) => void;
 }
 
-const CanvasRenderer = ({ canvas, selected, pushShape }: CanvasProps) => {
+const CanvasRenderer = ({
+  canvas,
+  selected,
+  pushRect,
+  pushPoly,
+}: CanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
 
@@ -34,11 +35,11 @@ const CanvasRenderer = ({ canvas, selected, pushShape }: CanvasProps) => {
   const dispatch = useDispatch();
 
   const [isDraw, setIsDraw] = useState<boolean>(false);
-  const [point, setPoint] = useState<Cor[]>([]);
+  const [point, setPoint] = useState<DrawCoordinate[]>([]);
 
   useEffect(() => {
     setContext(canvasRef.current?.getContext('2d') as CanvasRenderingContext2D);
-    // set context in redux canvas store
+    // setting context(ctx) in redux canvas store
   }, []);
 
   useEffect(() => {
@@ -50,8 +51,8 @@ const CanvasRenderer = ({ canvas, selected, pushShape }: CanvasProps) => {
     canvas.drawArea(context, selected);
   }, [canvas, context, selected]);
 
-  const pushPoint = (cor: Coordinate) => {
-    setPoint(p => [...p, cor]);
+  const pushPoint = (coor: DrawCoordinate) => {
+    setPoint(p => [...p, coor]);
   };
 
   const drawEnd = useCallback(() => {
@@ -60,21 +61,30 @@ const CanvasRenderer = ({ canvas, selected, pushShape }: CanvasProps) => {
     dispatch(setEditMode(false));
   }, [dispatch]);
 
-  const addRect = ({ x, y }: Coordinate) => {
+  const addRect = (end: DrawCoordinate) => {
     const start = point[0];
 
-    pushShape({ start, end: { x, y } });
+    const coordinate = [
+      ...canvas.getCoordinateRatio(start),
+      ...canvas.getCoordinateRatio(end),
+    ];
+    pushRect(coordinate);
+
     drawEnd();
   };
 
   const addPoly = useCallback(() => {
-    pushShape(point);
+    const coordinate: number[] = point.reduce(
+      (acc, cur) => [...acc, ...canvas.getCoordinateRatio(cur)],
+      [] as number[],
+    );
+
+    pushPoly(coordinate);
     drawEnd();
-  }, [point, pushShape, drawEnd]);
+  }, [point, drawEnd, pushPoly, canvas]);
 
   // hot key 분리
   useEffect(() => {
-    // editmode, 기능 -> redux
     const handleKeydown = ({ key }: KeyboardEvent) => {
       if (key === 'Escape') {
         drawEnd();

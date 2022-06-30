@@ -3,8 +3,7 @@ import { Body1, Button, H5, H6, Header, Switch, Title1 } from '@wizrnd/nx-ui';
 import { useMemo, useState } from 'react';
 
 import { all_index } from './type';
-import { Channel } from 'src/model/channel';
-import { Area, Shape } from 'src/canvas/CanvasClass';
+import { AreaObject, Channel, Position } from 'src/model/channel';
 
 import AreaEditor from './AreaEditor';
 import AreaTab from './components/AreaTab';
@@ -14,10 +13,10 @@ interface ChannelProps {
   channel: Channel;
   areaLoading: boolean;
   shapeLoading: boolean;
-  pushArea: (area?: Area) => Promise<number>;
+  pushArea: (area?: AreaObject) => Promise<number>;
   deleteArea: (index: number) => void;
-  changeAreaColor: (color: string, index: number) => void;
-  pushShape: (shape: Shape, index: number) => void;
+  setArea: (area: AreaObject, index: number) => void;
+  pushPosition: (position: Position, index: number) => void;
 }
 
 const ChannelPage = ({
@@ -26,12 +25,12 @@ const ChannelPage = ({
   shapeLoading,
   pushArea,
   deleteArea,
-  changeAreaColor,
-  pushShape,
+  setArea,
+  pushPosition,
 }: ChannelProps) => {
   const {
     id,
-    name,
+    channelName,
     description,
     cameraSrc,
     useInference,
@@ -40,10 +39,14 @@ const ChannelPage = ({
     area,
   } = channel;
 
-  const [selectedArea, setArea] = useState<number>(all_index); // no arae setting
+  const [selectedArea, setSelectedArea] = useState<number>(all_index); // no arae setting
+  const currentArea = useMemo(
+    () => (selectedArea !== all_index ? area[selectedArea] : null),
+    [area, selectedArea],
+  );
 
   const handleChange = (selected: number) => {
-    setArea(selected);
+    setSelectedArea(selected);
   };
 
   const handlePushArea = async () => {
@@ -54,8 +57,8 @@ const ChannelPage = ({
     }
   };
 
-  const handlePushShape = (shape: Shape) => {
-    pushShape(shape, selectedArea);
+  const handlePushPosition = (position: Position) => {
+    pushPosition(position, selectedArea);
   };
 
   const handleDeleteArea = () => {
@@ -64,19 +67,21 @@ const ChannelPage = ({
     }
 
     deleteArea(selectedArea);
-    setArea(selectedArea ? selectedArea - 1 : all_index);
+    setSelectedArea(selectedArea ? selectedArea - 1 : all_index);
   };
 
   const handleChangeColor = (color: string) => {
-    changeAreaColor(color, selectedArea);
-  };
+    if (!currentArea) {
+      return;
+    }
 
-  const currentArea = useMemo(() => area[selectedArea], [area, selectedArea]);
+    setArea({ ...currentArea, color }, selectedArea);
+  };
 
   return (
     <main>
       <Header>
-        <H6>채널 관리 / {name}</H6>
+        <H6>채널 관리 / {channelName}</H6>
       </Header>
 
       <Style />
@@ -86,13 +91,13 @@ const ChannelPage = ({
           <AreaEditor
             areas={area}
             selected={selectedArea}
-            pushShape={handlePushShape}
             shapeLoading={shapeLoading}
+            onPushPosition={handlePushPosition}
           />
 
           <div className="channel-description">
             <Title1>
-              [{id}] {name}
+              [{id}] {channelName}
             </Title1>
             <Body1>{description}</Body1>
             <Body1>{cameraSrc}</Body1>
@@ -114,7 +119,7 @@ const ChannelPage = ({
           <div className="area-tab-wapper">
             <AreaTab
               parentId={id}
-              area={area}
+              areas={area}
               selected={selectedArea}
               handleChange={handleChange}
             />
@@ -124,7 +129,7 @@ const ChannelPage = ({
           </div>
 
           <div className="area-description">
-            {selectedArea !== all_index && (
+            {currentArea && (
               <AreaDetail
                 handleChangeColor={handleChangeColor}
                 area={currentArea}

@@ -1,17 +1,24 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Client from 'src/utils/connection';
 
-import { Channel, ChannelPublic, isChannel } from 'src/model/channel';
-import { Area, Shape } from 'src/canvas/CanvasClass';
+import {
+  Channel,
+  AreaObject,
+  ChannelObject,
+  isChannel,
+  Position,
+} from 'src/model/channel';
 import { RequestConfig } from 'src/utils/connection/types';
 
 const resource = 'channels';
 
 export const useChannel = (id: number) => {
   const endPoint = useMemo(() => `${resource}/${id}`, [id]);
-  const [loading, setLoading] = useState<boolean>(true);
+
   const [channel, setChannel] = useState<Channel | null>(null);
+
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const [areaLoading, setAreaLoading] = useState<boolean>(false);
   const [shapeLoading, setShapeLoading] = useState<boolean>(false);
 
@@ -25,7 +32,6 @@ export const useChannel = (id: number) => {
               statusText: 'Type Exception',
             });
           }
-
           setChannel(json);
         })
         .catch(err => {
@@ -34,15 +40,6 @@ export const useChannel = (id: number) => {
         .finally(() => setLoading(false));
     },
     [endPoint],
-  );
-
-  const putChannel = useCallback(
-    (newChannel?: ChannelPublic) => {
-      const body = JSON.stringify(newChannel);
-
-      return requestChannel({ method: 'PUT', body });
-    },
-    [requestChannel],
   );
 
   useEffect(() => {
@@ -54,23 +51,35 @@ export const useChannel = (id: number) => {
     };
   }, [requestChannel]);
 
-  // argument is connection model OR data interface convert to model from here
-  const pushArea = (newArea?: Area) => {
-    setAreaLoading(true);
+  const putChannel = useCallback(
+    (newChannel: ChannelObject) => {
+      if (!channel) {
+        return Promise.reject('Cannot PUT Request without channel data');
+      }
 
+      const body = JSON.stringify({ ...channel, ...newChannel });
+
+      return requestChannel({ method: 'PUT', body });
+    },
+    [requestChannel, channel],
+  );
+
+  // argument is connection model OR data interface convert to model from here
+  const pushArea = (area?: AreaObject) => {
     if (!channel) {
-      const err = 'Cannot put Request without channel data';
-      setError(err);
+      setError('Cannot put Request without channel data');
       return Promise.reject(-1);
     }
 
-    if (!newArea) {
-      newArea = new Area({ name: `new Area` });
+    setAreaLoading(true);
+
+    if (!area) {
+      area = new AreaObject({});
     }
 
-    const newChannel: Channel = {
+    const newChannel = {
       ...channel,
-      area: [...channel.area, newArea],
+      area: [...channel.area, area],
     };
 
     return putChannel(newChannel)
@@ -80,58 +89,53 @@ export const useChannel = (id: number) => {
 
   const deleteArea = (index: number) => {
     if (!channel) {
-      const err = 'Cannot put Request without channel data';
-      setError(err);
-      return;
+      setError('Cannot put Request without channel data');
+      return false;
     }
 
-    const newArea = channel.area.filter((a, i) => i !== index);
+    const newArea = [
+      ...channel.area.slice(0, index),
+      ...channel.area.slice(index + 1),
+    ];
     const newChannel = { ...channel, area: newArea };
 
     putChannel(newChannel);
   };
 
-  const changeAreaColor = (color: string, areaIndex: number) => {
+  const setArea = (area: AreaObject, index: number) => {
     if (!channel) {
       const err = 'Cannot put Request without channel data';
       setError(err);
-      return;
+      return Promise.reject(false);
     }
 
-    const area = channel.area[areaIndex];
-
-    if (!area) {
-      const err = 'Cannot change color in Invaild area index';
+    if (!channel.area[index]) {
+      const err = 'Cannot set Area in invalid area index';
       setError(err);
-      return;
+      return Promise.reject(false);
     }
 
-    const newArea = [...channel.area];
-    newArea[areaIndex] = { ...area, color };
-
-    const newChannel: Channel = {
-      ...channel,
-      area: newArea,
-    };
+    const newAreas = [...channel.area];
+    newAreas[index] = area;
+    const newChannel = { ...channel, area: newAreas };
 
     return putChannel(newChannel);
   };
 
-  const pushShape = (newShape: Shape, areaIndex: number) => {
+  // shape -> position
+  const pushPosition = (newPosition: Position, areaIndex: number) => {
     if (!channel) {
-      const err = 'Cannot put Request without channel data';
-      setError(err);
+      setError('Cannot put Request without channel data');
       return Promise.reject(-1);
     }
 
     setShapeLoading(true);
 
-    const newShapes = [...channel.area[areaIndex].shapes, newShape];
-    const area = [...channel.area];
-    area[areaIndex] = { ...area[areaIndex], shapes: newShapes };
-    const newChannel = { ...channel, area: area };
+    const area = channel.area[areaIndex];
+    const position = [...area.position, newPosition]; // add new Shape
+    const newArea: AreaObject = { ...area, position };
 
-    putChannel(newChannel).finally(() => setShapeLoading(false));
+    setArea(newArea, areaIndex).finally(() => setShapeLoading(false));
   };
 
   return {
@@ -141,8 +145,8 @@ export const useChannel = (id: number) => {
     areaLoading,
     shapeLoading,
     pushArea,
+    setArea,
     deleteArea,
-    changeAreaColor,
-    pushShape,
+    pushPosition,
   };
 };

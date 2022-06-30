@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ListType } from 'src/types';
+import { ListType } from 'src/model/types';
 import Client from 'src/utils/connection';
 
 const handleErrorDefault = (msg: string) => {
@@ -49,7 +49,6 @@ export const useList = <T extends ListType>(
 ) => {
   const [loading, setLoading] = useState(false);
   const [collection, setCollection] = useState<T[] | null>(null);
-  // const [result, setResult] = useState(true);
 
   const postList = (body: Partial<T>) => {
     setLoading(true);

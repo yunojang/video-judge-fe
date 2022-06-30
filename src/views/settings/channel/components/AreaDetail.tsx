@@ -1,12 +1,12 @@
 import { css, Global } from '@emotion/react';
 import { Button, Checkbox, Title1 } from '@wizrnd/nx-ui';
 import { useMemo, useState } from 'react';
-import { Area } from 'src/canvas/CanvasClass';
+import { AreaObject } from 'src/model/channel';
 
 interface AreaDetailProps {
   handleDelete: () => void;
   handleChangeColor: (color: string) => void;
-  area: Area;
+  area: AreaObject;
 }
 
 const AreaDetail = ({
@@ -15,7 +15,7 @@ const AreaDetail = ({
   handleChangeColor,
 }: AreaDetailProps) => {
   const defaultColor = useMemo(() => {
-    console.log('setcolor');
+    console.log(area);
     return area.color;
   }, [area]);
 

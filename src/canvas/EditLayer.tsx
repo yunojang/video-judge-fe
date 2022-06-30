@@ -1,17 +1,22 @@
 import { css } from '@emotion/css';
 import { MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { EditMode } from 'src/reducer/canvas';
-import { Canvas, Rect } from './CanvasClass';
-import { Coordinate } from './types';
+import { Canvas } from './CanvasClass';
+import { DrawCoordinate } from './types';
 
 interface EditLayerProps {
   editMode: EditMode;
   canvas: Canvas;
   selected: number;
   isEditing: boolean;
-  addRect: (cor: Coordinate) => void;
-  point: Coordinate[];
-  onClickPoly: (cor: Coordinate) => void;
+  addRect: (cor: DrawCoordinate) => void;
+  point: DrawCoordinate[];
+  onClickPoly: (cor: DrawCoordinate) => void;
+}
+
+interface Rect {
+  start: DrawCoordinate;
+  end: DrawCoordinate;
 }
 
 const EditLayer = ({
@@ -37,15 +42,18 @@ const EditLayer = ({
   }, [isEditing, canvas, context]);
 
   const drawRect = (ctx: CanvasRenderingContext2D, rect: Rect) => {
-    const { width, height } = Canvas.getRectSize(rect.start, rect.end);
-    const { x, y } = rect.start;
+    const { x: sx, y: sy } = rect.start;
+    const { x: dx, y: dy } = rect.end;
 
     canvas.clear(ctx);
     ctx.strokeStyle = canvas.areas[selected].color;
-    ctx.strokeRect(x, y, width, height);
+    ctx.strokeRect(sx, sy, dx - sx, dy - sy);
   };
 
-  const drawLine = (ctx: CanvasRenderingContext2D, points: Coordinate[]) => {
+  const drawLine = (
+    ctx: CanvasRenderingContext2D,
+    points: DrawCoordinate[],
+  ) => {
     canvas.clear(ctx);
     ctx.strokeStyle = canvas.areas[selected].color;
 

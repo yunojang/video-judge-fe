@@ -7,6 +7,7 @@ import { Channel } from 'src/model/channel';
 
 import ListView from 'src/components/ListView';
 import ErrorMsg from 'src/components/ErrorMsg';
+import { paths } from 'src/routes';
 
 const resource = 'channels';
 const ChannelList: FC = () => {
@@ -15,14 +16,14 @@ const ChannelList: FC = () => {
 
   const renderChannel = ({
     id,
-    name,
+    channelName,
     description,
     index,
     useAlarm,
   }: Channel & { index: number }) => (
-    <Link to={`/channel/${id}`} key={index}>
+    <Link to={`${paths.channels}/${id}`} key={index}>
       <div className={style.container}>
-        <span className="title">{name}</span>
+        <span className="title">{channelName}</span>
         <div className="description">
           <span>{description}</span>
           <span>{useAlarm ? 'on' : 'off'}</span>

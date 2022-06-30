@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 import { css } from '@emotion/css';
-import { Area, Canvas, Shape } from './CanvasClass';
+import { Canvas } from './CanvasClass';
 import { Button } from '@wizrnd/nx-ui';
 import { Coordinate } from './types';
 import EditLayer from './EditLayer';

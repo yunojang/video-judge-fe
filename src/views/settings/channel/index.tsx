@@ -15,8 +15,8 @@ const Channel = () => {
     channel,
     pushArea,
     deleteArea,
-    changeAreaColor,
-    pushShape,
+    setArea,
+    pushPosition,
   } = useChannel(Number(id));
 
   return error ? (
@@ -29,9 +29,9 @@ const Channel = () => {
       areaLoading={areaLoading}
       shapeLoading={shapeLoading}
       pushArea={pushArea}
+      setArea={setArea}
       deleteArea={deleteArea}
-      changeAreaColor={changeAreaColor}
-      pushShape={pushShape}
+      pushPosition={pushPosition}
     />
   );
 };

@@ -1,56 +1,20 @@
-import { Coordinate } from './types';
+import { Coordinate, isCoordinate } from './types';
 
 import { getResolution, WidthProps, HeightProps } from './utils/screen';
 import { getAlphaColor } from './utils/color';
-
-export interface Rect {
-  start: Coordinate;
-  end: Coordinate;
-}
-
-export type Shape = Rect | Coordinate[];
-
-interface AreaProps {
-  name: string;
-  color?: string;
-  fillAlpha?: number;
-  useArea?: boolean;
-  shapes?: Shape[];
-}
-
-export class Area {
-  name?: string;
-  color: string;
-  fillAlpha: number;
-  useArea: boolean;
-  shapes: Shape[];
-
-  constructor({
-    name = 'Area',
-    color = '#55aaee',
-    fillAlpha = 0.2,
-    useArea = true,
-    shapes = [],
-  }: AreaProps) {
-    this.name = name;
-    this.color = color;
-    this.fillAlpha = fillAlpha;
-    this.useArea = useArea;
-    this.shapes = shapes;
-  }
-}
+import { AreaObject, isRect } from 'src/model/channel';
+import { getRoundDigit } from 'src/utils/number';
 
 interface CanvasProps {
   width?: number;
   height?: number;
-  // model Area type으로 바꿀수있음
-  areas?: Area[];
+  areas?: AreaObject[];
 }
 
 export class Canvas {
   width: number;
   height: number;
-  areas: Area[];
+  areas: AreaObject[];
 
   constructor({ width, height, areas = [] }: CanvasProps) {
     this.areas = areas;
@@ -67,37 +31,62 @@ export class Canvas {
     this.height = h;
   }
 
-  static getRectSize = (start: Coordinate, end: Coordinate) => {
-    const { x: sx, y: sy } = start;
-    const { x: ex, y: ey } = end;
-
+  static getRectSize = ([sx, sy]: Coordinate, [dx, dy]: Coordinate) => {
     return {
-      width: ex - sx,
-      height: ey - sy,
+      width: dx - sx,
+      height: dy - sy,
     };
   };
+
+  getCoordinateRatio({ x, y }: { x: number; y: number }) {
+    return [
+      getRoundDigit(x / this.width, 3),
+      getRoundDigit(y / this.height, 3),
+    ];
+  }
+
+  getRealCoordinate([rx, ry]: Coordinate): Coordinate {
+    return [this.width * rx, this.height * ry];
+  }
 
   clear(ctx: CanvasRenderingContext2D) {
     ctx.clearRect(0, 0, this.width, this.height);
   }
 
   drawArea(ctx: CanvasRenderingContext2D, areaIdx: number) {
-    const { color, fillAlpha, shapes } = this.areas[areaIdx];
+    const { color, alpha, position } = this.areas[areaIdx];
 
     ctx.strokeStyle = color;
-    ctx.fillStyle = getAlphaColor(color, fillAlpha);
+    ctx.fillStyle = getAlphaColor(color, alpha);
 
-    shapes.map(shape => {
-      if (isRect(shape)) {
-        const { x, y } = shape.start;
-        const { width, height } = Canvas.getRectSize(shape.start, shape.end);
+    position.map(p => {
+      // position type is rect OR poly
+      if (isRect(p)) {
+        // p.coordinate is [number, number, number, number]
+        const [r1, r2, r3, r4] = p.coordinate;
+
+        const source = this.getRealCoordinate([r1, r2]);
+        const dest = this.getRealCoordinate([r3, r4]);
+
+        const { width, height } = Canvas.getRectSize(source, dest);
+        const [x, y] = source;
 
         ctx.strokeRect(x, y, width, height);
         ctx.fillRect(x, y, width, height);
       } else {
-        // draw poly
         ctx.beginPath();
-        shape.forEach(({ x, y }) => ctx.lineTo(x, y));
+
+        let coor: number[] = [];
+        p.coordinate.forEach(c => {
+          coor.push(c);
+
+          if (isCoordinate(coor)) {
+            // coor is [number, number]
+            ctx.lineTo(...this.getRealCoordinate(coor));
+            coor = [];
+          }
+        });
+
         ctx.closePath();
         ctx.stroke();
         ctx.fill();
@@ -105,7 +94,3 @@ export class Canvas {
     });
   }
 }
-
-const isRect = (shape: Shape): shape is Rect => {
-  return 'start' in shape && 'end' in shape;
-};
