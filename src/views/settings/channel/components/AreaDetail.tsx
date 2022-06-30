@@ -15,10 +15,11 @@ const AreaDetail = ({
   handleChangeColor,
 }: AreaDetailProps) => {
   const defaultColor = useMemo(() => {
+    console.log('setcolor');
     return area.color;
   }, [area]);
 
-  const [color, setColor] = useState<string>();
+  const [color, setColor] = useState<string>(defaultColor);
 
   return (
     <div className="area-detail-container">
@@ -37,9 +38,9 @@ const AreaDetail = ({
             <Title1>Color</Title1>
             <input
               type="color"
-              value={color ?? defaultColor}
+              value={defaultColor}
               onChange={e => setColor(e.target.value)}
-              onBlur={e => handleChangeColor(e.target.value)}
+              onBlur={() => handleChangeColor(color)}
             />
           </div>
           <div>
