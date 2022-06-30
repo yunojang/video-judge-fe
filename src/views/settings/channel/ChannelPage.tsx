@@ -8,6 +8,7 @@ import { AreaObject, Channel, Position } from 'src/model/channel';
 import AreaEditor from './AreaEditor';
 import AreaTab from './components/AreaTab';
 import AreaDetail from './components/AreaDetail';
+import Seal from 'src/components/Seal';
 
 interface ChannelProps {
   channel: Channel;
@@ -116,26 +117,34 @@ const ChannelPage = ({
             Use Send: <Switch checked={useSend} />
           </div>
 
-          <div className="area-tab-wapper">
-            <AreaTab
-              parentId={id}
-              areas={area}
-              selected={selectedArea}
-              handleChange={handleChange}
-            />
-            {!areaLoading && (
-              <Button onClick={handlePushArea} iconName="PlusIcon" size="md" />
-            )}
-          </div>
+          <div>
+            <Seal sealing={areaLoading} transparence>
+              <>
+                <div className="area-tab-wapper">
+                  <AreaTab
+                    parentId={id}
+                    areas={area}
+                    selected={selectedArea}
+                    handleChange={handleChange}
+                  />
+                  <Button
+                    onClick={handlePushArea}
+                    iconName="PlusIcon"
+                    size="md"
+                  />
+                </div>
 
-          <div className="area-description">
-            {currentArea && (
-              <AreaDetail
-                handleChangeColor={handleChangeColor}
-                area={currentArea}
-                handleDelete={handleDeleteArea}
-              />
-            )}
+                <div className="area-description">
+                  {currentArea && (
+                    <AreaDetail
+                      handleChangeColor={handleChangeColor}
+                      area={currentArea}
+                      handleDelete={handleDeleteArea}
+                    />
+                  )}
+                </div>
+              </>
+            </Seal>
           </div>
         </div>
       </div>

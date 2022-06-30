@@ -5,10 +5,21 @@ import { ReactChild } from 'react';
 interface SealProps {
   children: ReactChild;
   color?: string;
+  sealing?: boolean;
+  transparence?: boolean;
 }
 
-const Seal = ({ children, color = '#333' }: SealProps) => {
-  const style = makeStyle(color);
+const Seal = ({
+  children,
+  color = '#aaa',
+  sealing = true,
+  transparence = false,
+}: SealProps) => {
+  const style = makeStyle(color, transparence);
+
+  if (!sealing) {
+    return <>{children};</>;
+  }
 
   return (
     <div className={style.container}>
@@ -34,7 +45,7 @@ const breath = keyframes`
   }
 `;
 
-const makeStyle = (color: string) => ({
+const makeStyle = (color: string, transparence: boolean) => ({
   container: css`
     position: relative;
     width: 100%;
@@ -42,10 +53,16 @@ const makeStyle = (color: string) => ({
   `,
   seal: css`
     background-color: ${color};
-    animation: ${breath} 2s ease-in-out infinite;
     z-index: 1;
     position: absolute;
     inset: 0;
+    ${transparence
+      ? css`
+          opacity: 0;
+        `
+      : css`
+          animation: ${breath} 1.5s ease-in-out infinite;
+        `}
   `,
 
   wrapped: css``,
