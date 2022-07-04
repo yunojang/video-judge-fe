@@ -9,6 +9,7 @@ export type EditMode = 'rect' | 'poly' | false;
 // action
 const canvasAction = {
   setMode: makeAction('SetMode'),
+  setContext: makeAction('SetContext'),
 };
 
 // action creators
@@ -19,12 +20,21 @@ export const setEditMode = (mode: EditMode) => {
   };
 };
 
+export const setContext = (ctx: CanvasRenderingContext2D) => {
+  return {
+    type: canvasAction.setContext,
+    payload: ctx,
+  };
+};
+
 interface CanvasState {
   editMode: EditMode;
+  context: CanvasRenderingContext2D | null;
 }
 
 const initialState: CanvasState = {
   editMode: false,
+  context: null,
 };
 
 const canvasReduer = (
@@ -36,6 +46,12 @@ const canvasReduer = (
       return {
         ...state,
         editMode: payload,
+      };
+    }
+    case canvasAction.setContext: {
+      return {
+        ...state,
+        context: payload,
       };
     }
     default:

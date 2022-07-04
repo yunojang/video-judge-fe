@@ -12,6 +12,7 @@ import { Button } from '@wizrnd/nx-ui';
 import { Coordinate } from './types';
 import EditLayer from './EditLayer';
 import { EditMode } from 'src/reducer/canvas';
+import { AreaObject } from 'src/model/channel';
 
 interface Cor {
   x: number;
@@ -27,12 +28,7 @@ const CanvasTest = () => {
   // seperate state - 데이터 불러와서, 렌더러에 넣어주는 영역
   const [editMode, setEditMode] = useState<EditMode>(false);
   // area model type으로  // edit -> setArea area를 렌더링
-  const [area, setArea] = useState<Area>({
-    color: '#ffaa55',
-    fillAlpha: 0.2,
-    name: 'Area-1',
-    shapes: [],
-  });
+  const [area, setArea] = useState<AreaObject>(new AreaObject({}));
 
   // add shape method (실제론 변경 요청으로)
   const pushShape = useCallback(

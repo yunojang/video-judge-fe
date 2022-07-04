@@ -38,8 +38,9 @@ const CanvasRenderer = ({
   const [point, setPoint] = useState<DrawCoordinate[]>([]);
 
   useEffect(() => {
-    setContext(canvasRef.current?.getContext('2d') as CanvasRenderingContext2D);
-    // setting context(ctx) in redux canvas store
+    const ctx = canvasRef.current?.getContext('2d') as CanvasRenderingContext2D;
+
+    setContext(ctx);
   }, []);
 
   useEffect(() => {
