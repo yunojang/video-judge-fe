@@ -8,14 +8,14 @@ interface EditBarProps {
   loading: boolean;
   show?: boolean;
   height?: number;
-  clear?: () => void;
+  onClearArea: () => void;
 }
 
 const AreaEditBar = ({
   show = false,
   height = 40,
   loading,
-  clear = () => {},
+  onClearArea,
 }: EditBarProps) => {
   const dispatch = useDispatch();
 
@@ -33,7 +33,9 @@ const AreaEditBar = ({
         </Button>
       </div>
       <div>
-        <Button onClick={clear}>Clear</Button>
+        <Button variant="contained" onClick={onClearArea}>
+          Clear
+        </Button>
       </div>
     </div>
   );

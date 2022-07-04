@@ -79,6 +79,14 @@ const ChannelPage = ({
     setArea({ ...currentArea, color }, selectedArea);
   };
 
+  const handleClearArea = () => {
+    if (!currentArea) {
+      return;
+    }
+
+    setArea({ ...currentArea, position: [] }, selectedArea);
+  };
+
   return (
     <main>
       <Header>
@@ -94,6 +102,7 @@ const ChannelPage = ({
             selected={selectedArea}
             shapeLoading={shapeLoading}
             onPushPosition={handlePushPosition}
+            onClearArea={handleClearArea}
           />
 
           <div className="channel-description">

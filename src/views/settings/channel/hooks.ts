@@ -103,6 +103,8 @@ export const useChannel = (id: number) => {
   };
 
   const setArea = (area: AreaObject, index: number) => {
+    setAreaLoading(true);
+
     if (!channel) {
       const err = 'Cannot put Request without channel data';
       setError(err);
@@ -119,7 +121,7 @@ export const useChannel = (id: number) => {
     newAreas[index] = area;
     const newChannel = { ...channel, area: newAreas };
 
-    return putChannel(newChannel);
+    return putChannel(newChannel).finally(() => setAreaLoading(false));
   };
 
   // shape -> position

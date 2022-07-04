@@ -18,6 +18,7 @@ interface AreaEditorProps {
   selected: number;
   shapeLoading: boolean;
   onPushPosition: (position: Position) => void;
+  onClearArea: () => void;
 }
 
 const width = 900;
@@ -28,6 +29,7 @@ const AreaEditor = ({
   selected,
   onPushPosition,
   shapeLoading,
+  onClearArea,
 }: AreaEditorProps) => {
   const canvas = useMemo(() => {
     return new Canvas({ areas, width });
@@ -59,6 +61,7 @@ const AreaEditor = ({
         show={isCorrectCanvasArea}
         height={editBarHeight}
         loading={shapeLoading}
+        onClearArea={onClearArea}
       />
 
       <div className="viewer">
