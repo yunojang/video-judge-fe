@@ -1,5 +1,13 @@
-const ErrorMsg = ({ msg }: { msg: string }) => (
-  <span style={{ color: '#ee6666' }}>{msg}</span>
-);
+import { css } from '@emotion/css';
+
+const ErrorMsg = ({ msg }: { msg: string }) => {
+  return <span className={style}>{msg}</span>;
+};
 
 export default ErrorMsg;
+
+const style = css`
+  color: #ee6666;
+  font-size: 21px;
+  font-weight: bold;
+`;
