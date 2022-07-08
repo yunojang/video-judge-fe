@@ -19,7 +19,7 @@ const routes: Router[] = [
   },
 ];
 
-const router = () => {
+const ChannelRouter = () => {
   return (
     <Routes>
       {routes.map(({ path, element }) => (
@@ -33,4 +33,4 @@ const router = () => {
   );
 };
 
-export default router;
+export default ChannelRouter;

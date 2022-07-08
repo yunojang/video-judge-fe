@@ -4,17 +4,17 @@ export const menu = [
   {
     path: paths.canvasSandbox,
     logo: 'HubotIcon',
-    tooltip: 'canvas sandbox lab',
+    tooltip: '[Lab] - Canvas Sandbox',
   },
   {
     path: paths.alert,
     logo: 'MailIcon',
-    tooltip: 'setting alarm',
+    tooltip: '[Lab] - Setting Alarm',
   },
   {
     path: paths.settings,
     logo: 'ToolsIcon',
-    tooltip: 'settings',
+    tooltip: 'Settings',
   },
 ];
 

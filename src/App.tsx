@@ -3,7 +3,7 @@ import GlobalStyles from './GlobalStyles';
 import RootProvider from './RootProvider';
 import RootRouter, { isFrontendRoute } from './routes';
 
-import Header from './views/home/components/Header';
+import Header from './components/Header';
 import { menu, title, header_height } from './constant/header';
 
 const App = () => (

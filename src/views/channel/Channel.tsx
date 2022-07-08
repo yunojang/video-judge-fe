@@ -7,6 +7,7 @@ import ErrorMsg from 'src/components/ErrorMsg';
 
 const Channel = () => {
   const { id } = useParams();
+
   const {
     error,
     loading,

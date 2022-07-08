@@ -1,10 +1,11 @@
-import MenuWrapper from 'src/components/Menu/MenuPage';
 import { default_menu, menu } from './menu';
+
+import MenuPage from 'src/components/Menu/MenuPage';
 
 const Settings = () => {
   return (
     <main>
-      <MenuWrapper menu={menu} defaultId={default_menu} />
+      <MenuPage menu={menu} defaultId={default_menu} />
     </main>
   );
 };

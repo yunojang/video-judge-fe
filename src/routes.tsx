@@ -9,6 +9,7 @@ import Home from './views/home';
 const Settings = lazy(() => import('./views/settings'));
 const Alert = lazy(() => import('./views/alert'));
 const Channel = lazy(() => import('./views/channel'));
+const ChannelUpdate = lazy(() => import('./views/channel/Channel'));
 
 // test component
 const CanvasTest = lazy(() => import('./canvas/TestRenderer'));
@@ -28,6 +29,17 @@ export const paths = {
   canvasSandbox: '/sandbox_canvas',
 };
 
+export const getPath = (id: string): string | null => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const path = paths as any;
+
+  if (!path[id]) {
+    return null;
+  }
+
+  return path[id];
+};
+
 const routes: Router[] = [
   {
     path: paths.home,
@@ -44,6 +56,10 @@ const routes: Router[] = [
   {
     path: `${paths.channels}/*`,
     element: <Channel />,
+  },
+  {
+    path: `${paths.channels}/new`,
+    element: <ChannelUpdate />,
   },
   {
     path: paths.canvasSandbox,

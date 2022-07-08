@@ -1,5 +1,5 @@
 import { css } from '@emotion/css';
-import { Button, Header as NxHeader } from '@wizrnd/nx-ui';
+import { Button, Header as NxHeader, Tooltip } from '@wizrnd/nx-ui';
 import { Link } from 'react-router-dom';
 
 interface TitleProps {
@@ -11,7 +11,7 @@ interface TitleProps {
   text?: string;
 }
 
-interface MenuObject {
+export interface MenuObject {
   path: string;
   text?: string;
   logo?: string;
@@ -19,9 +19,11 @@ interface MenuObject {
 }
 
 interface HeaderProps {
-  menu: MenuObject[];
+  menu?: MenuObject[];
   title?: TitleProps;
   height?: number;
+  color?: string;
+  shadow?: number;
   isFrontendRouter?: (path: string) => boolean;
 }
 
@@ -42,8 +44,10 @@ const Title = ({ icon, path, text, alt, width }: TitleProps) => {
 
 const Header = ({
   title,
-  menu,
+  menu = [],
   height,
+  color = 'white',
+  shadow = 0,
   isFrontendRouter = () => false,
 }: HeaderProps) => {
   const renderMenu = ({
@@ -51,7 +55,7 @@ const Header = ({
     text,
     logo,
     index,
-  }: MenuObject & { index: number }) => {
+  }: MenuObject & { index?: number }) => {
     const isFrontend = isFrontendRouter(path);
     const Item = logo ? <Button iconName={logo}>{text}</Button> : text;
 
@@ -67,10 +71,23 @@ const Header = ({
   };
 
   return (
-    <NxHeader className={style} shadow={0} minHeight={height}>
+    <NxHeader
+      className={style}
+      shadow={shadow}
+      minHeight={height}
+      color={color}
+    >
       <Title {...title} />
       <div className="menu-right">
-        {menu.map((item, index) => renderMenu({ ...item, index }))}
+        {menu.map((item, index) =>
+          item.tooltip ? (
+            <Tooltip title={item.tooltip} key={index} arrow>
+              {renderMenu({ ...item })}
+            </Tooltip>
+          ) : (
+            renderMenu({ ...item, index })
+          ),
+        )}
       </div>
     </NxHeader>
   );
@@ -79,6 +96,5 @@ const Header = ({
 export default Header;
 
 const style = css`
-  background-color: white;
   color: black;
 `;
