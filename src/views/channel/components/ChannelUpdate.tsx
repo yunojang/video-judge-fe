@@ -2,12 +2,12 @@ import { css, Global } from '@emotion/react';
 import { Body1, Button, H5, H6, Header, Switch, Title1 } from '@wizrnd/nx-ui';
 import { useMemo, useState } from 'react';
 
-import { all_index } from './type';
+import { all_index } from '../type';
 import { AreaObject, Channel, Position } from 'src/model/channel';
 
 import AreaEditor from './AreaEditor';
-import AreaTab from './components/AreaTab';
-import AreaDetail from './components/AreaDetail';
+import AreaTab from './AreaTab';
+import AreaDetail from './AreaDetail';
 import Seal from 'src/components/Seal';
 
 interface ChannelProps {
@@ -20,7 +20,7 @@ interface ChannelProps {
   pushPosition: (position: Position, index: number) => void;
 }
 
-const ChannelPage = ({
+const ChannelUpdate = ({
   channel,
   areaLoading,
   shapeLoading,
@@ -161,7 +161,7 @@ const ChannelPage = ({
   );
 };
 
-export default ChannelPage;
+export default ChannelUpdate;
 
 const Style = () => (
   <Global

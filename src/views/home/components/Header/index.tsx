@@ -21,6 +21,7 @@ interface MenuObject {
 interface HeaderProps {
   menu: MenuObject[];
   title?: TitleProps;
+  height?: number;
   isFrontendRouter?: (path: string) => boolean;
 }
 
@@ -42,6 +43,7 @@ const Title = ({ icon, path, text, alt, width }: TitleProps) => {
 const Header = ({
   title,
   menu,
+  height,
   isFrontendRouter = () => false,
 }: HeaderProps) => {
   const renderMenu = ({
@@ -65,7 +67,7 @@ const Header = ({
   };
 
   return (
-    <NxHeader className={style} shadow={0}>
+    <NxHeader className={style} shadow={0} minHeight={height}>
       <Title {...title} />
       <div className="menu-right">
         {menu.map((item, index) => renderMenu({ ...item, index }))}

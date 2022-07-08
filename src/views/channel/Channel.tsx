@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 
 import { useChannel } from './hooks';
 import Loading from 'src/components/Loading';
-import ChannelPage from './ChannelPage';
+import ChannelUpdate from './components/ChannelUpdate';
 import ErrorMsg from 'src/components/ErrorMsg';
 
 const Channel = () => {
@@ -24,7 +24,7 @@ const Channel = () => {
   ) : loading || !channel ? (
     <Loading />
   ) : (
-    <ChannelPage
+    <ChannelUpdate
       channel={channel}
       areaLoading={areaLoading}
       shapeLoading={shapeLoading}

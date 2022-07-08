@@ -10,8 +10,8 @@ import {
 } from 'src/model/channel';
 
 import CanvasRenderer from 'src/canvas/CanvasRenderer';
-import VideoPlayer from './components/VideoPlayer';
-import EditBar from './components/EditBar';
+import VideoPlayer from './VideoPlayer';
+import EditBar from './EditBar';
 
 interface AreaEditorProps {
   areas: AreaObject[];

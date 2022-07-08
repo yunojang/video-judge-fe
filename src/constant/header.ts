@@ -22,3 +22,8 @@ export const title = {
   text: 'Inference',
   path: '/',
 };
+
+export const header_height = {
+  wide: 40,
+  narrow: 50,
+};

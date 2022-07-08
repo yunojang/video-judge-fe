@@ -1,15 +1,18 @@
 import { FC, lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary';
+import ErrorMsg from './components/ErrorMsg';
 import Loading from './components/Loading';
 
 import Home from './views/home';
 
 const Settings = lazy(() => import('./views/settings'));
-const Channel = lazy(() => import('./views/settings/channel'));
+const Alert = lazy(() => import('./views/alert'));
+const Channel = lazy(() => import('./views/channel'));
+
+// test component
 const CanvasTest = lazy(() => import('./canvas/TestRenderer'));
 const RequestTest = lazy(() => import('./views/request'));
-const Alert = lazy(() => import('./views/alert'));
 
 interface Router {
   path: string;
@@ -35,12 +38,12 @@ const routes: Router[] = [
     element: <Settings />,
   },
   {
-    path: paths.channels + '/:id',
-    element: <Channel />,
-  },
-  {
     path: paths.alert,
     element: <Alert />,
+  },
+  {
+    path: `${paths.channels}/*`,
+    element: <Channel />,
   },
   {
     path: paths.canvasSandbox,
@@ -49,6 +52,10 @@ const routes: Router[] = [
   {
     path: '/sandbox_request',
     element: <RequestTest />,
+  },
+  {
+    path: '*',
+    element: <ErrorMsg msg="[404] NotFound" />,
   },
 ];
 

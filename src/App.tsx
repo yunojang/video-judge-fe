@@ -4,12 +4,17 @@ import RootProvider from './RootProvider';
 import RootRouter, { isFrontendRoute } from './routes';
 
 import Header from './views/home/components/Header';
-import { menu, title } from './constant/header';
+import { menu, title, header_height } from './constant/header';
 
 const App = () => (
   <Router>
     <RootProvider>
-      <Header title={title} menu={menu} isFrontendRouter={isFrontendRoute} />
+      <Header
+        title={title}
+        menu={menu}
+        height={header_height.wide}
+        isFrontendRouter={isFrontendRoute}
+      />
       <GlobalStyles />
       <RootRouter />
     </RootProvider>
