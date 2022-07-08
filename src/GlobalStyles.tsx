@@ -13,6 +13,9 @@ export const GlobalStyles = () => {
         li {
           list-style: none;
         }
+        a {
+          text-decoration: none;
+        }
       `}
     />
   );
