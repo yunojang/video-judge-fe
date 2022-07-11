@@ -14,7 +14,7 @@ const ChannelUpdate = () => {
   const { id } = useParams();
 
   const { pushItem: addChannel, error: listError } = useListResource<Channel>({
-    resource: 'channels',
+    resource: 'video-stream',
   });
   const {
     channel,
@@ -25,7 +25,7 @@ const ChannelUpdate = () => {
 
   const error = useMemo(() => {
     if (id && channelError) {
-      return '[Error] Incorect channel id';
+      return '[Error] Fetching channel data';
     } else if (listError) {
       return '[Error] Channel list error';
     }

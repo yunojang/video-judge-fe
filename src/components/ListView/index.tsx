@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { ListType } from 'src/model/types';
 import { useFetchList } from 'src/views/hooks';
@@ -31,6 +31,8 @@ const ListView = <T extends ListType = any>({
 }) => {
   const { collection, loading, error } = useFetchList<T>(resource);
   const theme = useTheme();
+
+  console.log(collection);
 
   return error ? (
     <ErrorMsg msg={error} />

@@ -4,7 +4,7 @@ import Client from 'src/utils/connection';
 import { Channel, ChannelObject, isChannel } from 'src/model/channel';
 import { RequestConfig } from 'src/utils/connection/types';
 
-const RESOURCE = 'channels';
+const RESOURCE = 'video-stream';
 
 export const useChannel = ({
   id,
@@ -13,7 +13,7 @@ export const useChannel = ({
   id?: number;
   defaultChannel?: Channel;
 }) => {
-  const endPoint = useMemo(() => `${RESOURCE}/${id}`, [id]);
+  const endPoint = useMemo(() => `/api/${RESOURCE}/${id}`, [id]);
 
   const [channel, setChannel] = useState<Channel | undefined>(defaultChannel);
   const [loading, setLoading] = useState<boolean>(false);

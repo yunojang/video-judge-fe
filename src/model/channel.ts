@@ -136,12 +136,11 @@ export interface Channel extends ChannelObject {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const isChannel = (data: any): data is Channel => {
-  const hasId = typeof data.id === 'number';
-  const hasName = typeof data.channelName === 'string';
-  const hasDescription = typeof data.description === 'string';
-  const hasArea = 'area' in data;
+  const hasId = typeof data?.id === 'number';
+  const hasName = typeof data?.channelName === 'string';
+  const hasDescription = typeof data?.description === 'string';
 
-  return hasId && hasName && hasDescription && hasArea;
+  return hasId && hasName && hasDescription;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

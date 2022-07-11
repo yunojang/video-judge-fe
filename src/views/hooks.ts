@@ -19,7 +19,7 @@ export const useFetchList = <T extends ListType>(
 
   const request = useCallback(
     () =>
-      Client.get({ endPoint: `${resource}` })
+      Client.get({ endPoint: `/api/${resource}` })
         .then(({ json }) => {
           setCollection(json as T[]);
         })
@@ -60,7 +60,7 @@ export const useListResource = <T extends ListType>({
   const [collection, setCollection] = useState<T[]>(defaultCollection);
   const [error, setError] = useState<string | null>(null);
 
-  const endPoint = useMemo(() => `/${resource}`, [resource]);
+  const endPoint = useMemo(() => `/api/${resource}`, [resource]);
 
   const request = (options?: RequestBase) => {
     setLoading(true);
