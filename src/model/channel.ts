@@ -86,7 +86,18 @@ export class AreaObject {
   }
 }
 
-export interface ChannelObject {
+interface ChannelProps {
+  channelName?: string;
+  cameraSrc?: string;
+  useAlarm?: boolean;
+  useInference?: boolean;
+  useSend?: boolean;
+  position?: string;
+  description?: string;
+  area?: AreaObject[];
+}
+
+export class ChannelObject {
   channelName: string;
   cameraSrc: string;
   useAlarm: boolean;
@@ -95,12 +106,32 @@ export interface ChannelObject {
   position: string;
   description: string;
   area: AreaObject[];
-  createDate: Date;
+
+  constructor({
+    channelName = 'Channel',
+    cameraSrc = 'rtsp://',
+    description = '',
+    position = '',
+    useAlarm = false,
+    useInference = false,
+    useSend = false,
+    area = [],
+  }: ChannelProps) {
+    this.channelName = channelName;
+    this.cameraSrc = cameraSrc;
+    this.description = description;
+    this.position = position;
+    this.useAlarm = useAlarm;
+    this.useInference = useInference;
+    this.useSend = useSend;
+    this.area = area;
+  }
 }
 
 // get response model
 export interface Channel extends ChannelObject {
   id: number;
+  createDate: Date;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

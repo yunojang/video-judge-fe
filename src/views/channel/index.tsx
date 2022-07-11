@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 
 import ErrorBoundary from 'src/components/ErrorBoundary';
-import Channel from './Channel';
+import ChannelUpdate from './ChannelUpdate';
 
 interface Router {
   path: string;
@@ -11,11 +11,11 @@ interface Router {
 const routes: Router[] = [
   {
     path: '/new',
-    element: <Channel />,
+    element: <ChannelUpdate />,
   },
   {
     path: '/:id',
-    element: <Channel />,
+    element: <ChannelUpdate />,
   },
 ];
 

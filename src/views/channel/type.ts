@@ -1,1 +1,1 @@
-export const all_index = 99999;
+export const all_index = -1;

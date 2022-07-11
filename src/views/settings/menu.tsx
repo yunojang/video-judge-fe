@@ -1,20 +1,20 @@
 import ChannelList from './components/ChannelList';
 
-export enum MenuType {
+export enum SettingMenu {
   Channel = 'channels',
   Model = 'models',
 }
 
-export const default_menu = MenuType.Channel;
+export const default_menu = SettingMenu.Channel;
 
-export const menu = [
+export const settingMenus = [
   {
-    id: MenuType.Channel,
+    id: SettingMenu.Channel,
     label: 'Channel',
     element: <ChannelList />,
   },
   {
-    id: MenuType.Model,
+    id: SettingMenu.Model,
     label: 'Model',
     element: <div>[GET] api/algorithm-model</div>,
   },

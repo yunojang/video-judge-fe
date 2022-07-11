@@ -19,6 +19,8 @@ interface MenuWrapperProps {
   sideWidth?: string;
 }
 
+// const controlMenu = ['add'];
+
 const MenuWrapper = ({
   menu,
   defaultId,
@@ -26,12 +28,12 @@ const MenuWrapper = ({
 }: MenuWrapperProps) => {
   const [selected, setSelected] = useState<string>(defaultId);
 
-  const selectedMenu = useMemo(() => {
-    const m = menu.find(v => v.id === selected);
+  const selectedMenu = useMemo(
+    () => menu.find(v => v.id === selected),
+    [selected, menu],
+  );
 
-    return m;
-  }, [selected, menu]);
-
+  // menu page header's menu
   const headerMenu = useMemo(() => {
     const menus: HeaderMenuObject[] = [];
 

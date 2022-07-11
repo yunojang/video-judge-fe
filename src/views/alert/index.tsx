@@ -1,10 +1,10 @@
-import MenuWrapper from 'src/components/Menu/MenuPage';
+import MenuPage from 'src/components/Menu/MenuPage';
 import { default_menu, menu } from './menu';
 
 const Alert = () => {
   return (
     <main>
-      <MenuWrapper menu={menu} defaultId={default_menu} />
+      <MenuPage menu={menu} defaultId={default_menu} />
     </main>
   );
 };

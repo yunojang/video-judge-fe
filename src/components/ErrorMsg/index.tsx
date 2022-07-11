@@ -8,6 +8,5 @@ export default ErrorMsg;
 
 const style = css`
   color: #ee6666;
-  font-size: 21px;
-  font-weight: bold;
+  font-size: 20px;
 `;

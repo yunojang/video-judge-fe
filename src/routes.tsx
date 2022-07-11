@@ -9,7 +9,7 @@ import Home from './views/home';
 const Settings = lazy(() => import('./views/settings'));
 const Alert = lazy(() => import('./views/alert'));
 const Channel = lazy(() => import('./views/channel'));
-const ChannelUpdate = lazy(() => import('./views/channel/Channel'));
+const ChannelUpdate = lazy(() => import('./views/channel/ChannelUpdate'));
 
 // test component
 const CanvasTest = lazy(() => import('./canvas/TestRenderer'));

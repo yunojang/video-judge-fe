@@ -4,7 +4,6 @@ import { Tab, Tabs } from '@wizrnd/nx-ui';
 import { AreaObject } from 'src/model/channel';
 
 interface AreaTabProps {
-  parentId: number;
   areas: AreaObject[];
   selected: number;
   handleChange: (selected: number) => void;

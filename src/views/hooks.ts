@@ -1,6 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
-import { ListType } from 'src/model/types';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
 import Client from 'src/utils/connection';
+import { ListType } from 'src/model/types';
+import { RequestBase } from 'src/utils/connection/types';
 
 const handleErrorDefault = (msg: string) => {
   throw new Error(msg);
@@ -43,34 +45,32 @@ export const useFetchList = <T extends ListType>(
   return { loading, collection, reload: request, error };
 };
 
-export const useList = <T extends ListType>(
-  resource: string,
-  handleErrorMsg: (msg: string) => void = handleErrorDefault,
-) => {
-  const [loading, setLoading] = useState(false);
-  const [collection, setCollection] = useState<T[] | null>(null);
+export const useListResource = <T extends ListType>({
+  resource,
+  initLoading = false,
+  defaultCollection = [],
+  handleErrorMsg = handleErrorDefault,
+}: {
+  resource: string;
+  initLoading?: boolean;
+  defaultCollection?: T[];
+  handleErrorMsg?: (msg: string) => void;
+}) => {
+  const [loading, setLoading] = useState(initLoading);
+  const [collection, setCollection] = useState<T[]>(defaultCollection);
+  const [error, setError] = useState<string | null>(null);
 
-  const postList = (body: Partial<T>) => {
+  const endPoint = useMemo(() => `/${resource}`, [resource]);
+
+  const request = (options?: RequestBase) => {
     setLoading(true);
 
-    return Client.post({ endPoint: `${resource}`, body: JSON.stringify(body) })
-      .then(({ json }) => json)
-      .catch(err => {
-        handleErrorMsg(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
-
-  const fetchList = () => {
-    setLoading(true);
-
-    return Client.get({ endPoint: `${resource}` })
+    return Client.request({ endPoint, ...options })
       .then(({ json }) => {
         setCollection(json as T[]);
       })
       .catch(err => {
+        setError(err);
         handleErrorMsg(err);
       })
       .finally(() => {
@@ -78,11 +78,18 @@ export const useList = <T extends ListType>(
       });
   };
 
+  const pushItem = (newItem: Partial<T>) => {
+    const body = JSON.stringify(newItem);
+
+    request({ body });
+  };
+
   return {
-    loading,
     collection,
-    postList,
-    fetchList,
-    reload: fetchList,
+    loading,
+    error,
+    fetchData: request,
+    reload: request,
+    pushItem,
   };
 };

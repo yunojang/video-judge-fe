@@ -16,7 +16,6 @@ import EditBar from './EditBar';
 interface AreaEditorProps {
   areas: AreaObject[];
   selected: number;
-  shapeLoading: boolean;
   onPushPosition: (position: Position) => void;
   onClearArea: () => void;
 }
@@ -28,7 +27,6 @@ const AreaEditor = ({
   areas,
   selected,
   onPushPosition,
-  shapeLoading,
   onClearArea,
 }: AreaEditorProps) => {
   const canvas = useMemo(() => {
@@ -60,7 +58,6 @@ const AreaEditor = ({
       <EditBar
         show={isCorrectCanvasArea}
         height={editBarHeight}
-        loading={shapeLoading}
         onClearArea={onClearArea}
       />
 
