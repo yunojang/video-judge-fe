@@ -1,27 +1,74 @@
-import { useFetchList } from 'src/views/hooks';
-import Loading from '../Loading';
-import React from 'react';
-import ErrorMsg from '../ErrorMsg';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useMemo } from 'react';
+
 import { ListType } from 'src/model/types';
+import { useFetchList } from 'src/views/hooks';
+
+import { Col, Row, useTheme } from '@wizrnd/nx-ui';
+import Loading from '../Loading';
+import ErrorMsg from '../ErrorMsg';
+import { css } from '@emotion/css';
+import { getSize } from './grid';
 
 interface ListViewProps {
   resource: string;
 }
 
-const ListView = <T extends ListType>({
+const MAX_SIZE = 12;
+const ListView = <T extends ListType = any>({
   resource,
-  renderList,
+  columns,
+  row,
 }: ListViewProps & {
-  renderList: (collection: T[] | null) => React.ReactElement;
+  columns: {
+    Cell: (obj: T) => React.ReactElement;
+    header: string;
+    size: number;
+  }[];
+  row: {
+    Container: (children: React.ReactChild, obj: T) => React.ReactElement;
+  };
 }) => {
   const { collection, loading, error } = useFetchList<T>(resource);
+  const theme = useTheme();
 
-  return loading ? (
-    <Loading position="center" />
-  ) : error ? (
+  return error ? (
     <ErrorMsg msg={error} />
   ) : (
-    renderList(collection)
+    <>
+      <header style={{ marginBottom: '1em' }}>
+        <Row
+          wrapper={MAX_SIZE}
+          className={css`
+            /* text-align: center; */
+            color: ${theme.palette.primary.main};
+          `}
+        >
+          {columns.map((c, i) => (
+            <Col key={i} span={getSize(c.size, MAX_SIZE)}>
+              {c.header}
+            </Col>
+          ))}
+        </Row>
+      </header>
+
+      {loading || !collection ? (
+        <Loading />
+      ) : (
+        collection.map(item =>
+          row.Container(
+            <>
+              {columns.map((col, i) => (
+                <Col key={i} span={getSize(col.size, MAX_SIZE)}>
+                  {col.Cell(item)}
+                </Col>
+              ))}
+            </>,
+            item,
+          ),
+        )
+      )}
+    </>
   );
 };
 

@@ -1,74 +1,91 @@
-import { FC } from 'react';
+import { FC, ReactChild, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { css } from '@emotion/css';
 import { Link } from 'react-router-dom';
+import { css } from '@emotion/css';
 
 import { Channel } from 'src/model/channel';
-
-import ListView from 'src/components/ListView';
-import ErrorMsg from 'src/components/ErrorMsg';
 import { paths } from 'src/routes';
+import { SettingMenu } from '../menu';
 
-const resource = 'channels';
+import { TextInput } from '@wizrnd/nx-ui';
+import ListView from 'src/components/ListView';
+
 const ChannelList: FC = () => {
   const { t } = useTranslation();
   const style = makeStyle();
 
-  const renderChannel = ({
-    id,
-    channelName,
-    description,
-    index,
-    useAlarm,
-  }: Channel & { index: number }) => (
-    <Link to={`${paths.channels}/${id}`} key={index}>
-      <div className={style.container}>
-        <span className="title">{channelName}</span>
-        <div className="description">
-          <span>{description}</span>
-          <span>{useAlarm ? 'on' : 'off'}</span>
-        </div>
-      </div>
-    </Link>
+  const columns = useMemo(
+    () => [
+      {
+        Cell: ({ channelName }: Channel) => <span>{channelName}</span>,
+        header: t('Name'),
+        size: 20,
+      },
+      {
+        Cell: ({ description }: Channel) => <span>{description}</span>,
+        header: t('Description'),
+        size: 25,
+      },
+      {
+        Cell: ({ cameraSrc }: Channel) => <span>{cameraSrc}</span>,
+        header: t('Camera URL'),
+        size: 25,
+      },
+      {
+        Cell: ({ useAlarm }: Channel) => (
+          <span>{useAlarm ? t('ON') : t('OFF')}</span>
+        ),
+        header: t('Alarm'),
+        size: 10,
+      },
+      {
+        Cell: ({ createDate }: Channel) => <span>{createDate}</span>,
+        header: t('Create Date'),
+        size: 20,
+      },
+    ],
+    [t],
   );
 
-  const render = (collection: Channel[] | null) => {
-    if (!collection) {
-      return <ErrorMsg msg={t('No Data, Check Resource key')} />;
-    }
+  const row = useMemo(
+    () => ({
+      Container: (children: ReactChild, { id }: Channel) => (
+        <Link key={id} to={`${paths.channels}/${id}`}>
+          <div className="list-item">{children}</div>
+        </Link>
+      ),
+    }),
+    [],
+  );
 
-    return (
-      <div>{collection.map((c, index) => renderChannel({ ...c, index }))}</div>
-    );
-  };
+  return (
+    <div className={style.container}>
+      <div className="channel-input">
+        <TextInput placeholder="Search Channel" iconName="SearchIcon" />
+      </div>
 
-  return <ListView<Channel> renderList={render} resource={resource} />;
+      <ListView<Channel>
+        row={row}
+        columns={columns}
+        resource={SettingMenu.Channel}
+      />
+    </div>
+  );
 };
 
 export default ChannelList;
 
 const makeStyle = () => {
   const container = css`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.6em;
-    margin-bottom: 0.2em;
-    background-color: #f5f5f5;
-    cursor: pointer;
-    text-decoration: none;
-
-    .title {
-      color: #222;
-      font-size: 16px;
+    .channel-input {
+      margin-bottom: 10px;
     }
 
-    .description {
-      color: #888;
-      font-size: 13px;
+    .list-item {
+      padding: 0.4em 0;
     }
-    .description > span {
-      padding: 1em;
+    .list-item:hover {
+      background-color: #f5f5f5;
     }
   `;
 
