@@ -138,6 +138,7 @@ const UpadtePage = ({
             <Title1>{channelName}</Title1>
             <Body1>{description}</Body1>
             <Body1>{cameraSrc}</Body1>
+            <Body1>{position}</Body1>
           </div>
         </div>
 

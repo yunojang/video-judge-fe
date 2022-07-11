@@ -64,7 +64,6 @@ export const useListResource = <T extends ListType>({
 
   const request = (options?: RequestBase) => {
     setLoading(true);
-
     return Client.request({ endPoint, ...options })
       .then(({ json }) => {
         setCollection(json as T[]);
@@ -81,7 +80,7 @@ export const useListResource = <T extends ListType>({
   const pushItem = (newItem: Partial<T>) => {
     const body = JSON.stringify(newItem);
 
-    request({ body });
+    request({ method: 'POST', body });
   };
 
   return {
