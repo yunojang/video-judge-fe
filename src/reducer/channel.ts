@@ -24,7 +24,7 @@ export const updateChannel = (
 export const resetChannel = () => {
   return {
     type: actions.updateChannel,
-    payload: new ChannelObject({}),
+    payload: { channel: new ChannelObject({}) },
   };
 };
 export const save = () => {
