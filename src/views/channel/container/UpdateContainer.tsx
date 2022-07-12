@@ -84,7 +84,7 @@ const UpdateContainer = ({
 
   const changeColor = (color: string) => {
     if (currentArea) {
-      updateArea({ ...currentArea, color });
+      updateArea({ ...currentArea, areaColor: color });
     }
   };
 

@@ -13,8 +13,8 @@ const AreaTab = ({ areas, selected, handleChange }: AreaTabProps) => {
   return (
     <Tabs value={selected} handleChange={(e, v) => handleChange(v)}>
       <Tab id={all_index} label="All" />
-      {areas.map((item, i) => (
-        <Tab key={i} id={i} label={item.name} />
+      {areas.map((area, i) => (
+        <Tab key={i} id={i} label={area.areaName} />
       ))}
     </Tabs>
   );

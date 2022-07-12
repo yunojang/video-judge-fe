@@ -2,7 +2,7 @@ import { paths } from '../routes';
 
 export const menu = [
   {
-    path: '/',
+    path: paths.videoTest,
     logo: 'HubotIcon',
     tooltip: '= Labortory =',
   },

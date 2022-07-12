@@ -40,18 +40,19 @@ interface AreaObjectProps {
   seq?: number;
   channelId?: number;
   createDate?: Date;
-  name?: string;
+  areaName?: string;
   useArea?: boolean;
   description?: string;
   threshold?: ThresholdBase[];
   position?: Position[];
-  color?: string;
+  areaColor?: string;
   alpha?: number;
 }
 
 export class AreaObject {
-  name: string;
-  color: string;
+  id: number;
+  areaName: string;
+  areaColor: string;
   alpha: number;
   useArea: boolean;
   seq: number;
@@ -65,23 +66,24 @@ export class AreaObject {
     seq = 0,
     channelId = 0,
     createDate = new Date(),
-    name = 'Area',
+    areaName = 'Area',
     useArea = true,
     description = '',
     threshold = [],
     position = [],
-    color = '#55aaee',
+    areaColor = '#55aaee',
     alpha = 0.2,
   }: AreaObjectProps) {
+    this.id = 0;
     this.seq = seq;
     this.channelId = channelId;
     this.createDate = createDate;
-    this.name = name;
+    this.areaName = areaName;
     this.useArea = useArea;
     this.description = description;
     this.threshold = threshold;
     this.position = position;
-    this.color = color;
+    this.areaColor = areaColor;
     this.alpha = alpha;
   }
 }

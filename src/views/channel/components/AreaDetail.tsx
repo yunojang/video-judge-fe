@@ -15,7 +15,7 @@ const AreaDetail = ({
   handleChangeColor,
 }: AreaDetailProps) => {
   const defaultColor = useMemo(() => {
-    return area.color;
+    return area.areaColor;
   }, [area]);
 
   const [color, setColor] = useState<string>(defaultColor);

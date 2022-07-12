@@ -54,7 +54,7 @@ export class Canvas {
   }
 
   drawArea(ctx: CanvasRenderingContext2D, areaIdx: number) {
-    const { color, alpha, position } = this.areas[areaIdx];
+    const { areaColor: color, alpha = 0.2, position } = this.areas[areaIdx];
 
     ctx.strokeStyle = color;
     ctx.fillStyle = getAlphaColor(color, alpha);

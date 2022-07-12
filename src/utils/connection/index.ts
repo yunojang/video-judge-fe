@@ -27,7 +27,7 @@ export const configureClient = (config: ClientConfig) => {
 };
 
 // published server: http://10.1.1.201:28084
-configureClient({ origin: 'http://localhost:3000' });
-// configureClient({ origin: 'http://10.1.1.201:28084' });
+// configureClient({ origin: 'http://localhost:3000' });
+configureClient({ origin: 'http://10.1.1.201:28084' });
 
 export default Client;

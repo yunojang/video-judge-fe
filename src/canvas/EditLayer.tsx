@@ -46,7 +46,7 @@ const EditLayer = ({
     const { x: dx, y: dy } = rect.end;
 
     canvas.clear(ctx);
-    ctx.strokeStyle = canvas.areas[selected].color;
+    ctx.strokeStyle = canvas.areas[selected].areaColor;
     ctx.strokeRect(sx, sy, dx - sx, dy - sy);
   };
 
@@ -55,7 +55,7 @@ const EditLayer = ({
     points: DrawCoordinate[],
   ) => {
     canvas.clear(ctx);
-    ctx.strokeStyle = canvas.areas[selected].color;
+    ctx.strokeStyle = canvas.areas[selected].areaColor;
 
     ctx.beginPath();
     points.map(p => ctx.lineTo(p.x, p.y));
