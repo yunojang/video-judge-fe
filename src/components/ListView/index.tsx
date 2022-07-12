@@ -32,14 +32,13 @@ const ListView = <T extends ListType = any>({
   const { collection, loading, error } = useFetchList<T>(resource);
   const theme = useTheme();
 
-  console.log(collection);
-
   return error ? (
     <ErrorMsg msg={error} />
   ) : (
     <>
       <header style={{ marginBottom: '1em' }}>
         <Row
+          spacing={{ col: 2 }}
           wrapper={MAX_SIZE}
           className={css`
             /* text-align: center; */
@@ -59,13 +58,13 @@ const ListView = <T extends ListType = any>({
       ) : (
         collection.map(item =>
           row.Container(
-            <>
+            <Row spacing={{ col: 2 }} wrapper={MAX_SIZE}>
               {columns.map((col, i) => (
                 <Col key={i} span={getSize(col.size, MAX_SIZE)}>
                   {col.Cell(item)}
                 </Col>
               ))}
-            </>,
+            </Row>,
             item,
           ),
         )

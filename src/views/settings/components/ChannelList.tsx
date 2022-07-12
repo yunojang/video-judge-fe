@@ -5,7 +5,6 @@ import { css } from '@emotion/css';
 
 import { Channel } from 'src/model/channel';
 import { paths } from 'src/routes';
-import { SettingMenu } from '../menu';
 
 import { TextInput } from '@wizrnd/nx-ui';
 import ListView from 'src/components/ListView';
@@ -17,29 +16,37 @@ const ChannelList: FC = () => {
   const columns = useMemo(
     () => [
       {
-        Cell: ({ channelName }: Channel) => <span>{channelName}</span>,
+        Cell: ({ channelName }: Channel) => (
+          <div className="item-cell">{channelName}</div>
+        ),
         header: t('Name'),
         size: 20,
       },
       {
-        Cell: ({ description }: Channel) => <span>{description}</span>,
+        Cell: ({ description }: Channel) => (
+          <div className="item-cell">{description}</div>
+        ),
         header: t('Description'),
         size: 25,
       },
       {
-        Cell: ({ cameraSrc }: Channel) => <span>{cameraSrc}</span>,
+        Cell: ({ cameraSrc }: Channel) => (
+          <div className="item-cell">{cameraSrc}</div>
+        ),
         header: t('Camera URL'),
         size: 25,
       },
       {
         Cell: ({ useAlarm }: Channel) => (
-          <span>{useAlarm ? t('ON') : t('OFF')}</span>
+          <div className="item-cell">{useAlarm ? t('ON') : t('OFF')}</div>
         ),
         header: t('Alarm'),
         size: 10,
       },
       {
-        Cell: ({ createDate }: Channel) => <span>{createDate}</span>,
+        Cell: ({ createDate }: Channel) => (
+          <div className="item-cell">{createDate}</div>
+        ),
         header: t('Create Date'),
         size: 20,
       },
@@ -64,11 +71,7 @@ const ChannelList: FC = () => {
         <TextInput placeholder="Search Channel" iconName="SearchIcon" />
       </div>
 
-      <ListView<Channel>
-        row={row}
-        columns={columns}
-        resource={SettingMenu.Channel}
-      />
+      <ListView<Channel> row={row} columns={columns} resource="video-stream" />
     </div>
   );
 };
@@ -86,6 +89,12 @@ const makeStyle = () => {
     }
     .list-item:hover {
       background-color: #f5f5f5;
+    }
+
+    .item-cell {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   `;
 

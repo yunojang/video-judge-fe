@@ -2,7 +2,7 @@ import promiseWithTimeout from '../promiseWithTimeout';
 import parseResponse from './parseResponse';
 import { ClientConfig, ParseMethod, RequestBase, RequestConfig } from './types';
 
-const DEAFULT_ORIGIN = 'http://10.1.1.201:28084';
+const DEAFULT_ORIGIN = 'http:/localhost:3000';
 
 // connection feature
 export class ClientClass {

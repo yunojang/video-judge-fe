@@ -1,7 +1,7 @@
 import ChannelList from './components/ChannelList';
 
 export enum SettingMenu {
-  Channel = 'video-stream',
+  Channel = 'channels',
   Model = 'models',
 }
 

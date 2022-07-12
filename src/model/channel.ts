@@ -94,7 +94,7 @@ interface ChannelProps {
   useSend?: boolean;
   position?: string;
   description?: string;
-  area?: AreaObject[];
+  channelArea?: AreaObject[];
 }
 
 export class ChannelObject {
@@ -105,7 +105,7 @@ export class ChannelObject {
   useSend: boolean;
   position: string;
   description: string;
-  area: AreaObject[];
+  channelArea: AreaObject[];
 
   constructor({
     channelName = 'Channel',
@@ -115,7 +115,7 @@ export class ChannelObject {
     useAlarm = false,
     useInference = false,
     useSend = false,
-    area = [],
+    channelArea = [],
   }: ChannelProps) {
     this.channelName = channelName;
     this.cameraSrc = cameraSrc;
@@ -124,7 +124,7 @@ export class ChannelObject {
     this.useAlarm = useAlarm;
     this.useInference = useInference;
     this.useSend = useSend;
-    this.area = area;
+    this.channelArea = channelArea;
   }
 }
 

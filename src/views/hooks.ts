@@ -5,7 +5,7 @@ import { ListType } from 'src/model/types';
 import { RequestBase } from 'src/utils/connection/types';
 
 const handleErrorDefault = (msg: string) => {
-  throw new Error(msg);
+  console.error(msg);
 };
 
 // immediately fetch

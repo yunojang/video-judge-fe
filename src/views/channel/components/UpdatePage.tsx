@@ -29,7 +29,6 @@ const UpadtePage = ({
   const { t } = useTranslation();
 
   const [channel, setChannel] = useState<ChannelObject>(new ChannelObject({}));
-
   useEffect(() => {
     if (isNew) {
       setChannel(new ChannelObject({}));
@@ -39,7 +38,7 @@ const UpadtePage = ({
   }, [isNew, defaultChannel]);
 
   const {
-    area,
+    channelArea: area,
     cameraSrc,
     channelName,
     description,
@@ -64,23 +63,23 @@ const UpadtePage = ({
   };
 
   const pushArea = () => {
-    updateChannel({ area: [...area, new AreaObject({})] });
+    updateChannel({ channelArea: [...area, new AreaObject({})] });
     setSelectedArea(area.length);
   };
 
   const updateArea = (areaObject: AreaObject) => {
-    const area = [...channel.area];
-    area[selectedArea] = areaObject;
+    const channelArea = [...channel.channelArea];
+    channelArea[selectedArea] = areaObject;
 
-    updateChannel({ area });
+    updateChannel({ channelArea });
   };
 
   const deleteArea = () => {
     if (currentArea) {
-      const area = [...channel.area];
-      area.splice(selectedArea, 1);
+      const channelArea = [...channel.channelArea];
+      channelArea.splice(selectedArea, 1);
 
-      updateChannel({ area });
+      updateChannel({ channelArea });
       setSelectedArea(selectedArea ? selectedArea - 1 : all_index);
     }
   };
@@ -119,7 +118,12 @@ const UpadtePage = ({
     <main>
       <Header>
         <H6>채널 관리 / </H6>
-        <Button variant="contained" color="#103950" onClick={handleSubmit}>
+        <Button
+          width={100}
+          variant="outlined"
+          color="#d5ebff"
+          onClick={handleSubmit}
+        >
           {submitBtnContent}
         </Button>
       </Header>
