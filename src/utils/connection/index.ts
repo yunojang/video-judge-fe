@@ -26,6 +26,7 @@ export const configureClient = (config: ClientConfig) => {
   singletonInstance = new ClientClass(config);
 };
 
+// published server: http://10.1.1.201:28084
 configureClient({ origin: 'http://localhost:3000' });
 
 export default Client;

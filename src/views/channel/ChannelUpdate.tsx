@@ -7,43 +7,43 @@ import { useListResource } from '../hooks';
 
 import Loading from 'src/components/Loading';
 import ErrorMsg from 'src/components/ErrorMsg';
-import UpdatePage from './components/UpdatePage';
+import UpdateContainer from './container/UpdateContainer';
 
-// handling new Channel & update Channel
 const ChannelUpdate = () => {
   const { id } = useParams();
 
+  // channel list hooks
   const { pushItem: addChannel, error: listError } = useListResource<Channel>({
     resource: 'video-stream',
   });
+
+  // current channel hooks
   const {
     channel,
     error: channelError,
     loading,
-    putChannel,
-  } = useChannel({ id: Number(id) });
+    updateChannel,
+  } = useChannel({ id });
 
   const error = useMemo(() => {
-    if (id && channelError) {
-      return '[Error] Fetching channel data';
+    if (channelError) {
+      return '[Error] Fetching channel error';
     } else if (listError) {
       return '[Error] Channel list error';
     }
 
     return null;
-  }, [id, listError, channelError]);
-
-  const isNew = useMemo(() => !id || !channel, [id, channel]);
+  }, [listError, channelError]);
 
   return error ? (
     <ErrorMsg msg={error} />
   ) : loading ? (
     <Loading />
   ) : (
-    <UpdatePage
-      isNew={isNew}
+    <UpdateContainer
       channel={channel}
-      onSubmit={isNew ? addChannel : putChannel}
+      isNew={!id}
+      onSubmit={!id ? addChannel : updateChannel}
     />
   );
 };

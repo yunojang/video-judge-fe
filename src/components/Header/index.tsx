@@ -97,4 +97,5 @@ export default Header;
 
 const style = css`
   color: black;
+  padding: 0.4em 1.4em;
 `;

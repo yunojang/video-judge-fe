@@ -2,54 +2,46 @@ import { useMemo } from 'react';
 import { css, Global } from '@emotion/react';
 
 import { Canvas } from 'src/canvas/CanvasClass';
-import {
-  AreaObject,
-  AreaType,
-  isRectCoordinate,
-  Position,
-} from 'src/model/channel';
+import { AreaObject, AreaType, isRectCoordinate } from 'src/model/channel';
 
 import CanvasRenderer from 'src/canvas/CanvasRenderer';
 import VideoPlayer from './VideoPlayer';
 import EditBar from './EditBar';
+import { AreaState } from '../type';
 
 interface AreaEditorProps {
-  areas: AreaObject[];
-  selected: number;
-  onPushPosition: (position: Position) => void;
-  onClearArea: () => void;
+  list: AreaObject[];
+  area: AreaState;
 }
 
 const width = 900;
 const editBarHeight = 40;
 
 const AreaEditor = ({
-  areas,
-  selected,
-  onPushPosition,
-  onClearArea,
+  list,
+  area: { selected, addPosition, clearPosition },
 }: AreaEditorProps) => {
   const canvas = useMemo(() => {
-    return new Canvas({ areas, width });
-  }, [areas]);
+    return new Canvas({ areas: list, width });
+  }, [list]);
 
   const isCorrectCanvasArea = useMemo(
-    () => Boolean(areas[selected]),
-    [areas, selected],
+    () => Boolean(list[selected]),
+    [list, selected],
   );
 
   const pushRect = (coordinate: number[]) => {
     const type = AreaType.Rect;
 
     if (isRectCoordinate(coordinate)) {
-      onPushPosition({ type, coordinate });
+      addPosition({ type, coordinate });
     }
   };
 
   const pushPoly = (coordinate: number[]) => {
     const type = AreaType.Polygon;
 
-    onPushPosition({ type, coordinate });
+    addPosition({ type, coordinate });
   };
 
   return (
@@ -58,7 +50,7 @@ const AreaEditor = ({
       <EditBar
         show={isCorrectCanvasArea}
         height={editBarHeight}
-        onClearArea={onClearArea}
+        onClearArea={clearPosition}
       />
 
       <div className="viewer">

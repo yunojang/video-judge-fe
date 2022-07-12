@@ -1,22 +1,22 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Client from 'src/utils/connection';
 
-import { Channel, ChannelObject, isChannel } from 'src/model/channel';
+import { ChannelObject, isChannel } from 'src/model/channel';
 import { RequestConfig } from 'src/utils/connection/types';
 
 const RESOURCE = 'video-stream';
 
 export const useChannel = ({
   id,
-  defaultChannel,
+  defaultChannel = new ChannelObject({}),
 }: {
-  id?: number;
-  defaultChannel?: Channel;
+  id?: string;
+  defaultChannel?: ChannelObject;
 }) => {
   const endPoint = useMemo(() => `/api/${RESOURCE}/${id}`, [id]);
 
-  const [channel, setChannel] = useState<Channel | undefined>(defaultChannel);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [channel, setChannel] = useState<ChannelObject>(defaultChannel);
+  const [loading, setLoading] = useState<boolean>(!!id);
   const [error, setError] = useState<string | null>(null);
 
   const requestChannel = useCallback(
@@ -42,16 +42,18 @@ export const useChannel = ({
   );
 
   useEffect(() => {
-    requestChannel().then(json => {
-      if (isChannel(json)) {
-        setChannel(json);
-      } else {
-        setError('Response type is not valid');
-      }
-    });
-  }, [requestChannel]);
+    if (id) {
+      requestChannel().then(json => {
+        if (isChannel(json)) {
+          setChannel(json);
+        } else {
+          setError('Response type is not valid');
+        }
+      });
+    }
+  }, [requestChannel, id]);
 
-  const putChannel = useCallback(
+  const updateChannel = useCallback(
     (newChannel: ChannelObject) => {
       const body = JSON.stringify({ ...channel, ...newChannel });
 
@@ -70,6 +72,6 @@ export const useChannel = ({
     channel,
     error,
     loading,
-    putChannel,
+    updateChannel,
   };
 };
