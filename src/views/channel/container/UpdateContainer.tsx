@@ -20,7 +20,7 @@ const UpdateContainer = ({
   onSubmit,
 }: UpdateProps) => {
   const dispatch = useDispatch();
-  const { current, isModified } = useSelector(
+  const { current, hasUnSave } = useSelector(
     (state: RootState) => state.channel,
   );
 
@@ -32,10 +32,10 @@ const UpdateContainer = ({
   );
 
   useEffect(() => {
-    if (isNew) {
+    if (isNew || !fetchedChannel) {
       dispatch(resetChannel());
     } else {
-      dispatchUpdate(fetchedChannel as ChannelObject);
+      dispatch(updateChannel(fetchedChannel, true));
     }
   }, [dispatch, dispatchUpdate, isNew, fetchedChannel]);
 
@@ -96,7 +96,7 @@ const UpdateContainer = ({
   };
 
   const handleSubmit = () => {
-    if (current !== fetchedChannel) {
+    if (hasUnSave) {
       onSubmit(current);
     }
   };
@@ -107,7 +107,7 @@ const UpdateContainer = ({
       channel={{
         current,
         changeName,
-        isModified,
+        hasUnSave,
       }}
       area={{
         selected: selectedArea,

@@ -12,10 +12,13 @@ const actions = {
 };
 
 // action creators
-export const updateChannel = (channelObject: Partial<ChannelObject>) => {
+export const updateChannel = (
+  channel: Partial<ChannelObject>,
+  isInitalize = false,
+) => {
   return {
     type: actions.updateChannel,
-    payload: channelObject,
+    payload: { channel, isInitalize },
   };
 };
 export const resetChannel = () => {
@@ -24,7 +27,7 @@ export const resetChannel = () => {
     payload: new ChannelObject({}),
   };
 };
-export const saveChannel = () => {
+export const save = () => {
   return {
     type: actions.setIsModified,
   };
@@ -32,12 +35,12 @@ export const saveChannel = () => {
 
 interface ChannelState {
   current: ChannelObject;
-  isModified: boolean;
+  hasUnSave: boolean;
 }
 
 const initialState: ChannelState = {
   current: new ChannelObject({}),
-  isModified: false,
+  hasUnSave: false,
 };
 
 const canvasReduer = (
@@ -46,17 +49,16 @@ const canvasReduer = (
 ): ChannelState => {
   switch (type) {
     case actions.updateChannel: {
-      console.log(payload);
       return {
         ...state,
-        current: { ...state.current, ...payload },
-        isModified: true,
+        current: { ...state.current, ...payload.channel },
+        hasUnSave: payload.isInitalize ? false : true,
       };
     }
     case actions.setIsModified: {
       return {
         ...state,
-        isModified: false,
+        hasUnSave: false,
       };
     }
     default:
