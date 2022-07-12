@@ -2,14 +2,14 @@ import { paths } from '../routes';
 
 export const menu = [
   {
-    path: paths.canvasSandbox,
+    path: '/',
     logo: 'HubotIcon',
-    tooltip: '[Lab] - Canvas Sandbox',
+    tooltip: '= Labortory =',
   },
   {
     path: paths.alert,
     logo: 'MailIcon',
-    tooltip: '[Lab] - Setting Alarm',
+    tooltip: 'Setting Alarm',
   },
   {
     path: paths.settings,

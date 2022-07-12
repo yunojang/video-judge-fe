@@ -46,6 +46,10 @@ const UpdateContainer = ({
     [area, selectedArea],
   );
 
+  const changeName = (name: string) => {
+    dispatchUpdate({ channelName: name });
+  };
+
   const handleChangeArea = (key: number) => {
     setSelectedArea(key);
   };
@@ -102,6 +106,7 @@ const UpdateContainer = ({
       isNew={isNew}
       channel={{
         current,
+        changeName,
         isModified,
       }}
       area={{

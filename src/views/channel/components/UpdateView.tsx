@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
 import { css, Global } from '@emotion/react';
-import { Body1, Button, H5, H6, Header, Switch, Title1 } from '@wizrnd/nx-ui';
+import { Body1, Button, H5, Header, Switch, Title1 } from '@wizrnd/nx-ui';
 
 import { AreaState, ChannelState } from '../type';
 
@@ -47,7 +47,13 @@ const UpdateView = ({
   return (
     <main>
       <Header>
-        <H6>채널 관리 / </H6>
+        <input
+          className="title-input"
+          value={channelName}
+          onChange={e => {
+            channel.changeName(e.target.value);
+          }}
+        />
         <Button
           width={100}
           variant="outlined"
@@ -117,6 +123,16 @@ const Style = () => (
       .container {
         display: flex;
         gap: 8px;
+      }
+
+      .title-input {
+        background: transparent;
+        border: 0;
+        border-bottom: 2px solid #fff;
+        color: #fff;
+        padding: 0.4em;
+        font-size: 18px;
+        outline: 0;
       }
 
       .channel-viewer {
