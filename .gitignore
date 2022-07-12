@@ -9,4 +9,7 @@ yarn-error.log
 
 # setting
 .vscode
+
+# mock db
 db.json
+routes.json
