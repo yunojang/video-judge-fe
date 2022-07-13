@@ -13,6 +13,7 @@ const ChannelUpdate = lazy(() => import('./views/channel/ChannelUpdate'));
 
 // test component
 const RequestTest = lazy(() => import('./views/request'));
+const VideoTest = lazy(() => import('./views/videoTest'));
 
 interface Router {
   path: string;
@@ -25,6 +26,7 @@ export const paths = {
   alert: '/alert',
   settings: '/settings',
   channels: '/channel',
+  videoTest: '/video_test',
 };
 
 export const getPath = (id: string): string | null => {
@@ -58,6 +60,10 @@ const routes: Router[] = [
   {
     path: `${paths.channels}/new`,
     element: <ChannelUpdate />,
+  },
+  {
+    path: paths.videoTest,
+    element: <VideoTest />,
   },
   {
     path: '/sandbox_request',
