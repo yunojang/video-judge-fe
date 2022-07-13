@@ -12,6 +12,7 @@ import { AreaState } from '../type';
 interface AreaEditorProps {
   list: AreaObject[];
   area: AreaState;
+  videoUrl: string;
 }
 
 const width = 900;
@@ -20,6 +21,7 @@ const editBarHeight = 40;
 const AreaEditor = ({
   list,
   area: { selected, addPosition, clearPosition },
+  videoUrl,
 }: AreaEditorProps) => {
   const canvas = useMemo(() => {
     return new Canvas({ areas: list, width });
@@ -54,7 +56,12 @@ const AreaEditor = ({
       />
 
       <div className="viewer">
-        <VideoPlayer width={canvas.width} height={canvas.height} />
+        <VideoPlayer
+          width={canvas.width}
+          height={canvas.height}
+          url={videoUrl}
+          multipart
+        />
 
         {isCorrectCanvasArea && (
           <CanvasRenderer

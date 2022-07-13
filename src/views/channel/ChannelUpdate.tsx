@@ -26,12 +26,9 @@ const ChannelUpdate = () => {
   } = useChannel({ id });
 
   const error = useMemo(() => {
-    if (channelError) {
-      return '[Error] Fetching channel error';
-    } else if (listError) {
-      return '[Error] Channel list error';
+    if (channelError || listError) {
+      return channelError ?? listError;
     }
-
     return null;
   }, [listError, channelError]);
 

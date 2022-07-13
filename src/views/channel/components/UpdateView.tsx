@@ -67,7 +67,7 @@ const UpdateView = ({
       <Style />
       <div className="container">
         <div className="channel-viewer">
-          <AreaEditor area={area} list={channelArea} />
+          <AreaEditor area={area} list={channelArea} videoUrl={cameraSrc} />
 
           <div className="channel-description">
             <Title1>{channelName}</Title1>
