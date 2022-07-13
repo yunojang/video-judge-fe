@@ -7,19 +7,24 @@ import { all_index } from '../type';
 
 import { resetChannel, updateChannel } from 'src/reducer/channel';
 import UpdateView from '../components/UpdateView';
+import { useNavigate } from 'react-router-dom';
+import { toast } from '@wizrnd/nx-ui';
 
 interface UpdateProps {
   isNew: boolean;
-  onSubmit: (channel: ChannelObject) => void;
   channel?: ChannelObject;
+  postChannel: (channel: ChannelObject) => Promise<void>;
+  putChannel: (channel: ChannelObject) => Promise<void>;
 }
 
 const UpdateContainer = ({
   isNew,
   channel: fetchedChannel,
-  onSubmit,
+  postChannel,
+  putChannel,
 }: UpdateProps) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { current, hasUnSave } = useSelector(
     (state: RootState) => state.channel,
   );
@@ -96,9 +101,30 @@ const UpdateContainer = ({
   };
 
   const handleSubmit = () => {
-    if (hasUnSave) {
-      onSubmit(current);
+    if (!hasUnSave) {
+      return;
     }
+
+    let submitPromise;
+    toast.open({ message: 'Running...' });
+
+    if (isNew) {
+      submitPromise = postChannel(current);
+    } else {
+      submitPromise = putChannel(current);
+    }
+
+    submitPromise
+      .then(() => {
+        toast.success({ message: 'Done!' });
+
+        if (isNew) {
+          setTimeout(() => navigate(-1), 300);
+        }
+      })
+      .catch(err => {
+        toast.error({ message: 'Occurted Error', description: err });
+      });
   };
 
   return (

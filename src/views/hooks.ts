@@ -80,7 +80,7 @@ export const useListResource = <T extends ListType>({
   const pushItem = (newItem: Partial<T>) => {
     const body = JSON.stringify(newItem);
 
-    request({ method: 'POST', body });
+    return request({ method: 'POST', body });
   };
 
   return {

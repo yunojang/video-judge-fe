@@ -12,6 +12,7 @@ import { getSize } from './grid';
 
 interface ListViewProps {
   resource: string;
+  fallback?: React.ReactNode;
 }
 
 const MAX_SIZE = 12;
@@ -19,6 +20,7 @@ const ListView = <T extends ListType = any>({
   resource,
   columns,
   row,
+  fallback = <Loading />,
 }: ListViewProps & {
   columns: {
     Cell: (obj: T) => React.ReactElement;
@@ -53,22 +55,20 @@ const ListView = <T extends ListType = any>({
         </Row>
       </header>
 
-      {loading || !collection ? (
-        <Loading />
-      ) : (
-        collection.map(item =>
-          row.Container(
-            <Row spacing={{ col: 2 }} wrapper={MAX_SIZE}>
-              {columns.map((col, i) => (
-                <Col key={i} span={getSize(col.size, MAX_SIZE)}>
-                  {col.Cell(item)}
-                </Col>
-              ))}
-            </Row>,
-            item,
-          ),
-        )
-      )}
+      {loading || !collection
+        ? fallback
+        : collection.map(item =>
+            row.Container(
+              <Row spacing={{ col: 2 }} wrapper={MAX_SIZE}>
+                {columns.map((col, i) => (
+                  <Col key={i} span={getSize(col.size, MAX_SIZE)}>
+                    {col.Cell(item)}
+                  </Col>
+                ))}
+              </Row>,
+              item,
+            ),
+          )}
     </>
   );
 };

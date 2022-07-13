@@ -47,7 +47,7 @@ export const useChannel = ({
         if (isChannel(json)) {
           setChannel(json);
         } else {
-          setError('Response type is not valid');
+          setError('Response is not a valid type');
         }
       });
     }
@@ -58,10 +58,13 @@ export const useChannel = ({
       const body = JSON.stringify({ ...channel, ...newChannel });
 
       return requestChannel({ method: 'PUT', body }).then(channel => {
+        console.log(channel);
         if (isChannel(channel)) {
           setChannel(channel);
         } else {
-          setError('Response type is not valid');
+          const error = 'Response is not a valid type';
+          setError(error);
+          return Promise.reject(error);
         }
       });
     },

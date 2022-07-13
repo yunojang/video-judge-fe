@@ -51,7 +51,7 @@ export class ClientClass {
       timeout,
     );
 
-    return parseResponse<T>(response, parseMethod);
+    return parseResponse<T>(response, parseMethod, baseConfig.method);
   }
   getUrl(url?: string, endPoint?: string) {
     if (url) {

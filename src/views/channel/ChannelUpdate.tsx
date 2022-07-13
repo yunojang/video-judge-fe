@@ -13,7 +13,7 @@ const ChannelUpdate = () => {
   const { id } = useParams();
 
   // channel list hooks
-  const { pushItem: addChannel, error: listError } = useListResource<Channel>({
+  const { pushItem: postChannel, error: listError } = useListResource<Channel>({
     resource: 'video-stream',
   });
 
@@ -40,7 +40,8 @@ const ChannelUpdate = () => {
     <UpdateContainer
       channel={channel}
       isNew={!id}
-      onSubmit={!id ? addChannel : updateChannel}
+      postChannel={postChannel}
+      putChannel={updateChannel}
     />
   );
 };

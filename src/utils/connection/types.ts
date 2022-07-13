@@ -51,3 +51,9 @@ export interface TextResponse {
   text: string;
   response: Response;
 }
+
+export interface ActionMethodResponse {
+  result: boolean;
+  message?: string;
+  data: JsonObject;
+}
