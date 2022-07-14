@@ -34,8 +34,11 @@ const ListView = <T extends ListType = any>({
   const { collection, loading, error } = useFetchList<T>(resource);
   const theme = useTheme();
 
+  console.log(error, collection);
   return error ? (
-    <ErrorMsg msg={error} />
+    <ErrorMsg msg={error ?? 'List Error'} />
+  ) : !collection || !collection.length ? (
+    <div>Anything List</div>
   ) : (
     <>
       <header style={{ marginBottom: '1em' }}>
