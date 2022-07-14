@@ -8,7 +8,7 @@ import {
 const parseResponse = async <T extends ParseMethod>(
   response: Response,
   parseMethod: ParseMethod = 'json',
-  requestMethod?: RequestMethod,
+  requestMethod: RequestMethod = 'GET',
 ) => {
   type ReturnType = T extends 'raw' | null
     ? Response
@@ -18,10 +18,7 @@ const parseResponse = async <T extends ParseMethod>(
     ? TextResponse
     : never;
 
-  const isActionMethod =
-    requestMethod === 'DELETE' ||
-    requestMethod === 'POST' ||
-    requestMethod === 'PUT';
+  const isActionMethod = requestMethod !== 'GET';
 
   if (parseMethod === 'raw' || parseMethod === null) {
     return response as ReturnType;

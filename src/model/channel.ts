@@ -141,8 +141,9 @@ export const isChannel = (data: any): data is Channel => {
   const hasId = typeof data?.id === 'number';
   const hasName = typeof data?.channelName === 'string';
   const hasDescription = typeof data?.description === 'string';
+  const hasArea = typeof data?.channelArea === 'object';
 
-  return hasId && hasName && hasDescription;
+  return hasId && hasName && hasDescription && hasArea;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

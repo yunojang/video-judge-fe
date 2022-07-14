@@ -58,7 +58,6 @@ export const useChannel = ({
       const body = JSON.stringify({ ...channel, ...newChannel });
 
       return requestChannel({ method: 'PUT', body }).then(channel => {
-        console.log(channel);
         if (isChannel(channel)) {
           setChannel(channel);
         } else {
