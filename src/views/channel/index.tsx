@@ -1,14 +1,10 @@
 import { Route, Routes } from 'react-router-dom';
 
 import ErrorBoundary from 'src/components/ErrorBoundary';
+import { makeRoutes } from 'src/routes';
 import ChannelUpdate from './ChannelUpdate';
 
-interface Router {
-  path: string;
-  element: React.ReactNode;
-}
-
-const routes: Router[] = [
+const routes = makeRoutes([
   {
     path: '/new',
     element: <ChannelUpdate />,
@@ -17,7 +13,7 @@ const routes: Router[] = [
     path: '/:id',
     element: <ChannelUpdate />,
   },
-];
+]);
 
 const ChannelRouter = () => {
   return (

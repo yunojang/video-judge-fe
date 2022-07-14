@@ -1,4 +1,4 @@
-import { FC, lazy, Suspense } from 'react';
+import React, { FC, lazy, Suspense } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary';
 import ErrorMsg from './components/ErrorMsg';
@@ -40,7 +40,19 @@ export const getPath = (id: string): string | null => {
   return path[id];
 };
 
-const routes: Router[] = [
+export const makeRoutes = (
+  routes: Router[],
+  fallback: React.ReactNode = <ErrorMsg msg="[404] NotFound" />,
+) => {
+  const notFountRouter: Router = {
+    path: '*',
+    element: fallback,
+  };
+
+  return [...routes, notFountRouter];
+};
+
+const routes = makeRoutes([
   {
     path: paths.home,
     element: <Home />,
@@ -69,11 +81,7 @@ const routes: Router[] = [
     path: '/sandbox_request',
     element: <RequestTest />,
   },
-  {
-    path: '*',
-    element: <ErrorMsg msg="[404] NotFound" />,
-  },
-];
+]);
 
 const RootRouter: FC = () => (
   <Routes>
