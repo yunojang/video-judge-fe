@@ -40,7 +40,7 @@ const UpdateView = ({
     description,
     position,
     useAlarm,
-    useInference,
+    useChannel,
     useSend,
   } = channel.current;
 
@@ -78,15 +78,13 @@ const UpdateView = ({
         </div>
 
         <div className="channel-settings">
-          <H5>Settings</H5>
+          <H5 style={{ marginBottom: '1em' }}>Settings</H5>
           <div className="switch-setting">
-            Use Inference: <Switch checked={useInference} />
+            Use Channel:
+            <Switch checked={useChannel} onClick={channel.toggleUseChannel} />
           </div>
           <div className="switch-setting">
             Use Alarm: <Switch checked={useAlarm} />
-          </div>
-          <div className="switch-setting">
-            Use Send: <Switch checked={useSend} />
           </div>
 
           <div>
@@ -107,6 +105,10 @@ const UpdateView = ({
                   handleChangeColor={area.changeColor}
                 />
               )}
+            </div>
+
+            <div className="switch-setting">
+              Use Send: <Switch checked={useSend} />
             </div>
           </div>
         </div>
@@ -164,7 +166,7 @@ const Style = () => (
       }
 
       .area-description {
-        height: 360px;
+        height: 320px;
       }
     `}
   />

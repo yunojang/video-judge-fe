@@ -53,6 +53,10 @@ const UpdateContainer = ({
     updateCurrent({ channelName: name });
   };
 
+  const toggleUseChannel = () => {
+    updateCurrent({ useChannel: !current.useChannel });
+  };
+
   const handleChangeArea = (key: number) => {
     setSelectedArea(key);
   };
@@ -117,7 +121,7 @@ const UpdateContainer = ({
         toast.success({
           message: 'Success',
           description: 'Done work',
-          duration: 3000,
+          duration: 2000,
         });
         dispatch(save());
 
@@ -129,7 +133,7 @@ const UpdateContainer = ({
         toast.error({
           message: 'Occurted Error',
           description: err,
-          duration: 3000,
+          duration: 2000,
         });
       });
   };
@@ -140,6 +144,7 @@ const UpdateContainer = ({
       channel={{
         current,
         changeName,
+        toggleUseChannel,
         hasUnSave,
       }}
       area={{
