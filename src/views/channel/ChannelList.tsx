@@ -37,10 +37,10 @@ const ChannelList: FC = () => {
         size: 25,
       },
       {
-        Cell: ({ useAlarm }: Channel) => (
-          <div className="item-cell">{useAlarm ? t('ON') : t('OFF')}</div>
+        Cell: ({ useChannel }: Channel) => (
+          <div className="item-cell">{useChannel ? t('ON') : t('OFF')}</div>
         ),
-        header: t('Alarm'),
+        header: t('USE'),
         size: 10,
       },
       {

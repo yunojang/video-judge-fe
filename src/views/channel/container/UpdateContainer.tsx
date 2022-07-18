@@ -12,6 +12,7 @@ import { toast } from '@wizrnd/nx-ui';
 
 interface UpdateProps {
   isNew: boolean;
+  useLength: number;
   channel?: ChannelObject;
   postChannel: (channel: ChannelObject) => Promise<void>;
   putChannel: (channel: ChannelObject) => Promise<void>;
@@ -19,6 +20,7 @@ interface UpdateProps {
 
 const UpdateContainer = ({
   isNew,
+  useLength,
   channel: fetchedChannel,
   postChannel,
   putChannel,
@@ -108,6 +110,18 @@ const UpdateContainer = ({
     }
 
     let submitPromise;
+
+    if (current.useChannel) {
+      if (useLength === 4) {
+        toast.warning({
+          message: 'Unable to modify',
+          description: 'Cannot use more than 4 channels',
+        });
+
+        return;
+      }
+    }
+
     toast.open({ message: 'Running...', duration: 1000 });
 
     if (isNew) {
