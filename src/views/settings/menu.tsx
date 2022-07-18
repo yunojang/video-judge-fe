@@ -1,4 +1,4 @@
-import ChannelList from './components/ChannelList';
+import ChannelList from '../channel/ChannelList';
 
 export enum SettingMenu {
   Channel = 'channels',

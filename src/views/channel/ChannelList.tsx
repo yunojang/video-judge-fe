@@ -71,7 +71,7 @@ const ChannelList: FC = () => {
         <TextInput placeholder="Search Channel" iconName="SearchIcon" />
       </div>
 
-      <ListView<Channel> row={row} columns={columns} resource="video-stream" />
+      <ListView<Channel> resource="channel" row={row} columns={columns} />
     </div>
   );
 };

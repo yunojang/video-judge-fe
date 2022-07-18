@@ -2,9 +2,14 @@ import { Route, Routes } from 'react-router-dom';
 
 import ErrorBoundary from 'src/components/ErrorBoundary';
 import { makeRoutes } from 'src/routes';
+import ChannelList from './ChannelList';
 import ChannelUpdate from './ChannelUpdate';
 
 const routes = makeRoutes([
+  {
+    path: '/',
+    element: <ChannelList />,
+  },
   {
     path: '/new',
     element: <ChannelUpdate />,
