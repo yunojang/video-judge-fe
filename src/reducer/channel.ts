@@ -8,7 +8,8 @@ const makeAction = makeActionFunction(resource);
 // action
 const actions = {
   updateChannel: makeAction('UpdateChannel'),
-  setIsModified: makeAction('SetModified'),
+  save: makeAction('Save'),
+  modify: makeAction('Modifiy'),
 };
 
 // action creators
@@ -29,7 +30,12 @@ export const resetChannel = () => {
 };
 export const save = () => {
   return {
-    type: actions.setIsModified,
+    type: actions.save,
+  };
+};
+export const modify = () => {
+  return {
+    type: actions.modify,
   };
 };
 
@@ -55,10 +61,16 @@ const canvasReduer = (
         hasUnSave: payload.isInitalize ? false : true,
       };
     }
-    case actions.setIsModified: {
+    case actions.save: {
       return {
         ...state,
         hasUnSave: false,
+      };
+    }
+    case actions.modify: {
+      return {
+        ...state,
+        hasUnSave: true,
       };
     }
     default:

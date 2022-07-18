@@ -13,8 +13,8 @@ export const useFetchList = <T extends ListType>(
   resource: string,
   handleErrorMsg: (msg: string) => void = handleErrorDefault,
 ) => {
-  const [loading, setLoading] = useState(true);
   const [collection, setCollection] = useState<T[] | null>(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const request = useCallback(

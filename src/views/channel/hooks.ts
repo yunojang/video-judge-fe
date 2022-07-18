@@ -4,7 +4,7 @@ import Client from 'src/utils/connection';
 import { ChannelObject, isChannel } from 'src/model/channel';
 import { RequestConfig } from 'src/utils/connection/types';
 
-const RESOURCE = 'video-stream';
+const RESOURCE = 'channel';
 
 export const useChannel = ({
   id,
@@ -57,15 +57,9 @@ export const useChannel = ({
     (newChannel: ChannelObject) => {
       const body = JSON.stringify({ ...channel, ...newChannel });
 
-      return requestChannel({ method: 'PUT', body }).then(channel => {
-        if (isChannel(channel)) {
-          setChannel(channel);
-        } else {
-          const error = 'Response is not a valid type';
-          setError(error);
-          return Promise.reject(error);
-        }
-      });
+      return requestChannel({ method: 'PUT', body }).then(() =>
+        setChannel(newChannel),
+      );
     },
     [requestChannel, channel],
   );

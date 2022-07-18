@@ -14,7 +14,7 @@ const ChannelUpdate = () => {
 
   // channel list hooks
   const { pushItem: postChannel, error: listError } = useListResource<Channel>({
-    resource: 'video-stream',
+    resource: 'channel',
   });
 
   // current channel hooks

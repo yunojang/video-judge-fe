@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { AreaObject, ChannelObject, Position } from 'src/model/channel';
+import { modify, save } from 'src/reducer/channel';
 import { RootState } from 'src/store';
 import { all_index } from '../type';
 
-import { resetChannel, updateChannel } from 'src/reducer/channel';
 import UpdateView from '../components/UpdateView';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@wizrnd/nx-ui';
@@ -23,26 +23,24 @@ const UpdateContainer = ({
   postChannel,
   putChannel,
 }: UpdateProps) => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { current, hasUnSave } = useSelector(
-    (state: RootState) => state.channel,
-  );
+  const dispatch = useDispatch();
+  const { hasUnSave } = useSelector((state: RootState) => state.channel);
 
-  const dispatchUpdate = useCallback(
-    (channel: Partial<ChannelObject>) => {
-      dispatch(updateChannel(channel));
-    },
-    [dispatch],
+  const [current, setCurrent] = useState<ChannelObject>(
+    fetchedChannel ?? new ChannelObject({}),
   );
 
   useEffect(() => {
-    if (isNew || !fetchedChannel) {
-      dispatch(resetChannel());
-    } else {
-      dispatch(updateChannel(fetchedChannel, true));
+    if (!isNew && fetchedChannel) {
+      setCurrent(fetchedChannel);
     }
-  }, [dispatch, dispatchUpdate, isNew, fetchedChannel]);
+  }, [isNew, fetchedChannel]);
+
+  const updateCurrent = (newChannel: Partial<ChannelObject>) => {
+    setCurrent(current => ({ ...current, ...newChannel }));
+    dispatch(modify());
+  };
 
   const { channelArea: area } = current;
   const [selectedArea, setSelectedArea] = useState<number>(all_index);
@@ -52,7 +50,7 @@ const UpdateContainer = ({
   );
 
   const changeName = (name: string) => {
-    dispatchUpdate({ channelName: name });
+    updateCurrent({ channelName: name });
   };
 
   const handleChangeArea = (key: number) => {
@@ -60,7 +58,7 @@ const UpdateContainer = ({
   };
 
   const addArea = () => {
-    dispatchUpdate({ channelArea: [...area, new AreaObject({})] });
+    updateCurrent({ channelArea: [...area, new AreaObject({})] });
     setSelectedArea(area.length);
   };
 
@@ -68,7 +66,7 @@ const UpdateContainer = ({
     const channelArea = [...area];
     channelArea[selectedArea] = areaObject;
 
-    dispatchUpdate({ channelArea });
+    updateCurrent({ channelArea });
   };
 
   const deleteArea = () => {
@@ -76,7 +74,7 @@ const UpdateContainer = ({
       const channelArea = [...area];
       channelArea.splice(selectedArea, 1);
 
-      dispatchUpdate({ channelArea });
+      updateCurrent({ channelArea });
       setSelectedArea(selectedArea ? selectedArea - 1 : all_index);
     }
   };
@@ -106,7 +104,7 @@ const UpdateContainer = ({
     }
 
     let submitPromise;
-    toast.open({ message: 'Running...' });
+    toast.open({ message: 'Running...', duration: 1000 });
 
     if (isNew) {
       submitPromise = postChannel(current);
@@ -116,14 +114,23 @@ const UpdateContainer = ({
 
     submitPromise
       .then(() => {
-        toast.success({ message: 'Done!' });
+        toast.success({
+          message: 'Success',
+          description: 'Done work',
+          duration: 3000,
+        });
+        dispatch(save());
 
         if (isNew) {
           setTimeout(() => navigate(-1), 300);
         }
       })
       .catch(err => {
-        toast.error({ message: 'Occurted Error', description: err });
+        toast.error({
+          message: 'Occurted Error',
+          description: err,
+          duration: 3000,
+        });
       });
   };
 

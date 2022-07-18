@@ -91,8 +91,8 @@ export class AreaObject {
 interface ChannelProps {
   channelName?: string;
   cameraSrc?: string;
+  useChannel?: boolean;
   useAlarm?: boolean;
-  useInference?: boolean;
   useSend?: boolean;
   position?: string;
   description?: string;
@@ -102,8 +102,8 @@ interface ChannelProps {
 export class ChannelObject {
   channelName: string;
   cameraSrc: string;
+  useChannel: boolean;
   useAlarm: boolean;
-  useInference: boolean;
   useSend: boolean;
   position: string;
   description: string;
@@ -114,8 +114,8 @@ export class ChannelObject {
     cameraSrc = 'rtsp://',
     description = '',
     position = '',
+    useChannel = false,
     useAlarm = false,
-    useInference = false,
     useSend = false,
     channelArea = [],
   }: ChannelProps) {
@@ -123,8 +123,8 @@ export class ChannelObject {
     this.cameraSrc = cameraSrc;
     this.description = description;
     this.position = position;
+    this.useChannel = useChannel;
     this.useAlarm = useAlarm;
-    this.useInference = useInference;
     this.useSend = useSend;
     this.channelArea = channelArea;
   }
