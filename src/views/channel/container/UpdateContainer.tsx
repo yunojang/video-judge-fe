@@ -59,6 +59,10 @@ const UpdateContainer = ({
     updateCurrent({ useChannel: !current.useChannel });
   };
 
+  const changeCameraUrl = (url: string) => {
+    updateCurrent({ cameraSrc: url });
+  };
+
   const handleChangeArea = (key: number) => {
     setSelectedArea(key);
   };
@@ -158,6 +162,7 @@ const UpdateContainer = ({
       channel={{
         current,
         changeName,
+        changeCameraUrl,
         toggleUseChannel,
         hasUnSave,
       }}

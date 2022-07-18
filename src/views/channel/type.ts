@@ -5,6 +5,7 @@ export const all_index = -1;
 export interface ChannelState {
   current: ChannelObject;
   changeName: (name: string) => void;
+  changeCameraUrl: (url: string) => void;
   toggleUseChannel: () => void;
   hasUnSave: boolean;
 }

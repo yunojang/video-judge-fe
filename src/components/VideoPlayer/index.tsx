@@ -10,7 +10,8 @@ interface PlayerProps {
   position?: Position;
 }
 
-const TEST_CV_URL = 'http://localhost:8888';
+// const TEST_CV_URL = 'http://localhost:8888';
+const TEST_CV_URL = 'http://10.1.1.201:28084';
 
 const VideoPlayer = ({
   multipart = false,
@@ -31,8 +32,8 @@ const VideoPlayer = ({
     />
   ) : (
     <img
-      src={`${TEST_CV_URL}/api/video_feed?url=${url}`}
-      // src={`http://10.1.1.201:28084/api/channel/play?url=${url}`}
+      // src={`${TEST_CV_URL}/api/video_feed?url=${url}`}
+      src={`${TEST_CV_URL}/api/channel/play?url=${url}`}
       width={width}
       height={height}
       className={className}

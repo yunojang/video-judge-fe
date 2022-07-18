@@ -1,21 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
 import { css, Global } from '@emotion/react';
-import {
-  Body1,
-  Button,
-  H5,
-  Header,
-  Switch,
-  Title1,
-  useTheme,
-} from '@wizrnd/nx-ui';
+import { Button, H5, Header, Switch, useTheme } from '@wizrnd/nx-ui';
 
 import { AreaState, ChannelState } from '../type';
 
 import AreaEditor from './AreaEditor';
 import AreaTab from './AreaTab';
 import AreaDetail from './AreaDetail';
+import ChannelDescription from './ChannelDescription';
 
 interface ChannelProps {
   isNew: boolean;
@@ -41,16 +34,8 @@ const UpdateView = ({
     [t, isNew],
   );
 
-  const {
-    cameraSrc,
-    channelArea,
-    channelName,
-    description,
-    position,
-    useAlarm,
-    useChannel,
-    useSend,
-  } = channel.current;
+  const { cameraSrc, channelArea, channelName, useAlarm, useChannel, useSend } =
+    channel.current;
 
   return (
     <main>
@@ -78,10 +63,10 @@ const UpdateView = ({
           <AreaEditor area={area} list={channelArea} videoUrl={cameraSrc} />
 
           <div className="channel-description">
-            <Title1>{channelName}</Title1>
-            <Body1>{description}</Body1>
-            <Body1>{cameraSrc}</Body1>
-            <Body1>{position}</Body1>
+            <ChannelDescription
+              channel={channel.current}
+              handleChangeUrl={channel.changeCameraUrl}
+            />
           </div>
         </div>
 
