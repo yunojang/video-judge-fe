@@ -32,7 +32,7 @@ const VideoPlayer = ({
   ) : (
     <img
       src={`${TEST_CV_URL}/api/video_feed?url=${url}`}
-      // src={'http://10.1.1.201:28084/api/channel/play/60'}
+      // src={`http://10.1.1.201:28084/api/channel/play?url=${url}`}
       width={width}
       height={height}
       className={className}

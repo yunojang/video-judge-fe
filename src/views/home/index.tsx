@@ -7,9 +7,7 @@ import { fetch } from 'src/reducer/dashboard';
 
 import ErrorMsg from 'src/components/ErrorMsg';
 import Loading from 'src/components/Loading';
-import VideoPlayer from 'src/components/VideoPlayer';
-
-const TEST_CV_URL = 'http://localhost:8888';
+import DashboardItem from './DashboardItem';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -33,13 +31,7 @@ const Home = () => {
   ) : (
     <div className={style.container}>
       {dashboard.map(channel => (
-        <div key={channel.id}>
-          <VideoPlayer
-            multipart
-            url={`${TEST_CV_URL}/api/video_feed?url=${channel.cameraSrc}`}
-            height="100%"
-          />
-        </div>
+        <DashboardItem key={channel.id} item={channel} />
       ))}
     </div>
   );
@@ -57,15 +49,6 @@ const makeStyles = () => {
     box-sizing: border-box;
     // temp
     height: calc(100vh - 42px);
-
-    & > div {
-      background-color: #f5f5f5;
-      text-align: center;
-    }
-
-    & > div > img {
-      height: 100%;
-    }
   `;
 
   return {

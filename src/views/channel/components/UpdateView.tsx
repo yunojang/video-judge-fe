@@ -1,7 +1,15 @@
 import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
 import { css, Global } from '@emotion/react';
-import { Body1, Button, H5, Header, Switch, Title1 } from '@wizrnd/nx-ui';
+import {
+  Body1,
+  Button,
+  H5,
+  Header,
+  Switch,
+  Title1,
+  useTheme,
+} from '@wizrnd/nx-ui';
 
 import { AreaState, ChannelState } from '../type';
 
@@ -123,56 +131,60 @@ const UpdateView = ({
 
 export default UpdateView;
 
-const Style = () => (
-  <Global
-    styles={css`
-      .container {
-        display: flex;
-        gap: 8px;
-      }
+const Style = () => {
+  const theme = useTheme();
 
-      .title-input {
-        background: transparent;
-        border: 0;
-        border-bottom: 2px solid #fff;
-        color: #fff;
-        padding: 0.4em;
-        font-size: 18px;
-        outline: 0;
-      }
+  return (
+    <Global
+      styles={css`
+        .container {
+          display: flex;
+          gap: 8px;
+        }
 
-      .channel-viewer {
-        display: flex;
-        flex-direction: column;
-        padding-top: 1em;
-        padding-left: 0.5em;
-      }
+        .title-input {
+          background: transparent;
+          border: 0;
+          border-bottom: 2px solid ${theme.palette.primary.text};
+          color: ${theme.palette.primary.text};
+          padding: 0.4em;
+          font-size: 18px;
+          outline: 0;
+        }
 
-      .channel-description {
-        background: #f5f5f5;
-        padding: 1em;
-        flex: 1;
-      }
+        .channel-viewer {
+          display: flex;
+          flex-direction: column;
+          padding-top: 1em;
+          padding-left: 0.5em;
+        }
 
-      .channel-settings {
-        padding: 1em;
-        flex: 1;
-      }
+        .channel-description {
+          background: #f5f5f5;
+          padding: 1em;
+          flex: 1;
+        }
 
-      .switch-setting {
-        /* width: 15em; */
-        display: flex;
-        justify-content: space-between;
-      }
+        .channel-settings {
+          padding: 1em;
+          flex: 1;
+        }
 
-      .area-tab-wapper {
-        display: flex;
-        align-items: center;
-      }
+        .switch-setting {
+          /* width: 15em; */
+          display: flex;
+          justify-content: space-between;
+        }
 
-      .area-description {
-        height: 320px;
-      }
-    `}
-  />
-);
+        .area-tab-wapper {
+          display: flex;
+          align-items: center;
+        }
+
+        .area-description {
+          height: 320px;
+        }
+      `}
+    />
+  );
+};
