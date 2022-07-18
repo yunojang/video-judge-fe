@@ -4,8 +4,10 @@ export enum PromiseState {
   Reject = '_REJECTED',
 }
 
-export const makePromiseActionType = (action: string, promise: PromiseState) =>
-  action + promise;
+export const makePromiseActionType = (
+  action: string,
+  requestState: PromiseState,
+) => action + requestState;
 
 export const request = (action: string) =>
   makePromiseActionType(action, PromiseState.Pending);

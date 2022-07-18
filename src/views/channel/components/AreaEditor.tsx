@@ -5,7 +5,7 @@ import { Canvas } from 'src/canvas/CanvasClass';
 import { AreaObject, AreaType, isRectCoordinate } from 'src/model/channel';
 
 import CanvasRenderer from 'src/canvas/CanvasRenderer';
-import VideoPlayer from './VideoPlayer';
+import VideoPlayer from 'src/components/VideoPlayer';
 import EditBar from './EditBar';
 import { AreaState } from '../type';
 
@@ -61,6 +61,7 @@ const AreaEditor = ({
           height={canvas.height}
           url={videoUrl}
           multipart
+          position="absolute"
         />
 
         {isCorrectCanvasArea && (

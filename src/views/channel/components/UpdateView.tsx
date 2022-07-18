@@ -81,10 +81,14 @@ const UpdateView = ({
           <H5 style={{ marginBottom: '1em' }}>Settings</H5>
           <div className="switch-setting">
             Use Channel:
-            <Switch checked={useChannel} onClick={channel.toggleUseChannel} />
+            <Switch
+              checked={useChannel}
+              onClick={channel.toggleUseChannel}
+              size="md"
+            />
           </div>
           <div className="switch-setting">
-            Use Alarm: <Switch checked={useAlarm} />
+            Use Alarm: <Switch checked={useAlarm} size="md" />
           </div>
 
           <div>
@@ -108,7 +112,7 @@ const UpdateView = ({
             </div>
 
             <div className="switch-setting">
-              Use Send: <Switch checked={useSend} />
+              Use Send: <Switch checked={useSend} size="md" disabled />
             </div>
           </div>
         </div>
@@ -156,6 +160,7 @@ const Style = () => (
       }
 
       .switch-setting {
+        /* width: 15em; */
         display: flex;
         justify-content: space-between;
       }
