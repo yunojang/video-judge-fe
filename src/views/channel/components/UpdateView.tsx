@@ -34,7 +34,7 @@ const UpdateView = ({
     [t, isNew],
   );
 
-  const { cameraSrc, channelArea, channelName, useAlarm, useChannel, useSend } =
+  const { channelArea, channelName, useAlarm, useChannel, useSend } =
     channel.current;
 
   return (
@@ -60,7 +60,11 @@ const UpdateView = ({
       <Style />
       <div className="container">
         <div className="channel-viewer">
-          <AreaEditor area={area} list={channelArea} videoUrl={cameraSrc} />
+          <AreaEditor
+            area={area}
+            list={channelArea}
+            videoUrl={channel.previewUrl}
+          />
 
           <div className="channel-description">
             <ChannelDescription
@@ -81,7 +85,8 @@ const UpdateView = ({
             />
           </div>
           <div className="switch-setting">
-            Use Alarm: <Switch checked={useAlarm} size="md" />
+            Use Alarm:
+            <Switch checked={useAlarm} size="md" disabled={!useChannel} />
           </div>
 
           <div>
@@ -105,7 +110,8 @@ const UpdateView = ({
             </div>
 
             <div className="switch-setting">
-              Use Send: <Switch checked={useSend} size="md" disabled />
+              Use Send
+              <Switch checked={useSend} size="md" disabled={!useAlarm} />
             </div>
           </div>
         </div>
@@ -146,7 +152,7 @@ const Style = () => {
 
         .channel-description {
           background: #f5f5f5;
-          padding: 1em;
+          padding: 1em 1.4em;
           flex: 1;
         }
 

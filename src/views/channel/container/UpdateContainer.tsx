@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { AreaObject, ChannelObject, Position } from 'src/model/channel';
-import { modify, save } from 'src/reducer/channel';
+import { modify, save, setPrviewUrl } from 'src/reducer/channel';
 import { RootState } from 'src/store';
 import { all_index } from '../type';
 
@@ -27,22 +27,13 @@ const UpdateContainer = ({
 }: UpdateProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { hasUnSave } = useSelector((state: RootState) => state.channel);
+  const { hasUnSave, previewUrl } = useSelector(
+    (state: RootState) => state.channel,
+  );
 
   const [current, setCurrent] = useState<ChannelObject>(
     fetchedChannel ?? new ChannelObject({}),
   );
-
-  useEffect(() => {
-    if (!isNew && fetchedChannel) {
-      setCurrent(fetchedChannel);
-    }
-  }, [isNew, fetchedChannel]);
-
-  const updateCurrent = (newChannel: Partial<ChannelObject>) => {
-    setCurrent(current => ({ ...current, ...newChannel }));
-    dispatch(modify());
-  };
 
   const { channelArea: area } = current;
   const [selectedArea, setSelectedArea] = useState<number>(all_index);
@@ -50,6 +41,18 @@ const UpdateContainer = ({
     () => (selectedArea !== all_index ? area[selectedArea] : null),
     [area, selectedArea],
   );
+
+  useEffect(() => {
+    if (!isNew && fetchedChannel) {
+      setCurrent(fetchedChannel);
+      dispatch(setPrviewUrl(fetchedChannel.cameraSrc));
+    }
+  }, [isNew, fetchedChannel, dispatch]);
+
+  const updateCurrent = (newChannel: Partial<ChannelObject>) => {
+    setCurrent(current => ({ ...current, ...newChannel }));
+    dispatch(modify());
+  };
 
   const changeName = (name: string) => {
     updateCurrent({ channelName: name });
@@ -161,10 +164,11 @@ const UpdateContainer = ({
       isNew={isNew}
       channel={{
         current,
+        hasUnSave,
+        previewUrl: previewUrl ?? '',
         changeName,
         changeCameraUrl,
         toggleUseChannel,
-        hasUnSave,
       }}
       area={{
         selected: selectedArea,

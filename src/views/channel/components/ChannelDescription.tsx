@@ -1,6 +1,8 @@
 import { ChannelObject } from 'src/model/channel';
-import { Button, TextInput, Title1 } from '@wizrnd/nx-ui';
+import { Button, TextInput, Title1, Tooltip } from '@wizrnd/nx-ui';
 import { css } from '@emotion/css';
+import { useDispatch } from 'react-redux';
+import { setPrviewUrl } from 'src/reducer/channel';
 
 interface DescriptionProps {
   channel: ChannelObject;
@@ -8,6 +10,9 @@ interface DescriptionProps {
 }
 
 const ChannelDescription = ({ channel, handleChangeUrl }: DescriptionProps) => {
+  const dispatch = useDispatch();
+
+  const { cameraSrc } = channel;
   return (
     <div className={style}>
       <div className="channel-info-feild">
@@ -23,11 +28,19 @@ const ChannelDescription = ({ channel, handleChangeUrl }: DescriptionProps) => {
         <div className="url-input">
           <TextInput
             fullWidth
-            value={channel.cameraSrc}
+            value={cameraSrc}
             onChange={e => handleChangeUrl(e.target.value)}
             variant={'underlined'}
           />
-          <Button>Preview</Button>
+          <Tooltip arrow title="Show video preview">
+            <Button
+              variant="contained"
+              color="#5a5a5a"
+              onClick={() => dispatch(setPrviewUrl(cameraSrc))}
+            >
+              Preview
+            </Button>
+          </Tooltip>
         </div>
       </div>
     </div>
@@ -41,12 +54,13 @@ const style = css`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 6px;
+    gap: 1em;
+    margin-bottom: 8px;
   }
 
   .url-input {
     flex: 1;
     display: flex;
-    gap: 4px;
+    gap: 0.5em;
   }
 `;
