@@ -1,5 +1,6 @@
-import { css, cx } from '@emotion/css';
-import { Error } from './types';
+import { css, cx, keyframes } from '@emotion/css';
+import { useMemo } from 'react';
+import { Error, ERR_EMOJI, HttpErrorCode } from './types';
 
 type Position = 'inline' | 'center' | 'float';
 const ErrorMsg = ({
@@ -10,15 +11,43 @@ const ErrorMsg = ({
   position?: Position;
 }) => {
   const { code, message } = error;
+  const emoji = useMemo(() => {
+    switch (code) {
+      case 401:
+        return ERR_EMOJI[HttpErrorCode.Unauth];
+      case 403:
+        return ERR_EMOJI[HttpErrorCode.Forbidden];
+      case 404:
+        return ERR_EMOJI[HttpErrorCode.NotFound];
+      case 408:
+        return ERR_EMOJI[HttpErrorCode.Timeout];
+      case 400:
+      default:
+        return ERR_EMOJI[HttpErrorCode.ClientError];
+    }
+  }, [code]);
 
   return (
     <div className={cx(style, position)}>
-      <span>{`[${code}] ${message}`}</span>
+      <span className="emoji">{emoji}</span>
+      <span className="message">{`[${code}] ${message}`}</span>
     </div>
   );
 };
 
 export default ErrorMsg;
+
+const emojiAnimation = keyframes`
+  0% {
+    transform: rotate(-15deg);
+  }
+  50% {
+    transform: rotate(15deg);
+  }
+  100% {
+    transform: rotate(-15deg);
+  }
+`;
 
 const style = css`
   font-size: 20px;
@@ -41,5 +70,15 @@ const style = css`
   &.center {
     display: flex;
     margin: 1em auto;
+  }
+
+  & > .emoji {
+    font-size: 150px;
+    animation: ${emojiAnimation} 1.5s ease-in-out infinite;
+  }
+
+  & > .message {
+    color: #5a5a5a;
+    font-weight: bold;
   }
 `;
