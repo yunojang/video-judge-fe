@@ -54,7 +54,7 @@ export class ClientClass {
     const options: RequestBase = defaultConfig(baseConfig);
 
     const response = await promiseWithTimeout<Response>(
-      fetch(url, options),
+      fetch(url, options).catch(err => err),
       timeout,
     );
 
@@ -63,7 +63,15 @@ export class ClientClass {
     if (!response.ok) {
       // const { code, message } = (parsed as any).json as ResponseError;
       // const err = { code, message };
-      const err = { code: response.status, message: response.statusText };
+      const isInvalidConnect = !response.status;
+      if (isInvalidConnect) {
+        return Promise.reject({ code: 400, message: response });
+      }
+
+      const err = {
+        code: response.status,
+        message: response.statusText,
+      };
 
       return Promise.reject(err);
     } else {
