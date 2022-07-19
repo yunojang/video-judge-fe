@@ -12,6 +12,7 @@ export const settingMenus = [
     id: SettingMenu.Channel,
     label: 'Channel',
     element: <ChannelList />,
+    addonMenu: ['add'],
   },
   {
     id: SettingMenu.Model,

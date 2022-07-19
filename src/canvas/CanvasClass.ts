@@ -3,7 +3,7 @@ import { Coordinate, isCoordinate } from './types';
 import { getResolution, WidthProps, HeightProps } from './utils/screen';
 import { getAlphaColor } from './utils/color';
 import { AreaObject, isRect } from 'src/model/channel';
-import { getRoundDigit } from 'src/utils/number';
+import { getRoundDigit } from 'src/utils/format';
 
 interface CanvasProps {
   width?: number;

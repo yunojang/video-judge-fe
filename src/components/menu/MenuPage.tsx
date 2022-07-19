@@ -7,11 +7,13 @@ import ErrorMsg from '../ErrorMsg';
 import Menu from '../Menu';
 import Header, { MenuObject as HeaderMenuObject } from '../Header';
 import { invalidError } from './constant';
+import { makeNewMenu } from './utils';
 
 interface MenuObject {
   id: string;
   label: string;
   element: ReactChild;
+  addonMenu?: string[];
 }
 
 interface MenuWrapperProps {
@@ -19,8 +21,6 @@ interface MenuWrapperProps {
   defaultId: string;
   sideWidth?: string;
 }
-
-// const controlMenu = ['add'];
 
 const MenuWrapper = ({
   menu,
@@ -37,24 +37,24 @@ const MenuWrapper = ({
   // menu page header's menu
   const headerMenu = useMemo(() => {
     const menus: HeaderMenuObject[] = [];
-
     if (!selectedMenu) {
       return menus;
     }
 
-    const { id, label } = selectedMenu;
-    const path = getPath(id);
+    const { id, label, addonMenu } = selectedMenu;
+    if (!addonMenu) {
+      return menus;
+    }
 
+    const path = getPath(id);
     if (!path) {
       return menus;
     }
 
-    menus.push({
-      text: 'Add',
-      path: `${path}/new`,
-      tooltip: `Create ${label}`,
-      logo: 'PlusIcon',
-    });
+    if (addonMenu.includes('add')) {
+      const menu = makeNewMenu(label, path);
+      menus.push(menu);
+    }
 
     return menus;
   }, [selectedMenu]);
