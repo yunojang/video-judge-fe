@@ -42,7 +42,9 @@ export const getPath = (id: string): string | null => {
 
 export const makeRoutes = (
   routes: Router[],
-  fallback: React.ReactNode = <ErrorMsg msg="[404] NotFound" />,
+  fallback: React.ReactNode = (
+    <ErrorMsg error={{ code: 404, message: 'Not Found' }} />
+  ),
 ) => {
   const notFountRouter: Router = {
     path: '*',

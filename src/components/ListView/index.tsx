@@ -35,7 +35,7 @@ const ListView = <T extends ListType = any>({
   const theme = useTheme();
 
   return error ? (
-    <ErrorMsg msg={error ?? `Nonting Collection`} />
+    <ErrorMsg error={error} />
   ) : (
     <>
       <header style={{ marginBottom: '1em' }}>

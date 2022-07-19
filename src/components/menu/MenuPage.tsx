@@ -6,6 +6,7 @@ import { getPath, isFrontendRoute } from 'src/routes';
 import ErrorMsg from '../ErrorMsg';
 import Menu from '../Menu';
 import Header, { MenuObject as HeaderMenuObject } from '../Header';
+import { invalidError } from './constant';
 
 interface MenuObject {
   id: string;
@@ -85,7 +86,7 @@ const MenuWrapper = ({
         </Layout.Sider>
 
         <Layout.Content style={{ padding: '0.5em' }}>
-          {selectedMenu?.element ?? <ErrorMsg msg="Invalid Menu" />}
+          {selectedMenu?.element ?? <ErrorMsg error={invalidError} />}
         </Layout.Content>
       </Layout.Container>
     </Layout.Container>

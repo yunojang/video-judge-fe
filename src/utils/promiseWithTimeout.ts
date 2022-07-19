@@ -11,8 +11,8 @@ const rejectAfterTimeout = <T>(timeout: number) =>
   new Promise<T>((_, reject) => {
     setTimeout(() => {
       reject({
-        error: 'Promise Time out',
-        statusText: 'timeout',
+        code: 408,
+        message: '[Request Time out] Promise Time out',
         timeout,
       });
     }, timeout);

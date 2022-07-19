@@ -54,7 +54,7 @@ const ChannelUpdate = () => {
   );
 
   return error ? (
-    <ErrorMsg msg={error} />
+    <ErrorMsg error={error} />
   ) : loading ? (
     <Loading />
   ) : (

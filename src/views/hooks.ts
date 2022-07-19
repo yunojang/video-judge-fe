@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import Client from 'src/utils/connection';
 import { ListType } from 'src/model/types';
 import { RequestBase } from 'src/utils/connection/types';
+import { Error } from 'src/components/ErrorMsg/types';
 
 const handleErrorDefault = (msg: string) => {
   console.error(msg);
@@ -15,7 +16,7 @@ export const useFetchList = <T extends ListType>(
 ) => {
   const [collection, setCollection] = useState<T[] | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<Error | null>(null);
 
   const request = useCallback(
     () =>
@@ -24,7 +25,7 @@ export const useFetchList = <T extends ListType>(
           setCollection(json as T[]);
         })
         .catch(err => {
-          setError('Failed to Fetch List');
+          setError(err);
           handleErrorMsg(err);
         })
         .finally(() => {

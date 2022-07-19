@@ -23,7 +23,7 @@ const Home = () => {
 
   const style = makeStyles();
   return error ? (
-    <ErrorMsg msg={error} />
+    <ErrorMsg error={error} />
   ) : loading ? (
     <Loading />
   ) : !dashboard.length ? (

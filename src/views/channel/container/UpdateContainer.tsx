@@ -13,7 +13,7 @@ import { toast } from '@wizrnd/nx-ui';
 interface UpdateProps {
   isNew: boolean;
   useLength: number;
-  channel?: ChannelObject;
+  channel: ChannelObject | null;
   postChannel: (channel: ChannelObject) => Promise<void>;
   putChannel: (channel: ChannelObject) => Promise<void>;
 }
@@ -43,7 +43,9 @@ const UpdateContainer = ({
   );
 
   useEffect(() => {
-    if (!isNew && fetchedChannel) {
+    const isUpdate = !isNew && fetchedChannel;
+
+    if (isUpdate) {
       setCurrent(fetchedChannel);
       dispatch(setPrviewUrl(fetchedChannel.cameraSrc));
     }
@@ -123,6 +125,7 @@ const UpdateContainer = ({
         toast.warning({
           message: 'Unable to modify',
           description: 'Cannot use more than 4 channels',
+          duration: 2000,
         });
 
         return;

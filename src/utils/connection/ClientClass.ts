@@ -36,11 +36,11 @@ export class ClientClass {
   }
   async request<T extends ParseMethod = 'json'>({
     url: inputUrl,
+    parseMethod = 'json',
     timeout,
-    parseMethod,
     endPoint,
     ...baseConfig
-  }: RequestConfig & { parseMethod?: T }) {
+  }: RequestConfig & { parseMethod?: ParseMethod }) {
     const url = this.getUrl(inputUrl, endPoint);
 
     // Control any options
@@ -51,7 +51,17 @@ export class ClientClass {
       timeout,
     );
 
-    return parseResponse<T>(response, parseMethod);
+    const parsed = parseResponse<T>(response, parseMethod);
+
+    if (!response.ok) {
+      // const { code, message } = (parsed as any).json as ResponseError;
+      // const err = { code, message };
+      const err = { code: response.status, message: response.statusText };
+
+      return Promise.reject(err);
+    } else {
+      return parsed;
+    }
   }
   getUrl(url?: string, endPoint?: string) {
     if (url) {

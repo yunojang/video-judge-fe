@@ -3,26 +3,30 @@ import Client from 'src/utils/connection';
 
 import { ChannelObject, isChannel } from 'src/model/channel';
 import { RequestConfig } from 'src/utils/connection/types';
+import { Error } from 'src/components/ErrorMsg/types';
 
 const RESOURCE = 'channel';
 
 export const useChannel = ({
   id,
-  defaultChannel = new ChannelObject({}),
+  defaultChannel,
 }: {
   id?: string;
   defaultChannel?: ChannelObject;
 }) => {
   const endPoint = useMemo(() => `/api/${RESOURCE}/${id}`, [id]);
 
-  const [channel, setChannel] = useState<ChannelObject>(defaultChannel);
+  const [channel, setChannel] = useState<ChannelObject | null>(
+    defaultChannel ?? null,
+  );
   const [loading, setLoading] = useState<boolean>(!!id);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<Error | null>(null);
 
   const requestChannel = useCallback(
     (options?: Partial<RequestConfig>) => {
       if (!id) {
-        const err = 'Cannot PUT request without id';
+        const err = { code: 400, message: 'Cannot PUT request without id' };
+
         setError(err);
         return Promise.reject(err);
       }
@@ -30,11 +34,10 @@ export const useChannel = ({
       setLoading(true);
 
       return Client.request({ endPoint, ...options })
-        .then(({ json }) => {
-          return json;
-        })
+        .then(({ json }) => json)
         .catch(err => {
           setError(err);
+          return Promise.reject(err);
         })
         .finally(() => setLoading(false));
     },
@@ -42,16 +45,17 @@ export const useChannel = ({
   );
 
   useEffect(() => {
-    if (id) {
+    if (id && !defaultChannel) {
       requestChannel().then(json => {
-        if (isChannel(json)) {
-          setChannel(json);
-        } else {
-          setError('Response is not a valid type');
+        if (!isChannel(json)) {
+          setError({ code: 500, message: `Response data is not a valid type` });
+          return;
         }
+
+        setChannel(json);
       });
     }
-  }, [requestChannel, id]);
+  }, [requestChannel, id, defaultChannel]);
 
   const updateChannel = useCallback(
     (newChannel: ChannelObject) => {

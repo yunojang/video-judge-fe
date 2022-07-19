@@ -57,3 +57,9 @@ export interface ActionMethodResponse {
   message?: string;
   data: JsonObject;
 }
+
+export interface ResponseError {
+  code: number;
+  message: string;
+  details: object;
+}

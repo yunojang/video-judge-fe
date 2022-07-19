@@ -1,6 +1,8 @@
 import { AnyAction } from '@reduxjs/toolkit';
 
 import Client from 'src/utils/connection';
+import { ResponseError } from 'src/utils/connection/types';
+
 import { Channel } from 'src/model/channel';
 import { makeActionFunction, reject, request, success } from './utils';
 
@@ -23,7 +25,7 @@ export const fetch = () => {
 interface DashboardState {
   current: Channel[];
   loading: boolean;
-  error: string | null;
+  error: ResponseError | null;
 }
 
 const initialState: DashboardState = {
@@ -53,7 +55,7 @@ const dashboardReducer = (
     case reject(actions.fetch): {
       return {
         ...state,
-        error: 'Failed to fetch dashboard',
+        error: payload,
         loading: false,
       };
     }

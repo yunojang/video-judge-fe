@@ -1,6 +1,6 @@
 import { css, cx } from '@emotion/css';
 
-type Position = 'absolute' | 'static';
+type Position = 'absolute' | 'inline';
 
 interface PlayerProps {
   multipart?: boolean;
@@ -18,7 +18,7 @@ const VideoPlayer = ({
   width,
   height,
   url,
-  position = 'static',
+  position = 'inline',
 }: PlayerProps) => {
   const className = cx(style, position);
   return !multipart ? (
