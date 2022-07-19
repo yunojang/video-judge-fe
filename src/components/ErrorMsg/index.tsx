@@ -41,7 +41,13 @@ const emojiAnimation = keyframes`
   0% {
     transform: rotate(-15deg);
   }
+  25% {
+    transform: rotate(-15deg);
+  }
   50% {
+    transform: rotate(15deg);
+  }
+  75% {
     transform: rotate(15deg);
   }
   100% {
@@ -78,7 +84,9 @@ const style = css`
   }
 
   & > .message {
-    color: #5a5a5a;
+    color: #000000;
+    font-size: 22px;
+    margin-top: 1.2em;
     font-weight: bold;
   }
 `;
