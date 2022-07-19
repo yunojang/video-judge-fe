@@ -8,6 +8,7 @@ export type ClientInterface = Pick<
 export interface ClientConfig {
   url?: string;
   origin?: string;
+  timeout?: number;
 }
 
 export interface RequestBase {

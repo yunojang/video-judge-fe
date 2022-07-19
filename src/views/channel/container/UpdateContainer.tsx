@@ -125,7 +125,7 @@ const UpdateContainer = ({
         toast.warning({
           message: 'Unable to modify',
           description: 'Cannot use more than 4 channels',
-          duration: 2000,
+          duration: 3000,
         });
 
         return;
@@ -145,7 +145,7 @@ const UpdateContainer = ({
         toast.success({
           message: 'Success',
           description: 'Done work',
-          duration: 2000,
+          duration: 3000,
         });
         dispatch(save());
 
@@ -154,10 +154,11 @@ const UpdateContainer = ({
         }
       })
       .catch(err => {
+        console.log(err);
         toast.error({
-          message: 'Occurted Error',
-          description: err,
-          duration: 2000,
+          message: `Occurted Error: ${err.code}`,
+          description: err.message,
+          duration: 3000,
         });
       });
   };

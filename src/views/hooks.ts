@@ -21,16 +21,14 @@ export const useFetchList = <T extends ListType>(
   const request = useCallback(
     () =>
       Client.get({ endPoint: `/api/${resource}` })
-        .then(({ json }) => {
-          setCollection(json as T[]);
-        })
+        .then(({ json }) => setCollection(json as T[]))
         .catch(err => {
           setError(err);
           handleErrorMsg(err);
+
+          return Promise.reject(err);
         })
-        .finally(() => {
-          setLoading(false);
-        }),
+        .finally(() => setLoading(false)),
     [handleErrorMsg, resource],
   );
 
@@ -59,23 +57,21 @@ export const useListResource = <T extends ListType>({
 }) => {
   const [loading, setLoading] = useState(initLoading);
   const [collection, setCollection] = useState<T[]>(defaultCollection);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<Error | null>(null);
 
   const endPoint = useMemo(() => `/api/${resource}`, [resource]);
 
   const request = (options?: RequestBase) => {
     setLoading(true);
     return Client.request({ endPoint, ...options })
-      .then(({ json }) => {
-        setCollection(json as T[]);
-      })
+      .then(({ json }) => setCollection(json as T[]))
       .catch(err => {
         setError(err);
         handleErrorMsg(err);
+
+        return Promise.reject(err);
       })
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => setLoading(false));
   };
 
   const pushItem = (newItem: Partial<T>) => {

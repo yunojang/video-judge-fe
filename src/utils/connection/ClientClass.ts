@@ -3,16 +3,23 @@ import parseResponse from './parseResponse';
 import { ClientConfig, ParseMethod, RequestBase, RequestConfig } from './types';
 
 const DEAFULT_ORIGIN = 'http:/localhost:3000';
+const DEFAULT_TIMEOUT = 20000;
 
 // connection feature
 export class ClientClass {
   url: string;
   origin: string;
+  timeout: number;
 
-  constructor({ url: inputUrl, origin = DEAFULT_ORIGIN }: ClientConfig) {
+  constructor({
+    url: inputUrl,
+    origin = DEAFULT_ORIGIN,
+    timeout = DEFAULT_TIMEOUT,
+  }: ClientConfig) {
     const url = new URL(inputUrl ?? origin);
     this.url = url.href;
     this.origin = url.origin;
+    this.timeout = timeout;
   }
   async get<T extends ParseMethod = 'json'>(
     config: RequestConfig & { parseMethod?: T },
