@@ -10,6 +10,9 @@ export const GlobalStyles = () => {
           margin: 0;
           padding: 0;
         }
+        body {
+          min-height: 100vh;
+        }
         li {
           list-style: none;
         }

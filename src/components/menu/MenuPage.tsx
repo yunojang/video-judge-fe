@@ -85,7 +85,7 @@ const MenuWrapper = ({
           />
         </Layout.Sider>
 
-        <Layout.Content style={{ padding: '0.5em' }}>
+        <Layout.Content style={{ padding: '0 1em' }}>
           {selectedMenu?.element ?? <ErrorMsg error={invalidError} />}
         </Layout.Content>
       </Layout.Container>

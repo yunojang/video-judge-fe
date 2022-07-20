@@ -9,6 +9,7 @@ import { paths } from 'src/routes';
 import { TextInput } from '@wizrnd/nx-ui';
 import ListView from 'src/components/ListView';
 
+const PAGE_SIZE = 16;
 const ChannelList: FC = () => {
   const { t } = useTranslation();
   const style = makeStyle();
@@ -71,7 +72,12 @@ const ChannelList: FC = () => {
         <TextInput placeholder="Search Channel" iconName="SearchIcon" />
       </div>
 
-      <ListView<Channel> resource="channel" row={row} columns={columns} />
+      <ListView<Channel>
+        resource="channel"
+        row={row}
+        columns={columns}
+        pageSize={PAGE_SIZE}
+      />
     </div>
   );
 };

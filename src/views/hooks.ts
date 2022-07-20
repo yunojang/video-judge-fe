@@ -41,7 +41,17 @@ export const useFetchList = <T extends ListType>(
     };
   }, [request]);
 
-  return { loading, collection, reload: request, error };
+  const resourceCount = useMemo(() => {
+    return collection?.length ?? 0;
+  }, [collection]);
+
+  return {
+    loading,
+    collection,
+    resourceCount,
+    reload: request,
+    error,
+  };
 };
 
 export const useListResource = <T extends ListType>({
