@@ -53,6 +53,8 @@ const ChannelUpdate = () => {
     [dashLoading, channelLoading],
   );
 
+  const isNew = useMemo(() => !id || !channel, [id, channel]);
+
   return error ? (
     <ErrorMsg error={error} />
   ) : loading ? (
@@ -61,7 +63,7 @@ const ChannelUpdate = () => {
     <UpdateContainer
       channel={channel}
       useLength={useLength}
-      isNew={!id}
+      isNew={isNew}
       postChannel={postChannel}
       putChannel={updateChannel}
     />

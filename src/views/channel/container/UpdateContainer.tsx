@@ -31,9 +31,14 @@ const UpdateContainer = ({
     (state: RootState) => state.channel,
   );
 
-  const [current, setCurrent] = useState<ChannelObject>(
-    fetchedChannel ?? new ChannelObject({}),
-  );
+  const [current, setCurrent] = useState<ChannelObject>(new ChannelObject({}));
+
+  useEffect(() => {
+    if (!isNew) {
+      setCurrent(fetchedChannel as ChannelObject);
+      dispatch(setPrviewUrl((fetchedChannel as ChannelObject).cameraSrc));
+    }
+  }, [isNew, fetchedChannel, dispatch]);
 
   const { channelArea: area } = current;
   const [selectedArea, setSelectedArea] = useState<number>(all_index);
@@ -41,15 +46,6 @@ const UpdateContainer = ({
     () => (selectedArea !== all_index ? area[selectedArea] : null),
     [area, selectedArea],
   );
-
-  useEffect(() => {
-    const isUpdate = !isNew && fetchedChannel;
-
-    if (isUpdate) {
-      setCurrent(fetchedChannel);
-      dispatch(setPrviewUrl(fetchedChannel.cameraSrc));
-    }
-  }, [isNew, fetchedChannel, dispatch]);
 
   const updateCurrent = (newChannel: Partial<ChannelObject>) => {
     setCurrent(current => ({ ...current, ...newChannel }));

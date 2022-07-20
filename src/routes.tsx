@@ -12,7 +12,7 @@ const Channel = lazy(() => import('./views/channel'));
 const ChannelUpdate = lazy(() => import('./views/channel/ChannelUpdate'));
 
 // test component
-const RequestTest = lazy(() => import('./views/request'));
+const Plate = lazy(() => import('./views/plate'));
 const VideoTest = lazy(() => import('./views/videoTest'));
 
 interface Router {
@@ -23,6 +23,7 @@ interface Router {
 
 export const paths = {
   home: '/',
+  plate: '/plate',
   alert: '/alert',
   settings: '/settings',
   channels: '/channel',
@@ -60,6 +61,10 @@ const routes = makeRoutes([
     element: <Home />,
   },
   {
+    path: `${paths.plate}/*`,
+    element: <Plate />,
+  },
+  {
     path: paths.settings,
     element: <Settings />,
   },
@@ -78,10 +83,6 @@ const routes = makeRoutes([
   {
     path: paths.videoTest,
     element: <VideoTest />,
-  },
-  {
-    path: '/sandbox_request',
-    element: <RequestTest />,
   },
 ]);
 

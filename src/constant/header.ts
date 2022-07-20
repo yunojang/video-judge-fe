@@ -2,6 +2,11 @@ import { paths } from '../routes';
 
 export const menu = [
   {
+    path: paths.plate,
+    logo: 'RepoTemplateIcon',
+    tooltip: 'CRUD Plate',
+  },
+  {
     path: paths.videoTest,
     logo: 'HubotIcon',
     tooltip: '= Labortory =',

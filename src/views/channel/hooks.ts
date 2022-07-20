@@ -5,7 +5,7 @@ import { ChannelObject, isChannel } from 'src/model/channel';
 import { RequestConfig } from 'src/utils/connection/types';
 import { Error } from 'src/components/ErrorMsg/types';
 
-const RESOURCE = 'channel';
+const resource = 'channel';
 
 export const useChannel = ({
   id,
@@ -14,7 +14,7 @@ export const useChannel = ({
   id?: string;
   defaultChannel?: ChannelObject;
 }) => {
-  const endPoint = useMemo(() => `/api/${RESOURCE}/${id}`, [id]);
+  const endPoint = useMemo(() => `/api/${resource}/${id}`, [id]);
 
   const [channel, setChannel] = useState<ChannelObject | null>(
     defaultChannel ?? null,
@@ -25,7 +25,7 @@ export const useChannel = ({
   const requestChannel = useCallback(
     (options?: Partial<RequestConfig>) => {
       if (!id) {
-        const err = { code: 400, message: 'Cannot PUT request without id' };
+        const err = { code: 400, message: 'Cannot request without id' };
 
         setError(err);
         return Promise.reject(err);
@@ -48,7 +48,7 @@ export const useChannel = ({
     if (id && !defaultChannel) {
       requestChannel().then(json => {
         if (!isChannel(json)) {
-          setError({ code: 500, message: `Response data is not a valid type` });
+          setError({ code: 400, message: `Response data is not a valid type` });
           return;
         }
 
