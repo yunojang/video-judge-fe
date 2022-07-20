@@ -55,7 +55,7 @@ export class ClientClass {
 
     const response = await promiseWithTimeout<Response>(
       fetch(url, options).catch(err => err),
-      timeout,
+      timeout ?? this.timeout,
     );
 
     const parsed = parseResponse<T>(response, parseMethod);

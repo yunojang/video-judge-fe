@@ -69,7 +69,12 @@ const PlateList = () => {
       <Link to={`${paths.plate}/new`}>
         <Button iconName="PlusIcon">New</Button>
       </Link>
-      <ListView<Channel> resource="channel" row={row} columns={columns} />
+      <ListView<Channel>
+        resource="channel"
+        row={row}
+        columns={columns}
+        pageSize={10}
+      />
     </div>
   );
 };
