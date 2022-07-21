@@ -8,11 +8,11 @@ interface PagerProps {
 
 export const useListView = ({ pageSize, resourceCount }: PagerProps) => {
   const [query, setQuery] = useQueryParams({ page: NumberParam });
-  const [pageIndex, _setPage] = useState(query.page ? query.page - 1 : 0);
+  const [pageIndex, setPageIndex] = useState(query.page ? query.page - 1 : 0);
 
   const setPage = (p: number) => {
-    setQuery({ page: p });
-    _setPage(p);
+    setQuery({ page: p + 1 });
+    setPageIndex(p);
   };
 
   const gotoPage = (index: number) => {
@@ -24,14 +24,14 @@ export const useListView = ({ pageSize, resourceCount }: PagerProps) => {
     [pageSize, resourceCount],
   );
 
-  const canNextPage = useMemo(
-    () => pageIndex < pageCount - 1,
-    [pageCount, pageIndex],
-  );
-
   const rowLength = useMemo(
     () => (pageCount - 1 !== pageIndex ? pageSize : resourceCount % pageSize),
     [pageCount, pageIndex, pageSize, resourceCount],
+  );
+
+  const canNextPage = useMemo(
+    () => pageIndex < pageCount - 1,
+    [pageCount, pageIndex],
   );
 
   const canPreviousPage = useMemo(() => pageIndex > 0, [pageIndex]);
