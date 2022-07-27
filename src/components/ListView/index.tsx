@@ -3,7 +3,7 @@ import React from 'react';
 import { css } from '@emotion/css';
 
 import { ListType } from 'src/model/types';
-import { useFetchList } from 'src/views/hooks';
+import { useFetchList } from 'src/hooks/list';
 import { useListView } from './hooks';
 
 import { Col, Row, useTheme } from '@wizrnd/nx-ui';

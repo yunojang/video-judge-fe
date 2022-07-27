@@ -38,22 +38,26 @@ export const useChannel = ({
         .catch(err => {
           setError(err);
           return Promise.reject(err);
-        })
-        .finally(() => setLoading(false));
+        });
     },
     [endPoint, id],
   );
 
   useEffect(() => {
     if (id && !defaultChannel) {
-      requestChannel().then(json => {
-        if (!isChannel(json)) {
-          setError({ code: 400, message: `Response data is not a valid type` });
-          return;
-        }
+      requestChannel()
+        .then(json => {
+          if (!isChannel(json)) {
+            setError({
+              code: 400,
+              message: `Response data is not a valid type`,
+            });
+            return;
+          }
 
-        setChannel(json);
-      });
+          setChannel(json);
+        })
+        .finally(() => setLoading(false));
     }
   }, [requestChannel, id, defaultChannel]);
 
@@ -61,9 +65,9 @@ export const useChannel = ({
     (newChannel: ChannelObject) => {
       const body = JSON.stringify({ ...channel, ...newChannel });
 
-      return requestChannel({ method: 'PUT', body }).then(() =>
-        setChannel(newChannel),
-      );
+      return requestChannel({ method: 'PUT', body })
+        .then(() => setChannel(newChannel))
+        .finally(() => setLoading(false));
     },
     [requestChannel, channel],
   );

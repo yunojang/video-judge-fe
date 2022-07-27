@@ -3,11 +3,13 @@ import { ChannelObject } from 'src/model/channel';
 
 import VideoPlayer from 'src/components/VideoPlayer';
 import { Button } from '@wizrnd/nx-ui';
+import useRtc from 'src/hooks/useRtc';
 
 interface ItemProps {
   item: ChannelObject;
 }
 const DashboardItem = ({ item }: ItemProps) => {
+  const { stream } = useRtc(item.cameraSrc);
   return (
     <div className={style}>
       <div className="info">
@@ -15,7 +17,7 @@ const DashboardItem = ({ item }: ItemProps) => {
         <Button iconName="ScreenFullIcon" />
       </div>
       <div className="frame">
-        <VideoPlayer multipart height="100%" url={item.cameraSrc} />
+        <VideoPlayer height="100%" stream={stream} />
       </div>
     </div>
   );

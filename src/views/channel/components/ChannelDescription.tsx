@@ -7,9 +7,14 @@ import { setPrviewUrl } from 'src/reducer/channel';
 interface DescriptionProps {
   channel: ChannelObject;
   handleChangeUrl: (url: string) => void;
+  handleChangePreview: (url: string) => void;
 }
 
-const ChannelDescription = ({ channel, handleChangeUrl }: DescriptionProps) => {
+const ChannelDescription = ({
+  channel,
+  handleChangeUrl,
+  handleChangePreview,
+}: DescriptionProps) => {
   const dispatch = useDispatch();
 
   const { cameraSrc } = channel;
@@ -36,7 +41,7 @@ const ChannelDescription = ({ channel, handleChangeUrl }: DescriptionProps) => {
             <Button
               variant="contained"
               color="#5a5a5a"
-              onClick={() => dispatch(setPrviewUrl(cameraSrc))}
+              onClick={() => handleChangePreview(cameraSrc)}
             >
               Preview
             </Button>

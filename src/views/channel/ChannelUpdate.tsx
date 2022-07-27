@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import { Channel } from 'src/model/channel';
 import { useChannel } from './hooks';
-import { useListResource } from '../hooks';
+import { useListResource } from 'src/hooks/list';
 
 import Loading from 'src/components/Loading';
 import ErrorMsg from 'src/components/ErrorMsg';

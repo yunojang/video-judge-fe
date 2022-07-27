@@ -1,43 +1,48 @@
 import { css, cx } from '@emotion/css';
+import { useEffect, useRef } from 'react';
 
 type Position = 'absolute' | 'inline';
 
 interface PlayerProps {
-  multipart?: boolean;
   width?: string | number;
   height?: string | number;
-  url?: string;
   position?: Position;
+  url?: string;
+  stream?: MediaStream;
+  // state?: VideoState;
 }
 
 // const TEST_CV_URL = 'http://localhost:8888';
-const TEST_CV_URL = 'http://10.1.1.201:28084';
 
 const VideoPlayer = ({
-  multipart = false,
   width,
   height,
   url,
+  stream,
   position = 'inline',
 }: PlayerProps) => {
   const className = cx(style, position);
-  return !multipart ? (
-    <video
-      src={url}
-      width={width}
-      height={height}
-      autoPlay
-      loop
-      className={className}
-    />
-  ) : (
-    <img
-      // src={`${TEST_CV_URL}/api/video_feed?url=${url}`}
-      src={`${TEST_CV_URL}/api/channel/play?url=${url}`}
-      width={width}
-      height={height}
-      className={className}
-    />
+  const ref = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (!ref.current || !stream) {
+      return;
+    }
+    console.log(ref.current, stream);
+    ref.current.srcObject = stream;
+  }, [stream]);
+
+  return (
+    <div className={className} style={{ width, height }}>
+      <video
+        ref={ref}
+        src={url}
+        width="100%"
+        height="100%"
+        autoPlay
+        playsInline
+      />
+    </div>
   );
 };
 

@@ -14,7 +14,9 @@ interface ChannelProps {
   isNew: boolean;
   channel: ChannelState;
   area: AreaState;
+  stream?: MediaStream;
   addArea: () => void;
+  handleChangePreview: (url: string) => void;
   handleChangeArea: (key: number) => void;
   handleSubmit: () => void;
 }
@@ -24,6 +26,8 @@ const UpdateView = ({
   channel,
   area,
   addArea,
+  stream,
+  handleChangePreview,
   handleChangeArea,
   handleSubmit,
 }: ChannelProps) => {
@@ -60,16 +64,13 @@ const UpdateView = ({
       <Style />
       <div className="container">
         <div className="channel-viewer">
-          <AreaEditor
-            area={area}
-            list={channelArea}
-            videoUrl={channel.previewUrl}
-          />
+          <AreaEditor area={area} list={channelArea} stream={stream} />
 
           <div className="channel-description">
             <ChannelDescription
               channel={channel.current}
               handleChangeUrl={channel.changeCameraUrl}
+              handleChangePreview={handleChangePreview}
             />
           </div>
         </div>

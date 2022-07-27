@@ -2,13 +2,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { AreaObject, ChannelObject, Position } from 'src/model/channel';
-import { modify, save, setPrviewUrl } from 'src/reducer/channel';
+import { modify, save } from 'src/reducer/channel';
 import { RootState } from 'src/store';
 import { all_index } from '../type';
 
 import UpdateView from '../components/UpdateView';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@wizrnd/nx-ui';
+import useRtc from 'src/hooks/useRtc';
 
 interface UpdateProps {
   isNew: boolean;
@@ -27,16 +28,14 @@ const UpdateContainer = ({
 }: UpdateProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { hasUnSave, previewUrl } = useSelector(
-    (state: RootState) => state.channel,
-  );
-
+  const { hasUnSave } = useSelector((state: RootState) => state.channel);
   const [current, setCurrent] = useState<ChannelObject>(new ChannelObject({}));
+
+  const { stream, setCamera } = useRtc(fetchedChannel?.cameraSrc);
 
   useEffect(() => {
     if (!isNew) {
       setCurrent(fetchedChannel as ChannelObject);
-      dispatch(setPrviewUrl((fetchedChannel as ChannelObject).cameraSrc));
     }
   }, [isNew, fetchedChannel, dispatch]);
 
@@ -49,7 +48,10 @@ const UpdateContainer = ({
 
   const updateCurrent = (newChannel: Partial<ChannelObject>) => {
     setCurrent(current => ({ ...current, ...newChannel }));
-    dispatch(modify());
+
+    if (!hasUnSave) {
+      dispatch(modify());
+    }
   };
 
   const changeName = (name: string) => {
@@ -165,7 +167,6 @@ const UpdateContainer = ({
       channel={{
         current,
         hasUnSave,
-        previewUrl: previewUrl ?? '',
         changeName,
         changeCameraUrl,
         toggleUseChannel,
@@ -178,7 +179,9 @@ const UpdateContainer = ({
         clearPosition: clearAreaPosition,
         delete: deleteArea,
       }}
+      stream={stream}
       addArea={addArea}
+      handleChangePreview={setCamera}
       handleChangeArea={handleChangeArea}
       handleSubmit={handleSubmit}
     />
