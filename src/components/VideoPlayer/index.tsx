@@ -40,14 +40,7 @@ const VideoPlayer = ({
   return (
     <div className={className} style={{ width, height }}>
       {streamState === 'connected' ? (
-        <video
-          ref={ref}
-          src={url}
-          width="100%"
-          height="100%"
-          autoPlay
-          playsInline
-        />
+        <video ref={ref} src={url} height="100%" autoPlay playsInline />
       ) : (
         <VideoStateIndicator state={streamState} />
       )}
@@ -58,6 +51,8 @@ const VideoPlayer = ({
 export default VideoPlayer;
 
 const style = css`
+  text-align: center;
+
   &.static {
     position: static;
     margin: 0 auto;
