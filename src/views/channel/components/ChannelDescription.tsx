@@ -36,7 +36,7 @@ const ChannelDescription = ({
           <Tooltip arrow title="Show video preview">
             <Button
               variant="contained"
-              color="#5a5a5a"
+              color="#505050"
               onClick={() => handleChangePreview(cameraSrc)}
             >
               Preview

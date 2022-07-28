@@ -19,7 +19,7 @@ const MESSAGE = {
   },
   error: {
     icon: <XCircleFillIcon size="large" />,
-    text: 'URL Not Connected',
+    text: `Can not Connect`,
   },
   disconnected: {
     icon: <PlugIcon size="large" />,

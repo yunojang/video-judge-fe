@@ -118,16 +118,16 @@ const UpdateContainer = ({
 
     let submitPromise;
 
-    if (current.useChannel) {
-      if (useLength === 4) {
-        toast.warning({
-          message: 'Unable to modify',
-          description: 'Cannot use more than 4 channels',
-          duration: 3000,
-        });
+    const turnOnChannelUse = !fetchedChannel?.useChannel && current.useChannel;
 
-        return;
-      }
+    if (turnOnChannelUse && useLength === 4) {
+      toast.warning({
+        message: 'Unable to modify',
+        description: 'Cannot use more than 4 channels',
+        duration: 3000,
+      });
+
+      return;
     }
 
     toast.open({ message: 'Running...', duration: 1000 });
