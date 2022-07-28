@@ -11,7 +11,7 @@ const RotateGear = () => (
 const MESSAGE = {
   new: {
     icon: <></>,
-    text: 'Making Conncetion',
+    text: 'Preparing to connect',
   },
   checking: {
     icon: <RotateGear />,
