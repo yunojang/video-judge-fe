@@ -1,10 +1,11 @@
-import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
 import { css, Global } from '@emotion/react';
-import { Button, H5, Header, Switch, useTheme } from '@wizrnd/nx-ui';
+import { useTranslation } from 'react-i18next';
 
 import { AreaState, ChannelState } from '../type';
+import { RTCState } from 'src/utils/webrtc';
 
+import { Button, H5, Header, Switch, useTheme } from '@wizrnd/nx-ui';
 import AreaEditor from './AreaEditor';
 import AreaTab from './AreaTab';
 import AreaDetail from './AreaDetail';
@@ -15,6 +16,7 @@ interface ChannelProps {
   channel: ChannelState;
   area: AreaState;
   stream?: MediaStream;
+  streamState: RTCState;
   addArea: () => void;
   handleChangePreview: (url: string) => void;
   handleChangeArea: (key: number) => void;
@@ -27,6 +29,7 @@ const UpdateView = ({
   area,
   addArea,
   stream,
+  streamState,
   handleChangePreview,
   handleChangeArea,
   handleSubmit,
@@ -64,7 +67,12 @@ const UpdateView = ({
       <Style />
       <div className="container">
         <div className="channel-viewer">
-          <AreaEditor area={area} list={channelArea} stream={stream} />
+          <AreaEditor
+            area={area}
+            list={channelArea}
+            stream={stream}
+            streamState={streamState}
+          />
 
           <div className="channel-description">
             <ChannelDescription

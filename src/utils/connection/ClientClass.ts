@@ -54,7 +54,7 @@ export class ClientClass {
     const options: RequestBase = defaultConfig(baseConfig);
 
     const response = await promiseWithTimeout<Response>(
-      fetch(url, options).catch(err => err),
+      fetch(url, options),
       timeout ?? this.timeout,
     );
 
@@ -68,16 +68,15 @@ export class ClientClass {
         return Promise.reject({ code: 400, message: response });
       }
 
-      const err = {
+      return Promise.reject({
         code: response.status,
         message: response.statusText,
-      };
-
-      return Promise.reject(err);
+      });
     } else {
       return parsed;
     }
   }
+
   getUrl(url?: string, endPoint?: string) {
     if (url) {
       return url;

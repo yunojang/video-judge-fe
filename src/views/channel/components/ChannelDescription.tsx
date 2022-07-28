@@ -1,8 +1,6 @@
 import { ChannelObject } from 'src/model/channel';
 import { Button, TextInput, Title1, Tooltip } from '@wizrnd/nx-ui';
 import { css } from '@emotion/css';
-import { useDispatch } from 'react-redux';
-import { setPrviewUrl } from 'src/reducer/channel';
 
 interface DescriptionProps {
   channel: ChannelObject;
@@ -15,8 +13,6 @@ const ChannelDescription = ({
   handleChangeUrl,
   handleChangePreview,
 }: DescriptionProps) => {
-  const dispatch = useDispatch();
-
   const { cameraSrc } = channel;
   return (
     <div className={style}>

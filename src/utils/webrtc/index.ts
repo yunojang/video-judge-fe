@@ -2,7 +2,15 @@ interface WebrtcConfig extends RTCConfiguration {
   remoteUrl: string;
   offerToReceiveVideo?: boolean;
   offerToReceiveAudio?: boolean;
+  onChangeState?: (state: RTCState) => void;
 }
+
+export type RTCState =
+  | 'new'
+  | 'checking'
+  | 'error'
+  | 'connected'
+  | 'disconnected';
 
 const STUN_SERVERS = [
   {
@@ -19,6 +27,8 @@ const STUN_SERVERS = [
 class Webrtc {
   remoteUrl: string;
   pc: RTCPeerConnection;
+  state: RTCState;
+  onChangeState: (state: RTCState) => void;
   config: RTCConfiguration;
   offerToReceiveVideo: boolean;
   offerToReceiveAudio: boolean;
@@ -28,16 +38,24 @@ class Webrtc {
     offerToReceiveVideo = true,
     offerToReceiveAudio = false,
     iceServers = STUN_SERVERS,
+    onChangeState = () => {},
     ...rest
   }: WebrtcConfig) {
     const pc = new RTCPeerConnection({ iceServers, ...rest });
 
     this.pc = pc;
+    this.state = 'new';
+    this.onChangeState = onChangeState;
     this.config = { iceServers, ...rest };
     this.remoteUrl = remoteUrl;
     this.offerToReceiveVideo = offerToReceiveVideo;
     this.offerToReceiveAudio = offerToReceiveAudio;
   }
+
+  setState = (state: RTCState) => {
+    this.state = state;
+    this.onChangeState(state);
+  };
 
   createPeerConnection = () => {
     this.pc = new RTCPeerConnection(this.config);
@@ -45,6 +63,14 @@ class Webrtc {
 
   negotiate = async (payload?: object) => {
     this.createPeerConnection();
+
+    this.pc.addEventListener('iceconnectionstatechange', () => {
+      if (this.pc.iceConnectionState === 'disconnected') {
+        this.setState('disconnected');
+      }
+    });
+
+    this.setState('checking');
 
     const { offerToReceiveAudio, offerToReceiveVideo } = this;
     return this.pc
@@ -80,7 +106,19 @@ class Webrtc {
           method: 'POST',
         })
           .then(response => response.json())
-          .then(answer => this.pc.setRemoteDescription(answer));
+          .then(
+            result =>
+              new Promise<RTCSessionDescription>((resolve, reject) =>
+                result?.sdp ? resolve(result) : reject(result),
+              ),
+          )
+          .then(answer => {
+            this.pc.setRemoteDescription(answer);
+            this.setState('connected');
+          })
+          .catch(() => {
+            this.setState('error');
+          });
       });
 
     // wait iceGatheringState complete

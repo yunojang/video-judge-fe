@@ -9,7 +9,7 @@ interface ItemProps {
   item: ChannelObject;
 }
 const DashboardItem = ({ item }: ItemProps) => {
-  const { stream } = useRtc(item.cameraSrc);
+  const { stream, connectState } = useRtc(item.cameraSrc);
   return (
     <div className={style}>
       <div className="info">
@@ -17,7 +17,7 @@ const DashboardItem = ({ item }: ItemProps) => {
         <Button iconName="ScreenFullIcon" />
       </div>
       <div className="frame">
-        <VideoPlayer height="100%" stream={stream} />
+        <VideoPlayer height="100%" stream={stream} streamState={connectState} />
       </div>
     </div>
   );

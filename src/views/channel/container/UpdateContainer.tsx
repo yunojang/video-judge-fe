@@ -31,7 +31,7 @@ const UpdateContainer = ({
   const { hasUnSave } = useSelector((state: RootState) => state.channel);
   const [current, setCurrent] = useState<ChannelObject>(new ChannelObject({}));
 
-  const { stream, setCamera } = useRtc(fetchedChannel?.cameraSrc);
+  const { stream, connectState, setCamera } = useRtc(fetchedChannel?.cameraSrc);
 
   useEffect(() => {
     if (!isNew) {
@@ -180,6 +180,7 @@ const UpdateContainer = ({
         delete: deleteArea,
       }}
       stream={stream}
+      streamState={connectState}
       addArea={addArea}
       handleChangePreview={setCamera}
       handleChangeArea={handleChangeArea}

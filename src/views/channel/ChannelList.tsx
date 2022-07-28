@@ -6,7 +6,7 @@ import { css } from '@emotion/css';
 import { Channel } from 'src/model/channel';
 import { paths } from 'src/routes';
 
-import { TextInput } from '@wizrnd/nx-ui';
+import { GearIcon, TextInput } from '@wizrnd/nx-ui';
 import ListView from 'src/components/ListView';
 
 const PAGE_SIZE = 16;

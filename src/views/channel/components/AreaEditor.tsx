@@ -3,16 +3,18 @@ import { css, Global } from '@emotion/react';
 
 import { Canvas } from 'src/canvas/CanvasClass';
 import { AreaObject, AreaType, isRectCoordinate } from 'src/model/channel';
+import { AreaState } from '../type';
+import { RTCState } from 'src/utils/webrtc';
 
 import CanvasRenderer from 'src/canvas/CanvasRenderer';
 import VideoPlayer from 'src/components/VideoPlayer';
 import EditBar from './EditBar';
-import { AreaState } from '../type';
 
 interface AreaEditorProps {
   list: AreaObject[];
   area: AreaState;
   stream?: MediaStream;
+  streamState: RTCState;
 }
 
 const width = 900;
@@ -22,6 +24,7 @@ const AreaEditor = ({
   list,
   area: { selected, addPosition, clearPosition },
   stream,
+  streamState,
 }: AreaEditorProps) => {
   const canvas = useMemo(() => {
     return new Canvas({ areas: list, width });
@@ -60,6 +63,7 @@ const AreaEditor = ({
           width={canvas.width}
           height={canvas.height}
           stream={stream}
+          streamState={streamState}
           position="absolute"
         />
 

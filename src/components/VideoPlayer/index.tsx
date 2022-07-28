@@ -1,6 +1,9 @@
 import { css, cx } from '@emotion/css';
 import { useEffect, useRef } from 'react';
 
+import { RTCState } from 'src/utils/webrtc';
+import VideoStateIndicator from './VideoStateIndicator';
+
 type Position = 'absolute' | 'inline';
 
 interface PlayerProps {
@@ -9,6 +12,7 @@ interface PlayerProps {
   position?: Position;
   url?: string;
   stream?: MediaStream;
+  streamState: RTCState;
   // state?: VideoState;
 }
 
@@ -19,6 +23,7 @@ const VideoPlayer = ({
   height,
   url,
   stream,
+  streamState,
   position = 'inline',
 }: PlayerProps) => {
   const className = cx(style, position);
@@ -28,20 +33,24 @@ const VideoPlayer = ({
     if (!ref.current || !stream) {
       return;
     }
-    console.log(ref.current, stream);
+
     ref.current.srcObject = stream;
   }, [stream]);
 
   return (
     <div className={className} style={{ width, height }}>
-      <video
-        ref={ref}
-        src={url}
-        width="100%"
-        height="100%"
-        autoPlay
-        playsInline
-      />
+      {streamState === 'connected' ? (
+        <video
+          ref={ref}
+          src={url}
+          width="100%"
+          height="100%"
+          autoPlay
+          playsInline
+        />
+      ) : (
+        <VideoStateIndicator state={streamState} />
+      )}
     </div>
   );
 };
